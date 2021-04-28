@@ -14,7 +14,8 @@ enum FeedResponseMapper {
     }
 
     static func map(_ data: Data, from response: HTTPURLResponse) throws  {
-        guard isOK(response) else {
+        let decoder = JSONDecoder()
+        guard isOK(response), let _ = try? decoder.decode(Root.self, from: data) else {
             throw Error.invalidData
         }
     }
@@ -26,6 +27,8 @@ private extension FeedResponseMapper {
     static func isOK(_ response: HTTPURLResponse) -> Bool {
         response.statusCode == OK_200
     }
+    
+    struct Root: Decodable { }
 }
 
 class FeedResponseMapperTests: XCTestCase {
@@ -39,6 +42,14 @@ class FeedResponseMapperTests: XCTestCase {
                    try FeedResponseMapper.map(data, from: HTTPURLResponse(statusCode: code))
                )
            }
+    }
+    
+    func test_map_throws_error_on_200_HTTPResponse_with_invalid_json() {
+        let invalidJSONData = Data("any invalid data".utf8)
+
+        XCTAssertThrowsError(
+            try FeedResponseMapper.map(invalidJSONData, from: HTTPURLResponse(statusCode: 200))
+        )
     }
 }
 
