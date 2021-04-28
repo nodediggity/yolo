@@ -29,3 +29,6 @@ fastlane/test_output
 vendor/
 .bundle
 **/.DS_Store
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
