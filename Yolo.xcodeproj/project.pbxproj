@@ -17,6 +17,8 @@
 		6A30B9EE2639EBA200A65598 /* XCTestCase+MemoryLeakTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A30B9ED2639EBA200A65598 /* XCTestCase+MemoryLeakTracking.swift */; };
 		6A45D78D2639FB94003EF1C8 /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D78C2639FB94003EF1C8 /* Feed.swift */; };
 		6A45D7932639FBC2003EF1C8 /* FeedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7922639FBC2003EF1C8 /* FeedItem.swift */; };
+		6A45D7982639FD65003EF1C8 /* FeedResponseMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7972639FD65003EF1C8 /* FeedResponseMapperTests.swift */; };
+		6A45D79E2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D79D2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift */; };
 		6A79BE7D2639D918000062A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79BE7C2639D918000062A7 /* AppDelegate.swift */; };
 		6A79BE7F2639D918000062A7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79BE7E2639D918000062A7 /* SceneDelegate.swift */; };
 		6A79BE862639D919000062A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A79BE852639D919000062A7 /* Assets.xcassets */; };
@@ -46,6 +48,8 @@
 		6A30B9ED2639EBA200A65598 /* XCTestCase+MemoryLeakTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+MemoryLeakTracking.swift"; sourceTree = "<group>"; };
 		6A45D78C2639FB94003EF1C8 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		6A45D7922639FBC2003EF1C8 /* FeedItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedItem.swift; sourceTree = "<group>"; };
+		6A45D7972639FD65003EF1C8 /* FeedResponseMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedResponseMapperTests.swift; sourceTree = "<group>"; };
+		6A45D79D2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+StatusCode.swift"; sourceTree = "<group>"; };
 		6A79BE792639D918000062A7 /* Yolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Yolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A79BE7C2639D918000062A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A79BE7E2639D918000062A7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -174,6 +178,7 @@
 				6A30B9E32639EB6B00A65598 /* XCTestCase+Error.swift */,
 				6A30B9E92639EB8500A65598 /* XCTestCase+URL.swift */,
 				6A30B9ED2639EBA200A65598 /* XCTestCase+MemoryLeakTracking.swift */,
+				6A45D79D2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift */,
 			);
 			path = TestHelpers;
 			sourceTree = "<group>";
@@ -181,6 +186,7 @@
 		6A45D7892639FAFA003EF1C8 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				6A45D7962639FD51003EF1C8 /* API */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -200,6 +206,14 @@
 				6A45D7922639FBC2003EF1C8 /* FeedItem.swift */,
 			);
 			path = Feature;
+			sourceTree = "<group>";
+		};
+		6A45D7962639FD51003EF1C8 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				6A45D7972639FD65003EF1C8 /* FeedResponseMapperTests.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 		6A79BE702639D918000062A7 = {
@@ -335,8 +349,10 @@
 				6A30B9E42639EB6B00A65598 /* XCTestCase+Error.swift in Sources */,
 				6A30B9D32639EA6700A65598 /* URLProtocolStub.swift in Sources */,
 				6A30B9DE2639EB5800A65598 /* XCTestCase+Data.swift in Sources */,
+				6A45D7982639FD65003EF1C8 /* FeedResponseMapperTests.swift in Sources */,
 				6A30B9EA2639EB8500A65598 /* XCTestCase+URL.swift in Sources */,
 				6A30B9D92639EB0F00A65598 /* URLSessionHTTPClientTests.swift in Sources */,
+				6A45D79E2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift in Sources */,
 				6A30B9EE2639EBA200A65598 /* XCTestCase+MemoryLeakTracking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
