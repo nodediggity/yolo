@@ -7,19 +7,19 @@
 
 import Foundation
 
-public struct FeedItem {
+public struct FeedItem: Hashable {
     
     public let id: String
     public let imageURL: URL
     public let user: User
     public let interactions: Interactions
     
-    public struct User {
+    public struct User: Hashable {
         public let id: String
         public let name: String
         public let about: String
-        public let imageURL: String
-        public init(id: String, name: String, about: String, imageURL: String) {
+        public let imageURL: URL
+        public init(id: String, name: String, about: String, imageURL: URL) {
             self.id = id
             self.name = name
             self.about = about
@@ -27,7 +27,7 @@ public struct FeedItem {
         }
     }
     
-    public struct Interactions {
+    public struct Interactions: Hashable {
         public let likes: Int
         public let comments: Int
         public let shares: Int

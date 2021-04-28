@@ -7,6 +7,9 @@
 
 import Foundation
 
-public struct Feed {
-    let items: [FeedItem]
+public struct Feed: Hashable {
+    public let items: [FeedItem]
+    public init(items: [FeedItem]) {
+        self.items = items
+    }
 }
