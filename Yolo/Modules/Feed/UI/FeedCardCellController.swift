@@ -53,6 +53,10 @@ public final class FeedCardCellController {
         onSelection?()
     }
     
+    public func preload() {
+        load()
+    }
+    
     public func cancel() {
         onLoadImageCancel?()
     }
@@ -62,4 +66,5 @@ private extension FeedCardCellController {
     func load() {
         onLoadImage?()
     }
+
 }

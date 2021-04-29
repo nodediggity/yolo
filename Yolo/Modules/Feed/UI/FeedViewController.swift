@@ -73,7 +73,7 @@ private extension FeedViewController {
     }
     
     func preloadCellController(for indexPath: IndexPath) {
-        _ = controller(for: indexPath).view()
+        controller(for: indexPath).preload()
     }
 }
 
