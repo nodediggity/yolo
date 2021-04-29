@@ -94,6 +94,7 @@ private extension FeedCardView {
         )
         headerHStack.alignment = .center
         headerHStack.axis = .horizontal
+        headerHStack.spacing = 8
         
         // Footer
         let footerHStack = UIStackView(arrangedSubviews: [
@@ -121,7 +122,7 @@ private extension FeedCardView {
         container.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(container)
         
-        let bottomAnchorConstraint = bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 16)
+        let bottomAnchorConstraint = contentView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 16)
         bottomAnchorConstraint.priority = .defaultLow
         bottomAnchorConstraint.isActive = true
         
@@ -129,7 +130,7 @@ private extension FeedCardView {
             optionButtonContainer.widthAnchor.constraint(equalToConstant: 6),
             container.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 24)
+            contentView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 24)
         ])
     }
     
