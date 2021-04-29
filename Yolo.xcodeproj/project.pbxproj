@@ -30,6 +30,7 @@
 		6A45D7D7263A7B06003EF1C8 /* UIImage+TestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7D6263A7B06003EF1C8 /* UIImage+TestHelpers.swift */; };
 		6A45D7DD263A7B4D003EF1C8 /* UIViewController+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7DC263A7B4D003EF1C8 /* UIViewController+Snapshot.swift */; };
 		6A45D7E1263A7BD7003EF1C8 /* XCTestCase+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7E0263A7BD7003EF1C8 /* XCTestCase+Snapshot.swift */; };
+		6A45D7E5263A7C8A003EF1C8 /* FeedCardCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7E4263A7C8A003EF1C8 /* FeedCardCellController.swift */; };
 		6A79BE7D2639D918000062A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79BE7C2639D918000062A7 /* AppDelegate.swift */; };
 		6A79BE7F2639D918000062A7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79BE7E2639D918000062A7 /* SceneDelegate.swift */; };
 		6A79BE862639D919000062A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A79BE852639D919000062A7 /* Assets.xcassets */; };
@@ -72,6 +73,7 @@
 		6A45D7D6263A7B06003EF1C8 /* UIImage+TestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TestHelpers.swift"; sourceTree = "<group>"; };
 		6A45D7DC263A7B4D003EF1C8 /* UIViewController+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Snapshot.swift"; sourceTree = "<group>"; };
 		6A45D7E0263A7BD7003EF1C8 /* XCTestCase+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Snapshot.swift"; sourceTree = "<group>"; };
+		6A45D7E4263A7C8A003EF1C8 /* FeedCardCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCardCellController.swift; sourceTree = "<group>"; };
 		6A79BE792639D918000062A7 /* Yolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Yolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A79BE7C2639D918000062A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A79BE7E2639D918000062A7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 			children = (
 				6A45D7B0263A6E04003EF1C8 /* FeedViewController.swift */,
 				6A45D7C9263A7318003EF1C8 /* FeedCardView.swift */,
+				6A45D7E4263A7C8A003EF1C8 /* FeedCardCellController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -475,6 +478,7 @@
 				6A45D7C4263A6E7F003EF1C8 /* FeedPresentationAdapter.swift in Sources */,
 				6A30B9BA2639E9CD00A65598 /* URLSessionHTTPClient.swift in Sources */,
 				6A45D7C0263A6E65003EF1C8 /* FeedUIComposer.swift in Sources */,
+				6A45D7E5263A7C8A003EF1C8 /* FeedCardCellController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

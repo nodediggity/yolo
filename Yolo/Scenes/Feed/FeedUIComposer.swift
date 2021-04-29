@@ -30,3 +30,4 @@ public enum FeedUIComposer {
         return viewController
     }
 }
+
