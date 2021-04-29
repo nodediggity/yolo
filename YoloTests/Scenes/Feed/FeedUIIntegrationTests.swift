@@ -144,6 +144,48 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.simulateFeedCardNotVisible(at: 1)
         XCTAssertEqual(loader.cancelledImageLoaderURLs, feed.images(forItemAt: 0) + feed.images(forItemAt: 1))
     }
+    
+    func test_feed_card_view_renders_image_loaded_for_url() {
+        let feed = makeFeed(itemCount: 2)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+        
+        sut.simulateFeedCardVisible(at: 0)
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), .none)
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), .none)
+        
+        let userImageData0 = UIImage.makeImageData(withColor: .red)
+        let bodyImageData0 = UIImage.makeImageData(withColor: .blue)
+        
+        loader.loadImageCompletes(with: .success(userImageData0), at: 0)
+        
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), userImageData0)
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), .none)
+        
+        loader.loadImageCompletes(with: .success(bodyImageData0), at: 1)
+
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), userImageData0)
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), bodyImageData0)
+
+        sut.simulateFeedCardVisible(at: 1)
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), .none)
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), .none)
+
+        let userImageData1 = UIImage.makeImageData(withColor: .gray)
+        let bodyImageData1 = UIImage.makeImageData(withColor: .yellow)
+
+        loader.loadImageCompletes(with: .success(userImageData1), at: 2)
+
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), userImageData1)
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), .none)
+
+        loader.loadImageCompletes(with: .success(bodyImageData1), at: 3)
+
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), userImageData1)
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), bodyImageData1)
+    }
 }
 
 private extension FeedUIIntegrationTests {
@@ -228,6 +270,13 @@ private extension FeedUIIntegrationTests {
                 .handleEvents(receiveCancel: { [weak self] in self?.cancelledImageLoaderURLs.append(imageURL) })
                 .eraseToAnyPublisher()
         }
+        
+        func loadImageCompletes(with result: Result<Data, Error>, at index: Int = 0) {
+            switch result {
+            case let .success(data): loadImageRequests[index].publisher.send(data)
+            case let .failure(error): loadImageRequests[index].publisher.send(completion: .failure(error))
+            }
+        }
     }
     
     func makeFeed(itemCount: Int = 5) -> Feed {
@@ -290,6 +339,14 @@ private extension FeedViewController {
         return view
     }
     
+    func renderedFeedCardUserImageData(at row: Int) -> Data? {
+        return simulateFeedCardVisible(at: row)?.renderedImageForUser
+    }
+    
+    func renderedFeedCardBodyImageData(at row: Int) -> Data? {
+        return simulateFeedCardVisible(at: row)?.renderedImageForCard
+    }
+    
     func simulateUserInitiatedReload() {
         refreshControl?.beginRefreshing()
         scrollViewDidEndDragging(tableView, willDecelerate: false)
@@ -297,6 +354,15 @@ private extension FeedViewController {
 }
 
 private extension FeedCardView {
+    
+    var renderedImageForUser: Data? {
+        userImageView.image?.pngData()
+    }
+    
+    var renderedImageForCard: Data? {
+        cardImageView.image?.pngData()
+    }
+    
     var nameText: String? {
         nameLabel.text
     }
@@ -344,8 +410,8 @@ private extension Feed {
     func images(forItemAt index: Int) -> [URL?] {
         guard items.indices.contains(index) else { return [] }
         return [
-            items[index].user.imageURL,
-            items[index].imageURL
+            userImageURL(at: index),
+            cardImageURL(at: index)
         ]
     }
 }

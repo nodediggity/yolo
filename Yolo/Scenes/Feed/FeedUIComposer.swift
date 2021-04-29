@@ -49,14 +49,14 @@ extension FeedViewAdapter: FeedView {
             let model = FeedCardPresenter.map(item)
             let view = FeedCardCellController(model: model)
             
-            view.onLoadImage = { [loadImage] in
+            view.onLoadImage = { [loadImage, weak view] in
                 
-                loadImage(item.user.imageURL) { _ in
-                    
+                loadImage(item.user.imageURL) {
+                    view?.displayImage(for: .user($0))
                 }
                 
-                loadImage(item.imageURL) { _ in
-                    
+                loadImage(item.imageURL) {
+                    view?.displayImage(for: .body($0))
                 }
             }
             
@@ -72,10 +72,15 @@ extension FeedViewAdapter: FeedView {
     }
     
     func loadImage(for url: URL, completion: @escaping (UIImage?) -> Void) {
+        guard cancellables[url] == nil else { return }
         cancellables[url] = imageLoader(url)
+            .dispatchOnMainQueue()
             .sink(
-                receiveCompletion: { _ in },
-                receiveValue: { _ in }
+                receiveCompletion: { _ in
+                },
+                receiveValue: { imageData in
+                    completion(UIImage.init(data: imageData))
+                }
             )
     }
 }
