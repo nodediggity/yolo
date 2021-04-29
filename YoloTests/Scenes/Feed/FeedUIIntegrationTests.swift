@@ -85,8 +85,19 @@ private extension FeedUIIntegrationTests {
             return XCTFail("Expected \(feed.count) items but got \(sut.numberOfRenderedFeedItems) instead.", file: file, line: line)
         }
         
+        feed.indices.forEach { index in
+            let item = feed[index]
+            assertThat(sut, hasViewConfiguredFor: item, at: index, file: file, line: line)
+        }
         
         executeRunLoopToCleanUpReferences()
+    }
+    
+    func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: FeedItem, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+        let view = sut.feedCardView(at: index)
+        guard let cell = view as? FeedCardView else {
+            return XCTFail("Expected \(FeedCardView.self) instance but got \(String(describing: view)) instead", file: file, line: line)
+        }
     }
     
     var title: String {
@@ -155,6 +166,11 @@ private extension FeedViewController {
     var numberOfRenderedFeedItems: Int {
         guard tableView.numberOfSections > FEED_SECTION else { return 0 }
         return tableView.numberOfRows(inSection: FEED_SECTION)
+    }
+    
+    func feedCardView(at row: Int) -> UITableViewCell? {
+        let indexPath = IndexPath(row: row, section: FEED_SECTION)
+        return tableView(tableView, cellForRowAt: indexPath)
     }
     
     func simulateUserInitiatedReload() {
