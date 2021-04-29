@@ -186,6 +186,21 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), userImageData1)
         XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), bodyImageData1)
     }
+    
+    func test_feed_card_view_preloads_image_loaded_for_url() {
+        let feed = makeFeed(itemCount: 2)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+        XCTAssertTrue(loader.imageLoaderURLs.isEmpty)
+        
+        sut.simulateFeedCardNearVisible(at: 0)
+        XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0))
+        
+        sut.simulateFeedCardNearVisible(at: 1)
+        XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0) + feed.images(forItemAt: 1))
+    }
 }
 
 private extension FeedUIIntegrationTests {
@@ -337,6 +352,12 @@ private extension FeedViewController {
         delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
         
         return view
+    }
+    
+    func simulateFeedCardNearVisible(at row: Int) {
+        let ds = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: FEED_SECTION)
+        ds?.tableView(tableView, prefetchRowsAt: [index])
     }
     
     func renderedFeedCardUserImageData(at row: Int) -> Data? {
