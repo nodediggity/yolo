@@ -16,6 +16,7 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.title, title)
     }
     
+    // Feed
     func test_load_actions_request_feed_from_loader() {
         let (sut, loader) = makeSUT()
         XCTAssertEqual(loader.loadFeedCallCount, 0)
@@ -112,13 +113,29 @@ class FeedUIIntegrationTests: XCTestCase {
         }
         wait(for: [exp], timeout: 1.0)
     }
+    
+    // Images
+    func test_feed_card_view_loads_image_url_for_user_when_visible() {
+        let feed = makeFeed(itemCount: 2)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+        XCTAssertTrue(loader.imageLoaderURLs.isEmpty)
+        
+        sut.simulateFeedCardVisible(at: 0)
+        XCTAssertEqual(loader.imageLoaderURLs, [feed.userImageURL(at: 0)])
+        
+        sut.simulateFeedCardVisible(at: 1)
+        XCTAssertEqual(loader.imageLoaderURLs, [feed.userImageURL(at: 0), feed.userImageURL(at: 1)])
+    }
 }
 
 private extension FeedUIIntegrationTests {
     
     func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.compose(loader: loader.loadFeedPublisher)
+        let sut = FeedUIComposer.compose(loader: loader.loadFeedPublisher, imageLoader: loader.loadImagePublisher)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
@@ -179,6 +196,19 @@ private extension FeedUIIntegrationTests {
             case let .failure(error): loadFeedRequests[index].send(completion: .failure(error))
             }
         }
+        
+        // Image Loader
+        var imageLoaderURLs: [URL] {
+            loadImageRequests.map(\.url)
+        }
+        
+        private var loadImageRequests: [(url: URL, publisher: PassthroughSubject<Data, Error>)] = []
+        
+        func loadImagePublisher(_ imageURL: URL) -> AnyPublisher<Data, Error> {
+            let publisher = PassthroughSubject<Data, Error>()
+            loadImageRequests.append((imageURL, publisher))
+            return publisher.eraseToAnyPublisher()
+        }
     }
     
     func makeFeed(itemCount: Int = 5) -> Feed {
@@ -225,6 +255,11 @@ private extension FeedViewController {
         return tableView(tableView, cellForRowAt: indexPath)
     }
     
+    @discardableResult
+    func simulateFeedCardVisible(at row: Int) -> FeedCardView? {
+        return feedCardView(at: row) as? FeedCardView
+    }
+    
     func simulateUserInitiatedReload() {
         refreshControl?.beginRefreshing()
         scrollViewDidEndDragging(tableView, willDecelerate: false)
@@ -263,4 +298,11 @@ extension UIView {
 
 func executeRunLoopToCleanUpReferences() {
     RunLoop.current.run(until: Date())
+}
+
+private extension Feed {
+    func userImageURL(at index: Int) -> URL? {
+        guard items.indices.contains(index) else { return nil }
+        return items[index].user.imageURL
+    }
 }

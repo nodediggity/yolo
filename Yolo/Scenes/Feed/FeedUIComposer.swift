@@ -11,15 +11,16 @@ import Combine
 public enum FeedUIComposer {
     
     public typealias FeedLoader = () -> AnyPublisher<[FeedItem], Error>
+    public typealias ImageLoader = (_ imageURL: URL) -> AnyPublisher<Data, Error>
     
-    public static func compose(loader: @escaping FeedLoader) -> FeedViewController {
+    public static func compose(loader: @escaping FeedLoader, imageLoader: @escaping ImageLoader) -> FeedViewController {
         
         let viewController = FeedViewController()
         viewController.title = FeedPresenter.title
         
         let adapter = FeedPresentationAdapter(loader: loader)
         adapter.presenter = FeedPresenter(
-            view: FeedViewAdapter(controller: viewController),
+            view: FeedViewAdapter(controller: viewController, imageLoader: imageLoader),
             loadingView: viewController
         )
         
@@ -30,10 +31,15 @@ public enum FeedUIComposer {
 }
 
 private final class FeedViewAdapter {
-    private weak var controller: FeedViewController?
     
-    init(controller: FeedViewController) {
+    private weak var controller: FeedViewController?
+    private let imageLoader: FeedUIComposer.ImageLoader
+    
+    private var cancellables: [URL: AnyCancellable] = [:]
+    
+    init(controller: FeedViewController, imageLoader: @escaping FeedUIComposer.ImageLoader) {
         self.controller = controller
+        self.imageLoader = imageLoader
     }
 }
 
@@ -41,7 +47,23 @@ extension FeedViewAdapter: FeedView {
     func display(_ viewModel: FeedViewModel) {
         controller?.display(viewModel.feed.map { item in
             let model = FeedCardPresenter.map(item)
-            return FeedCardCellController(model: model)
+            let view = FeedCardCellController(model: model)
+            
+            view.onLoadUserImage = { [loadImage] in
+                loadImage(item.user.imageURL) { _ in
+                    
+                }
+            }
+            
+            return view
         })
+    }
+    
+    func loadImage(for url: URL, completion: @escaping (UIImage?) -> Void) {
+        cancellables[url] = imageLoader(url)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { _ in }
+            )
     }
 }
