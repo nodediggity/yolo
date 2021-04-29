@@ -10,16 +10,16 @@ import Combine
 import Yolo
 
 class FeedUIIntegrationTests: XCTestCase {
-
+    
     func test_scene_has_title() {
         let (sut, _) = makeSUT()
         XCTAssertEqual(sut.title, title)
     }
-
+    
     func test_load_actions_request_feed_from_loader() {
         let (sut, loader) = makeSUT()
         XCTAssertEqual(loader.loadFeedCallCount, 0)
-
+        
         sut.loadViewIfNeeded()
         XCTAssertEqual(loader.loadFeedCallCount, 1)
         
@@ -34,7 +34,7 @@ class FeedUIIntegrationTests: XCTestCase {
     
     func test_loading_indicator_is_visible_while_loading_feed() {
         let (sut, loader) = makeSUT()
-
+        
         sut.loadViewIfNeeded()
         XCTAssertTrue(sut.isShowingLoadingIndicator)
         
@@ -47,6 +47,25 @@ class FeedUIIntegrationTests: XCTestCase {
         loader.loadFeedCompletes(with: .success([]), at: 1)
         XCTAssertFalse(sut.isShowingLoadingIndicator)
     }
+    
+    func test_load_feed_completion_renders_successfully_loaded_feed() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        assertThat(sut, isRendering: [])
+        
+        let page0 = makeFeed(itemCount: 5)
+        loader.loadFeedCompletes(with: .success(page0.items))
+        
+        assertThat(sut, isRendering: page0.items)
+        
+        sut.simulateUserInitiatedReload()
+        
+        let refreshedPage0 = makeFeed(itemCount: 10)
+        loader.loadFeedCompletes(with: .success(refreshedPage0.items), at: 1)
+        
+        assertThat(sut, isRendering: refreshedPage0.items)
+    }
 }
 
 private extension FeedUIIntegrationTests {
@@ -57,6 +76,17 @@ private extension FeedUIIntegrationTests {
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
+    }
+    
+    func assertThat(_ sut: FeedViewController, isRendering feed: [FeedItem], file: StaticString = #filePath, line: UInt = #line) {
+        sut.view.enforceLayoutCycle()
+        
+        guard sut.numberOfRenderedFeedItems == feed.count else {
+            return XCTFail("Expected \(feed.count) items but got \(sut.numberOfRenderedFeedItems) instead.", file: file, line: line)
+        }
+        
+        
+        executeRunLoopToCleanUpReferences()
     }
     
     var title: String {
@@ -85,18 +115,62 @@ private extension FeedUIIntegrationTests {
             }
         }
     }
+    
 
+    
+    func makeFeed(itemCount: Int = 5) -> Feed {
+        let items = (0..<itemCount).map(makeFeedItem(_:))
+        return Feed(items: items)
+    }
+    
+    func makeFeedItem(_ index: Int) -> FeedItem {
+        let ITEM_ID = UUID().uuidString
+        let IMAGE_URL = "https://some-image-\(index).com"
+        let USER_ID = UUID().uuidString
+        let USER_NAME = "any name \(index)"
+        let USER_ABOUT = "some text \(index)"
+        let USER_IMAGE_URL = "https://some-user-image-\(index).com"
+        let LIKES = Int.random(in: 0..<5)
+        let COMMENTS = Int.random(in: 0..<10)
+        let SHARES = Int.random(in: 0..<15)
+        
+        return FeedItem(
+            id: ITEM_ID,
+            imageURL: makeURL(IMAGE_URL),
+            user: FeedItem.User(id: USER_ID, name: USER_NAME, about: USER_ABOUT, imageURL: makeURL(USER_IMAGE_URL)),
+            interactions: FeedItem.Interactions(likes: LIKES, comments: COMMENTS, shares: SHARES)
+        )
+    }
 }
 
 private extension FeedViewController {
+    
+    private var FEED_SECTION: Int { 0 }
     
     var isShowingLoadingIndicator: Bool {
         guard let refreshControl = refreshControl else { return false }
         return refreshControl.isRefreshing
     }
     
+    var numberOfRenderedFeedItems: Int {
+        guard tableView.numberOfSections > FEED_SECTION else { return 0 }
+        return tableView.numberOfRows(inSection: FEED_SECTION)
+    }
+    
     func simulateUserInitiatedReload() {
         refreshControl?.beginRefreshing()
         scrollViewDidEndDragging(tableView, willDecelerate: false)
     }
+}
+
+
+extension UIView {
+    func enforceLayoutCycle() {
+        layoutIfNeeded()
+        RunLoop.current.run(until: Date())
+    }
+}
+
+func executeRunLoopToCleanUpReferences() {
+    RunLoop.current.run(until: Date())
 }
