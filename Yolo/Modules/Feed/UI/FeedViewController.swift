@@ -26,7 +26,17 @@ public final class FeedViewController: UITableViewController {
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        FeedCardView()
+        let item = feed[indexPath.row]
+        
+        let cell = FeedCardView()
+        
+        cell.nameLabel.text = item.user.name
+        cell.aboutLabel.text = item.user.about
+        cell.likesCountLabel.text = "\(item.interactions.likes)"
+        cell.commentsCountLabel.text = "\(item.interactions.comments)"
+        cell.sharesCountLabel.text = "\(item.interactions.shares)"
+        
+        return cell
     }
     
     public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
