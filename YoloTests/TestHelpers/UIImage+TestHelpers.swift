@@ -19,7 +19,7 @@ extension UIImage {
         return img!
     }
     
-    static func makeImageData(withColor color: UIColor) -> Data? {
-        make(withColor: color).pngData()
+    static func makeImageData(withColor color: UIColor) -> Data {
+        make(withColor: color).pngData()!
     }
 }

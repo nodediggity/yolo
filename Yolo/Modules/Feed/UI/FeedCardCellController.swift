@@ -9,15 +9,28 @@ import UIKit
 
 public final class FeedCardCellController {
     
+    public enum Image {
+        case user(UIImage?)
+        case body(UIImage?)
+    }
+    
     public var onLoadImage: (() -> Void)?
     public var onLoadImageCancel: (() -> Void)?
 
-    
     private let cell = FeedCardView()
     private let model: FeedCardViewModel
     
     public init(model: FeedCardViewModel) {
         self.model = model
+    }
+    
+    public func displayImage(for view: Image) {
+        switch view {
+        case let .user(image):
+            cell.userImageView.image = image
+        case let .body(image):
+            cell.cardImageView.image = image
+        }
     }
     
     public func view() -> FeedCardView {

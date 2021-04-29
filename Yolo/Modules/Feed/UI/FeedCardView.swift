@@ -9,6 +9,11 @@ import UIKit
 
 public final class FeedCardView: UITableViewCell {
     
+    private(set) public var userImageView: UIImageView = {
+        let imageView = UIImageView(frame: .zero)
+        return imageView
+    }()
+    
     private(set) public var nameLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textColor = .label
@@ -41,6 +46,11 @@ public final class FeedCardView: UITableViewCell {
         view.heightAnchor.constraint(equalToConstant: 184).isActive = true
         view.layer.cornerRadius = 12
         return view
+    }()
+    
+    private(set) public var cardImageView: UIImageView = {
+        let imageView = UIImageView(frame: .zero)
+        return imageView
     }()
     
     private(set) public lazy var likeButton: UIButton = {
