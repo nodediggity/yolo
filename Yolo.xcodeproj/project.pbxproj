@@ -56,6 +56,7 @@
 		6AE02CCB263B326E0089B39F /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */; };
 		6AE02CD5263B3FBE0089B39F /* UIImage+TryMake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */; };
 		6AE02CD9263B41810089B39F /* ResourceViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CD8263B41810089B39F /* ResourceViewAdapter.swift */; };
+		6AE02CE9263B43610089B39F /* CellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CE8263B43610089B39F /* CellController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +123,7 @@
 		6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
 		6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TryMake.swift"; sourceTree = "<group>"; };
 		6AE02CD8263B41810089B39F /* ResourceViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewAdapter.swift; sourceTree = "<group>"; };
+		6AE02CE8263B43610089B39F /* CellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -367,6 +369,7 @@
 				6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */,
 				6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */,
 				6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */,
+				6AE02CE8263B43610089B39F /* CellController.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -647,6 +650,7 @@
 				6AE02CAF263B1E310089B39F /* ResourcePresentationAdapter.swift in Sources */,
 				6AE02CD5263B3FBE0089B39F /* UIImage+TryMake.swift in Sources */,
 				6A79BE7D2639D918000062A7 /* AppDelegate.swift in Sources */,
+				6AE02CE9263B43610089B39F /* CellController.swift in Sources */,
 				6A45D78D2639FB94003EF1C8 /* Feed.swift in Sources */,
 				6A45D7CF263A78CB003EF1C8 /* Publisher+MainQueue.swift in Sources */,
 				6A45D7A3263A0548003EF1C8 /* FeedResponseMapper.swift in Sources */,
