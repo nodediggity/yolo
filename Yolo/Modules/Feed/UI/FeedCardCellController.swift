@@ -9,6 +9,8 @@ import UIKit
 
 public final class FeedCardCellController {
     
+    public var onLoadUserImage: (() -> Void)?
+    
     private let cell = FeedCardView()
     private let model: FeedCardViewModel
     
@@ -24,6 +26,13 @@ public final class FeedCardCellController {
         cell.commentsCountLabel.text = model.comments
         cell.sharesCountLabel.text = model.shares
         
+        load()
         return cell
+    }
+}
+
+private extension FeedCardCellController {
+    func load() {
+        onLoadUserImage?()
     }
 }
