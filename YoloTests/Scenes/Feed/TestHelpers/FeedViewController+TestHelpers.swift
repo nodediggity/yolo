@@ -56,15 +56,7 @@ extension FeedViewController {
         let index = IndexPath(row: row, section: FEED_SECTION)
         ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
-    
-    func renderedFeedCardUserImageData(at row: Int) -> Data? {
-        return simulateFeedCardVisible(at: row)?.renderedImageForUser
-    }
-    
-    func renderedFeedCardBodyImageData(at row: Int) -> Data? {
-        return simulateFeedCardVisible(at: row)?.renderedImageForCard
-    }
-    
+        
     func simulateUserInitiatedReload() {
         refreshControl?.beginRefreshing()
         scrollViewDidEndDragging(tableView, willDecelerate: false)
