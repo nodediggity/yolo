@@ -16,6 +16,7 @@ public final class FeedCardView: UITableViewCell {
         imageView.layer.cornerRadius = 32
         imageView.clipsToBounds = true
         imageView.backgroundColor = .init(white: 0, alpha: 0.1)
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
@@ -57,6 +58,7 @@ public final class FeedCardView: UITableViewCell {
     private(set) public var cardImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         return imageView
     }()
     
