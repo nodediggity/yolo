@@ -149,6 +149,7 @@
 				6A30B9C42639EA1700A65598 /* Info.plist */,
 				6A30B9CE2639EA4C00A65598 /* Modules */,
 				6A45D7A7263A62B8003EF1C8 /* Scenes */,
+				6A30B9DC2639EB4300A65598 /* TestHelpers */,
 			);
 			path = YoloTests;
 			sourceTree = "<group>";
@@ -158,7 +159,6 @@
 			children = (
 				6A45D7892639FAFA003EF1C8 /* Feed */,
 				6A30B9CF2639EA5000A65598 /* Networking */,
-				6A30B9DC2639EB4300A65598 /* TestHelpers */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
