@@ -12,15 +12,16 @@ public enum FeedUIComposer {
     
     public typealias FeedLoader = () -> AnyPublisher<[FeedItem], Error>
     public typealias ImageLoader = (_ imageURL: URL) -> AnyPublisher<Data, Error>
+    public typealias SelectionHandler = (FeedItem) -> Void
     
-    public static func compose(loader: @escaping FeedLoader, imageLoader: @escaping ImageLoader) -> FeedViewController {
+    public static func compose(loader: @escaping FeedLoader, imageLoader: @escaping ImageLoader, selection: @escaping SelectionHandler) -> FeedViewController {
         
         let viewController = FeedViewController()
         viewController.title = FeedPresenter.title
         
         let adapter = FeedPresentationAdapter(loader: loader)
         adapter.presenter = FeedPresenter(
-            view: FeedViewAdapter(controller: viewController, imageLoader: imageLoader),
+            view: FeedViewAdapter(controller: viewController, imageLoader: imageLoader, selection: selection),
             loadingView: viewController
         )
         
@@ -34,12 +35,14 @@ private final class FeedViewAdapter {
     
     private weak var controller: FeedViewController?
     private let imageLoader: FeedUIComposer.ImageLoader
+    private let selection: FeedUIComposer.SelectionHandler
     
     private var cancellables: [URL: AnyCancellable] = [:]
     
-    init(controller: FeedViewController, imageLoader: @escaping FeedUIComposer.ImageLoader) {
+    init(controller: FeedViewController, imageLoader: @escaping FeedUIComposer.ImageLoader, selection: @escaping FeedUIComposer.SelectionHandler) {
         self.controller = controller
         self.imageLoader = imageLoader
+        self.selection = selection
     }
 }
 
@@ -48,6 +51,10 @@ extension FeedViewAdapter: FeedView {
         controller?.display(viewModel.feed.map { item in
             let model = FeedCardPresenter.map(item)
             let view = FeedCardCellController(model: model)
+            
+            view.onSelection = { [selection] in
+                selection(item)
+            }
             
             view.onLoadImage = { [loadImage, weak view] in
                 

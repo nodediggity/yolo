@@ -39,6 +39,10 @@ public final class FeedViewController: UITableViewController {
         cancelCellControllerLoad(for: indexPath)
     }
     
+    public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        controller(for: indexPath).select()
+    }
+    
     public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         guard refreshControl?.isRefreshing == true else { return }
         load()

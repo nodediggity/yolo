@@ -16,6 +16,8 @@ public final class FeedCardCellController {
     
     public var onLoadImage: (() -> Void)?
     public var onLoadImageCancel: (() -> Void)?
+    
+    public var onSelection: (() -> Void)?
 
     private let cell = FeedCardView()
     private let model: FeedCardViewModel
@@ -45,6 +47,10 @@ public final class FeedCardCellController {
         
         load()
         return cell
+    }
+    
+    public func select() {
+        onSelection?()
     }
     
     public func cancel() {

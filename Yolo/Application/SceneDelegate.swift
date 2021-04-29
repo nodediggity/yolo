@@ -32,7 +32,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func configure(window: UIWindow) {
         window.rootViewController = FeedUIComposer.compose(
             loader: makeRemoteFeedLoader,
-            imageLoader: makeRemoteImageLoader
+            imageLoader: makeRemoteImageLoader,
+            selection: { _ in }
         )
         
         window.makeKeyAndVisible()
