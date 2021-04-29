@@ -50,4 +50,12 @@ private extension SceneDelegate {
             .map { $0.items }
             .eraseToAnyPublisher()
     }
+    
+    func makeRemoteImageLoader(_ imageURL: URL) -> AnyPublisher<Data, Error> {
+        let request = URLRequest(url: imageURL)
+        return httpClient
+            .dispatchPublisher(for: request)
+            .tryMap(ImageResponseMapper.map)
+            .eraseToAnyPublisher()
+    }
 }

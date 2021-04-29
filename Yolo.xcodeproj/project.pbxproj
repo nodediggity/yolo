@@ -193,8 +193,8 @@
 		6A30B9CE2639EA4C00A65598 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				6A45D834263AE979003EF1C8 /* Media */,
 				6A45D7892639FAFA003EF1C8 /* Feed */,
+				6A45D834263AE979003EF1C8 /* Media */,
 				6A30B9CF2639EA5000A65598 /* Networking */,
 			);
 			path = Modules;
