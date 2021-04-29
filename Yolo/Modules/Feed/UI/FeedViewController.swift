@@ -10,40 +10,46 @@ import UIKit
 public final class FeedViewController: UITableViewController {
     
     public var onLoad: (() -> Void)?
-    
-    private var controllers: [FeedCardCellController] = [] {
-        didSet { tableView.reloadData() }
-    }
-    
-    public func display(_ controllers: [FeedCardCellController]) {
-        self.controllers = controllers
-    }
+        
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
+        UITableViewDiffableDataSource<Int, CellController>(tableView: tableView) { tableView, index, controller in
+            controller.dataSource.tableView(tableView, cellForRowAt: index)
+        }
+    }()
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         refreshControl = UIRefreshControl(frame: .zero)
+        tableView.dataSource = dataSource
         tableView.prefetchDataSource = self
         tableView.separatorStyle = .none
-        
         tableView.register(FeedCardView.self)
         
         load()
     }
     
-    public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        controllers.count
+    public func display(_ sections: [CellController]...) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, CellController>()
+        sections.enumerated().forEach { section, cellControllers in
+            snapshot.appendSections([section])
+            snapshot.appendItems(cellControllers, toSection: section)
+        }
+        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
-    public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        controller(for: indexPath).view(in: tableView)
+    override public func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let delegate = controller(for: indexPath)?.delegate
+        delegate?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cancelCellControllerLoad(for: indexPath)
+        let delegate = controller(for: indexPath)?.delegate
+        delegate?.tableView?(tableView, didEndDisplaying: cell, forRowAt: indexPath)
     }
     
     public override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        controller(for: indexPath).select()
+        let delegate = controller(for: indexPath)?.delegate
+        delegate?.tableView?(tableView, didSelectRowAt: indexPath)
     }
     
     public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -54,11 +60,17 @@ public final class FeedViewController: UITableViewController {
 
 extension FeedViewController: UITableViewDataSourcePrefetching {
     public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(preloadCellController)
+        indexPaths.forEach { indexPath in
+            let dsp = controller(for: indexPath)?.dataSourcePrefetching
+            dsp?.tableView(tableView, prefetchRowsAt: [indexPath])
+        }
     }
     
     public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach(cancelCellControllerLoad)
+        indexPaths.forEach { indexPath in
+            let dsp = controller(for: indexPath)?.dataSourcePrefetching
+            dsp?.tableView?(tableView, cancelPrefetchingForRowsAt: [indexPath])
+        }
     }
 }
 
@@ -66,17 +78,9 @@ private extension FeedViewController {
     func load() {
         onLoad?()
     }
-        
-    func controller(for indexPath: IndexPath) -> FeedCardCellController {
-        controllers[indexPath.row]
-    }
     
-    func cancelCellControllerLoad(for indexPath: IndexPath) {
-        controller(for: indexPath).cancel()
-    }
-    
-    func preloadCellController(for indexPath: IndexPath) {
-        controller(for: indexPath).preload()
+    func controller(for indexPath: IndexPath) -> CellController? {
+        dataSource.itemIdentifier(for: indexPath)
     }
 }
 

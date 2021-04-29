@@ -12,6 +12,11 @@ extension FeedViewController {
     
     private var FEED_SECTION: Int { 0 }
     
+    override public func loadViewIfNeeded() {
+        super.loadViewIfNeeded()
+        tableView.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
+    }
+    
     var isShowingLoadingIndicator: Bool {
         guard let refreshControl = refreshControl else { return false }
         return refreshControl.isRefreshing
@@ -23,8 +28,9 @@ extension FeedViewController {
     }
     
     func feedCardView(at row: Int) -> UITableViewCell? {
-        let indexPath = IndexPath(row: row, section: FEED_SECTION)
-        return tableView(tableView, cellForRowAt: indexPath)
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: FEED_SECTION)
+        return ds?.tableView(tableView, cellForRowAt: index)
     }
     
     @discardableResult

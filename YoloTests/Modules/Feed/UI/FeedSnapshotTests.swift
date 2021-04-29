@@ -36,7 +36,7 @@ private extension FeedSnapshotTests {
         return controller
     }
     
-    func makeEmptyFeed() -> [FeedCardCellController] {
+    func makeEmptyFeed() -> [CellController] {
         []
     }
     
@@ -69,11 +69,11 @@ private extension FeedSnapshotTests {
 
 private extension FeedViewController {
     func display(_ stubs: [FeedCardStub]) {
-        let cells: [FeedCardCellController] = stubs.map { stub in
+        let cells: [CellController] = stubs.map { stub in
             let controller = FeedCardCellController(model: stub.viewModel)
             stub.controller = controller
             controller.onLoadImage = stub.displayImages
-            return controller
+            return .init(controller)
         }
         
         display(cells)

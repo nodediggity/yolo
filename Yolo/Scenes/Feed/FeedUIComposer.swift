@@ -90,7 +90,7 @@ extension FeedViewAdapter: ResourceView {
                 selection(item)
             }
             
-            return view
+            return CellController(id: item, view)
         })
     }
 }
