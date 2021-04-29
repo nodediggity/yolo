@@ -72,6 +72,7 @@ private extension FeedViewController {
         let cells: [FeedCardCellController] = stubs.map { stub in
             let controller = FeedCardCellController(model: stub.viewModel)
             stub.controller = controller
+            controller.onLoadImage = stub.displayImages
             return controller
         }
         
@@ -81,18 +82,7 @@ private extension FeedViewController {
 
 private final class FeedCardStub {
     let viewModel: FeedCardViewModel
-    
-    weak var controller: FeedCardCellController? {
-        didSet {
-            if let image = userImage {
-                controller?.displayImage(for: .user(image))
-            }
-            
-            if let image = cardImage {
-                controller?.displayImage(for: .body(image))
-            }
-        }
-    }
+    weak var controller: FeedCardCellController?
     
     private var userImage: UIImage?
     private var cardImage: UIImage?
@@ -101,5 +91,15 @@ private final class FeedCardStub {
         self.viewModel = FeedCardPresenter.map(item)
         self.userImage = userImage
         self.cardImage = cardImage
+    }
+    
+    func displayImages() {
+        if let image = userImage {
+            controller?.displayImage(for: .user(image))
+        }
+
+        if let image = cardImage {
+            controller?.displayImage(for: .body(image))
+        }
     }
 }

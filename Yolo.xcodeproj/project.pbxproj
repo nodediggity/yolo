@@ -54,6 +54,7 @@
 		6AE02CAF263B1E310089B39F /* ResourcePresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */; };
 		6AE02CB5263B1F270089B39F /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */; };
 		6AE02CCB263B326E0089B39F /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */; };
+		6AE02CD5263B3FBE0089B39F /* UIImage+TryMake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +119,7 @@
 		6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePresentationAdapter.swift; sourceTree = "<group>"; };
 		6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
 		6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
+		6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TryMake.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -361,6 +363,7 @@
 				6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */,
 				6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */,
 				6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */,
+				6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -639,6 +642,7 @@
 				6A45D814263AE262003EF1C8 /* Combine+Helpers.swift in Sources */,
 				6AE02CCB263B326E0089B39F /* UITableView+Dequeueing.swift in Sources */,
 				6AE02CAF263B1E310089B39F /* ResourcePresentationAdapter.swift in Sources */,
+				6AE02CD5263B3FBE0089B39F /* UIImage+TryMake.swift in Sources */,
 				6A79BE7D2639D918000062A7 /* AppDelegate.swift in Sources */,
 				6A45D78D2639FB94003EF1C8 /* Feed.swift in Sources */,
 				6A45D7CF263A78CB003EF1C8 /* Publisher+MainQueue.swift in Sources */,

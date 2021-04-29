@@ -24,6 +24,9 @@ public final class FeedViewController: UITableViewController {
         refreshControl = UIRefreshControl(frame: .zero)
         tableView.prefetchDataSource = self
         tableView.separatorStyle = .none
+        
+        tableView.register(FeedCardView.self)
+        
         load()
     }
     
@@ -32,7 +35,7 @@ public final class FeedViewController: UITableViewController {
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        controller(for: indexPath).view()
+        controller(for: indexPath).view(in: tableView)
     }
     
     public override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
