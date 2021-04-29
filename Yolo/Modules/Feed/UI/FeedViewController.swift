@@ -11,8 +11,12 @@ public final class FeedViewController: UITableViewController {
     
     public var onLoad: (() -> Void)?
     
-    private var feed: [FeedCardCellController] = [] {
+    private var controllers: [FeedCardCellController] = [] {
         didSet { tableView.reloadData() }
+    }
+    
+    public func display(_ controllers: [FeedCardCellController]) {
+        self.controllers = controllers
     }
     
     public override func viewDidLoad() {
@@ -22,12 +26,11 @@ public final class FeedViewController: UITableViewController {
     }
     
     public override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        feed.count
+        controllers.count
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let controller = feed[indexPath.row]
-        return controller.view()
+        controller(for: indexPath).view()
     }
     
     public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -40,11 +43,9 @@ private extension FeedViewController {
     func load() {
         onLoad?()
     }
-}
-
-extension FeedViewController: FeedView {
-    public func display(_ viewModel: FeedViewModel) {
-        self.feed = viewModel.feed.map(FeedCardCellController.init)
+    
+    func controller(for indexPath: IndexPath) -> FeedCardCellController {
+        controllers[indexPath.row]
     }
 }
 

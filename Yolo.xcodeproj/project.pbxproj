@@ -274,9 +274,9 @@
 		6A45D7AF263A6DFE003EF1C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				6A45D7B0263A6E04003EF1C8 /* FeedViewController.swift */,
-				6A45D7C9263A7318003EF1C8 /* FeedCardView.swift */,
 				6A45D7E4263A7C8A003EF1C8 /* FeedCardCellController.swift */,
+				6A45D7C9263A7318003EF1C8 /* FeedCardView.swift */,
+				6A45D7B0263A6E04003EF1C8 /* FeedViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
