@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class FeedCardCellController {
+public final class FeedCardCellController: NSObject {
     
     public enum Image {
         case user(UIImage?)
@@ -34,32 +34,18 @@ public final class FeedCardCellController {
             cell?.cardImageView.image = image
         }
     }
-    
-    public func view(in tableView: UITableView) -> FeedCardView {
-        cell = tableView.dequeueReusableCell()
-        load()
-        return configure(cell)!
-    }
-    
-    public func select() {
-        onSelection?()
-    }
-    
-    public func preload() {
-        load()
-    }
-    
-    public func cancel() {
-        onLoadImageCancel?()
-    }
 }
 
-private extension FeedCardCellController {
-    func load() {
-        onLoadImage?()
+extension FeedCardCellController: UITableViewDataSource {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        1
     }
     
-    func configure(_ cell: FeedCardView?) -> FeedCardView? {
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        cell = tableView.dequeueReusableCell()
+        cell?.userImageView.image = nil
+        cell?.cardImageView.image = nil
+        
         cell?.selectionStyle = .none
         
         cell?.nameLabel.text = model.name
@@ -68,7 +54,42 @@ private extension FeedCardCellController {
         cell?.commentsCountLabel.text = model.comments
         cell?.sharesCountLabel.text = model.shares
         
-        return cell
+        load()
+        return cell!
+    }
+}
+
+extension FeedCardCellController: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        onSelection?()
+    }
+    
+    public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cancel()
+    }
+}
+
+extension FeedCardCellController: UITableViewDataSourcePrefetching {
+    public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        load()
+    }
+    
+    public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        cancel()
+    }
+}
+
+private extension FeedCardCellController {
+    func load() {
+        onLoadImage?()
+    }
+    
+    func cancel() {
+        releaseCellForReuse()
+        onLoadImageCancel?()
     }
 
+    func releaseCellForReuse() {
+        cell = nil
+    }
 }

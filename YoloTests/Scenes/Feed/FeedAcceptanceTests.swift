@@ -15,6 +15,7 @@ class FeedAcceptanceTests: XCTestCase {
         XCTAssertEqual(sut.numberOfRenderedFeedItems, 5)
         
         let view0 = sut.simulateFeedCardVisible(at: 0)
+        
         XCTAssertEqual(view0?.renderedImageForUser, makeUserImageData())
         XCTAssertEqual(view0?.renderedImageForCard, makeCardImageData())
         
