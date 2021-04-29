@@ -19,7 +19,7 @@ public enum FeedUIComposer {
         let viewController = FeedViewController()
         viewController.title = FeedPresenter.title
         
-        let adapter = FeedPresentationAdapter(loader: loader)
+        let adapter = ResourcePresentationAdapter<[FeedItem], FeedViewAdapter>(service: loader)
         adapter.presenter = ResourcePresenter(
             view: FeedViewAdapter(
                 controller: viewController,
