@@ -11,7 +11,7 @@ public final class FeedViewController: UITableViewController {
     
     public var onLoad: (() -> Void)?
     
-    private var feed: [FeedItem] = [] {
+    private var feed: [FeedCardCellController] = [] {
         didSet { tableView.reloadData() }
     }
     
@@ -26,17 +26,8 @@ public final class FeedViewController: UITableViewController {
     }
     
     public override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = feed[indexPath.row]
-        
-        let cell = FeedCardView()
-        
-        cell.nameLabel.text = item.user.name
-        cell.aboutLabel.text = item.user.about
-        cell.likesCountLabel.text = "\(item.interactions.likes)"
-        cell.commentsCountLabel.text = "\(item.interactions.comments)"
-        cell.sharesCountLabel.text = "\(item.interactions.shares)"
-        
-        return cell
+        let controller = feed[indexPath.row]
+        return controller.view()
     }
     
     public override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -53,7 +44,7 @@ private extension FeedViewController {
 
 extension FeedViewController: FeedView {
     public func display(_ viewModel: FeedViewModel) {
-        self.feed = viewModel.feed
+        self.feed = viewModel.feed.map(FeedCardCellController.init)
     }
 }
 
