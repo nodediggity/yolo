@@ -13,11 +13,15 @@ class FeedAcceptanceTests: XCTestCase {
     func test_on_launch_displays_remote_feed_when_user_has_connectivity() {
         let sut = launch(httpClient: .online(response))
         XCTAssertEqual(sut.numberOfRenderedFeedItems, 5)
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), makeUserImageData())
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), makeCardImageData())
+        
+        let view0 = sut.simulateFeedCardVisible(at: 0)
+        XCTAssertEqual(view0?.renderedImageForUser, makeUserImageData())
+        XCTAssertEqual(view0?.renderedImageForCard, makeCardImageData())
+        
+        let view1 = sut.simulateFeedCardVisible(at: 1)
+        XCTAssertEqual(view1?.renderedImageForUser, makeUserImageData())
+        XCTAssertEqual(view1?.renderedImageForCard, makeCardImageData())
 
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), makeUserImageData())
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), makeCardImageData())
     }
     
     func test_on_launch_with_no_connectivity_displays_empty_feed() {

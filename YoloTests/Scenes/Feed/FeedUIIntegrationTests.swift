@@ -167,39 +167,41 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.loadViewIfNeeded()
         loader.loadFeedCompletes(with: .success(feed.items))
         
-        sut.simulateFeedCardVisible(at: 0)
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), .none)
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), .none)
+        let view0 = sut.simulateFeedCardVisible(at: 0)
+        
+        XCTAssertEqual(view0?.renderedImageForUser, .none)
+        XCTAssertEqual(view0?.renderedImageForCard, .none)
         
         let userImageData0 = UIImage.makeImageData(withColor: .red)
         let bodyImageData0 = UIImage.makeImageData(withColor: .blue)
         
         loader.loadImageCompletes(with: .success(userImageData0), at: 0)
         
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), userImageData0)
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), .none)
+        XCTAssertEqual(view0?.renderedImageForUser, userImageData0)
+        XCTAssertEqual(view0?.renderedImageForCard, .none)
         
         loader.loadImageCompletes(with: .success(bodyImageData0), at: 1)
+
+        XCTAssertEqual(view0?.renderedImageForUser, userImageData0)
+        XCTAssertEqual(view0?.renderedImageForCard, bodyImageData0)
         
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), userImageData0)
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), bodyImageData0)
+        let view1 = sut.simulateFeedCardVisible(at: 1)
         
-        sut.simulateFeedCardVisible(at: 1)
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), .none)
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), .none)
+        XCTAssertEqual(view1?.renderedImageForUser, .none)
+        XCTAssertEqual(view1?.renderedImageForCard, .none)
         
-        let userImageData1 = UIImage.makeImageData(withColor: .gray)
-        let bodyImageData1 = UIImage.makeImageData(withColor: .yellow)
+        let userImageData1 = UIImage.makeImageData(withColor: .purple)
+        let bodyImageData1 = UIImage.makeImageData(withColor: .darkGray)
         
         loader.loadImageCompletes(with: .success(userImageData1), at: 2)
         
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), userImageData1)
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), .none)
+        XCTAssertEqual(view1?.renderedImageForUser, userImageData1)
+        XCTAssertEqual(view1?.renderedImageForCard, .none)
         
         loader.loadImageCompletes(with: .success(bodyImageData1), at: 3)
         
-        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), userImageData1)
-        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), bodyImageData1)
+        XCTAssertEqual(view1?.renderedImageForUser, userImageData1)
+        XCTAssertEqual(view1?.renderedImageForCard, bodyImageData1)
     }
     
     func test_feed_card_view_preloads_image_loaded_for_url_when_near_visible() {
