@@ -156,39 +156,5 @@ private extension FeedCardView {
     }
 }
 
-extension UIFont {
-    static func preferredFont(forTextStyle style: TextStyle, weight: Weight) -> UIFont {
-        let metrics = UIFontMetrics(forTextStyle: style)
-        let desc = UIFontDescriptor.preferredFontDescriptor(withTextStyle: style)
-        let font = UIFont.systemFont(ofSize: desc.pointSize, weight: weight)
-        return metrics.scaledFont(for: font)
-    }
-}
 
-extension UIView {
-    
-    public func makeContainer() -> UIView {
-        let container = UIView()
-        container.backgroundColor = .clear
-        container.addSubview(self)
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            container.trailingAnchor.constraint(equalTo: trailingAnchor),
-            topAnchor.constraint(equalTo: container.topAnchor),
-            container.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
-        
-        return container
-    }
-    
-}
 
-extension UIImage {
-    func resized(to size: CGSize) -> UIImage {
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            draw(in: CGRect(origin: .zero, size: size))
-        }
-    }
-}
