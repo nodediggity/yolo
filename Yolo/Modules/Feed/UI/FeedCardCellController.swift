@@ -12,7 +12,7 @@ public final class FeedCardCellController {
     private let cell = FeedCardView()
     private let model: FeedCardViewModel
     
-    init(model: FeedCardViewModel) {
+    public init(model: FeedCardViewModel) {
         self.model = model
     }
     
