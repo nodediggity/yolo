@@ -60,6 +60,13 @@ extension FeedViewAdapter: FeedView {
                 }
             }
             
+            view.onLoadImageCancel = { [weak self] in
+                [item.user.imageURL, item.imageURL].forEach { url in
+                    self?.cancellables[url]?.cancel()
+                    self?.cancellables[url] = nil
+                }
+            }
+            
             return view
         })
     }

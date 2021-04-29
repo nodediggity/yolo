@@ -10,6 +10,8 @@ import UIKit
 public final class FeedCardCellController {
     
     public var onLoadImage: (() -> Void)?
+    public var onLoadImageCancel: (() -> Void)?
+
     
     private let cell = FeedCardView()
     private let model: FeedCardViewModel
@@ -28,6 +30,10 @@ public final class FeedCardCellController {
         
         load()
         return cell
+    }
+    
+    public func cancel() {
+        onLoadImageCancel?()
     }
 }
 
