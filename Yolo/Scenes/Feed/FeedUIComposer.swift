@@ -39,6 +39,9 @@ private final class FeedViewAdapter {
 
 extension FeedViewAdapter: FeedView {
     func display(_ viewModel: FeedViewModel) {
-        controller?.display(viewModel.feed.map(FeedCardCellController.init))
+        controller?.display(viewModel.feed.map { item in
+            let model = FeedCardPresenter.map(item)
+            return FeedCardCellController(model: model)
+        })
     }
 }

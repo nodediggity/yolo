@@ -78,7 +78,7 @@ class FeedUIIntegrationTests: XCTestCase {
         
         sut.simulateUserInitiatedReload()
         loader.loadFeedCompletes(with: .success([]), at: 1)
-
+        
         assertThat(sut, isRendering: [])
     }
     
@@ -90,7 +90,7 @@ class FeedUIIntegrationTests: XCTestCase {
         loader.loadFeedCompletes(with: .success(feed.items))
         
         assertThat(sut, isRendering: feed.items)
-
+        
         sut.simulateUserInitiatedReload()
         
         let error = makeError()
@@ -145,11 +145,13 @@ private extension FeedUIIntegrationTests {
             return XCTFail("Expected \(FeedCardView.self) instance but got \(String(describing: view)) instead", file: file, line: line)
         }
         
-        XCTAssertEqual(cell.nameText, item.user.name, file: file, line: line)
-        XCTAssertEqual(cell.aboutText, item.user.about, file: file, line: line)
-        XCTAssertEqual(cell.likesText, "\(item.interactions.likes)", file: file, line: line)
-        XCTAssertEqual(cell.commentsText, "\(item.interactions.comments)", file: file, line: line)
-        XCTAssertEqual(cell.sharesText, "\(item.interactions.shares)", file: file, line: line)
+        let viewModel = FeedCardPresenter.map(item)
+        
+        XCTAssertEqual(cell.nameText, viewModel.name, file: file, line: line)
+        XCTAssertEqual(cell.aboutText, viewModel.about, file: file, line: line)
+        XCTAssertEqual(cell.likesText, viewModel.likes, file: file, line: line)
+        XCTAssertEqual(cell.commentsText, viewModel.comments, file: file, line: line)
+        XCTAssertEqual(cell.sharesText, viewModel.shares, file: file, line: line)
     }
     
     var title: String {
@@ -178,7 +180,7 @@ private extension FeedUIIntegrationTests {
             }
         }
     }
-
+    
     func makeFeed(itemCount: Int = 5) -> Feed {
         let items = (0..<itemCount).map(makeFeedItem(_:))
         return Feed(items: items)

@@ -10,19 +10,19 @@ import UIKit
 public final class FeedCardCellController {
     
     private let cell = FeedCardView()
-    private let model: FeedItem
+    private let model: FeedCardViewModel
     
-    init(model: FeedItem) {
+    init(model: FeedCardViewModel) {
         self.model = model
     }
     
     public func view() -> FeedCardView {
         
-        cell.nameLabel.text = model.user.name
-        cell.aboutLabel.text = model.user.about
-        cell.likesCountLabel.text = "\(model.interactions.likes)"
-        cell.commentsCountLabel.text = "\(model.interactions.comments)"
-        cell.sharesCountLabel.text = "\(model.interactions.shares)"
+        cell.nameLabel.text = model.name
+        cell.aboutLabel.text = model.about
+        cell.likesCountLabel.text = model.likes
+        cell.commentsCountLabel.text = model.comments
+        cell.sharesCountLabel.text = model.shares
         
         return cell
     }
