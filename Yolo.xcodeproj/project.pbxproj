@@ -52,6 +52,7 @@
 		6AE02C9F263B121E0089B39F /* CommentsResponseMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02C9E263B121E0089B39F /* CommentsResponseMapperTests.swift */; };
 		6AE02CAB263B19DC0089B39F /* ResourcePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CAA263B19DC0089B39F /* ResourcePresenter.swift */; };
 		6AE02CAF263B1E310089B39F /* ResourcePresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */; };
+		6AE02CB5263B1F270089B39F /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +115,7 @@
 		6AE02C9E263B121E0089B39F /* CommentsResponseMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsResponseMapperTests.swift; sourceTree = "<group>"; };
 		6AE02CAA263B19DC0089B39F /* ResourcePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePresenter.swift; sourceTree = "<group>"; };
 		6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcePresentationAdapter.swift; sourceTree = "<group>"; };
+		6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -355,6 +357,7 @@
 				6A45D7CE263A78CB003EF1C8 /* Publisher+MainQueue.swift */,
 				6AE02CAA263B19DC0089B39F /* ResourcePresenter.swift */,
 				6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */,
+				6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -638,6 +641,7 @@
 				6A45D7A3263A0548003EF1C8 /* FeedResponseMapper.swift in Sources */,
 				6A45D7932639FBC2003EF1C8 /* FeedItem.swift in Sources */,
 				6A45D7B8263A6E42003EF1C8 /* FeedPresenter.swift in Sources */,
+				6AE02CB5263B1F270089B39F /* WeakRefVirtualProxy.swift in Sources */,
 				6A45D808263AB70B003EF1C8 /* UIView+Container.swift in Sources */,
 				6A45D802263AB6F3003EF1C8 /* UIFont+Weight.swift in Sources */,
 				6AE02C92263B10090089B39F /* Comment.swift in Sources */,
