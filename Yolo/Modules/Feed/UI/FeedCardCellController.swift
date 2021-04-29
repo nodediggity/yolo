@@ -9,7 +9,7 @@ import UIKit
 
 public final class FeedCardCellController {
     
-    public var onLoadUserImage: (() -> Void)?
+    public var onLoadImage: (() -> Void)?
     
     private let cell = FeedCardView()
     private let model: FeedCardViewModel
@@ -33,6 +33,6 @@ public final class FeedCardCellController {
 
 private extension FeedCardCellController {
     func load() {
-        onLoadUserImage?()
+        onLoadImage?()
     }
 }
