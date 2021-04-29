@@ -13,6 +13,11 @@ class FeedAcceptanceTests: XCTestCase {
     func test_on_launch_displays_remote_feed_when_user_has_connectivity() {
         let sut = launch(httpClient: .online(response))
         XCTAssertEqual(sut.numberOfRenderedFeedItems, 5)
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), makeUserImageData())
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), makeCardImageData())
+
+        XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), makeUserImageData())
+        XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), makeCardImageData())
     }
     
     func test_on_launch_with_no_connectivity_displays_empty_feed() {
@@ -37,9 +42,21 @@ private extension FeedAcceptanceTests {
     
     func makeData(for url: URL) -> Data {
         switch url.absoluteString {
+        case "https://some-user-image-0.com", "https://some-user-image-1.com":
+            return makeUserImageData()
+        case "https://some-image-0.com", "https://some-image-1.com":
+            return makeCardImageData()
         default:
             return makeFeedData(itemCount: 5)
         }
+    }
+    
+    func makeCardImageData() -> Data {
+        UIImage.makeImageData(withColor: .red)
+    }
+    
+    func makeUserImageData() -> Data {
+        UIImage.makeImageData(withColor: .blue)
     }
     
     func makeFeedData(itemCount: Int = 5) -> Data {

@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func configure(window: UIWindow) {
         window.rootViewController = FeedUIComposer.compose(
             loader: makeRemoteFeedLoader,
-            imageLoader: { _ in PassthroughSubject<Data, Error>().eraseToAnyPublisher() }
+            imageLoader: makeRemoteImageLoader
         )
         
         window.makeKeyAndVisible()
