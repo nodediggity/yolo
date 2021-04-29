@@ -23,6 +23,7 @@ public final class FeedViewController: UITableViewController {
         super.viewDidLoad()
         refreshControl = UIRefreshControl(frame: .zero)
         tableView.prefetchDataSource = self
+        tableView.separatorStyle = .none
         load()
     }
     
