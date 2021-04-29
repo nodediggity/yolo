@@ -35,6 +35,8 @@ public final class FeedCardCellController {
     
     public func view() -> FeedCardView {
         
+        cell.selectionStyle = .none
+        
         cell.nameLabel.text = model.name
         cell.aboutLabel.text = model.about
         cell.likesCountLabel.text = model.likes
