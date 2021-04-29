@@ -165,29 +165,44 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), .none)
         
         loader.loadImageCompletes(with: .success(bodyImageData0), at: 1)
-
+        
         XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 0), userImageData0)
         XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 0), bodyImageData0)
-
+        
         sut.simulateFeedCardVisible(at: 1)
         XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), .none)
         XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), .none)
-
+        
         let userImageData1 = UIImage.makeImageData(withColor: .gray)
         let bodyImageData1 = UIImage.makeImageData(withColor: .yellow)
-
+        
         loader.loadImageCompletes(with: .success(userImageData1), at: 2)
-
+        
         XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), userImageData1)
         XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), .none)
-
+        
         loader.loadImageCompletes(with: .success(bodyImageData1), at: 3)
-
+        
         XCTAssertEqual(sut.renderedFeedCardUserImageData(at: 1), userImageData1)
         XCTAssertEqual(sut.renderedFeedCardBodyImageData(at: 1), bodyImageData1)
     }
     
-    func test_feed_card_view_preloads_image_loaded_for_url() {
+    func test_feed_card_view_preloads_image_loaded_for_url_when_near_visible() {
+        let feed = makeFeed(itemCount: 2)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+        XCTAssertTrue(loader.imageLoaderURLs.isEmpty)
+        
+        sut.simulateFeedCardNearVisible(at: 0)
+        XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0))
+        
+        sut.simulateFeedCardNearVisible(at: 1)
+        XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0) + feed.images(forItemAt: 1))
+    }
+    
+    func test_feed_card_view_cancels_preloaf_image_for_url_when_no_longer_near_visible() {
         let feed = makeFeed(itemCount: 2)
         let (sut, loader) = makeSUT()
         
@@ -358,6 +373,14 @@ private extension FeedViewController {
         let ds = tableView.prefetchDataSource
         let index = IndexPath(row: row, section: FEED_SECTION)
         ds?.tableView(tableView, prefetchRowsAt: [index])
+    }
+    
+    func simulateFeedCardNoLongerNearVisible(at row: Int) {
+        simulateFeedCardNearVisible(at: row)
+        
+        let ds = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: FEED_SECTION)
+        ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
     }
     
     func renderedFeedCardUserImageData(at row: Int) -> Data? {
