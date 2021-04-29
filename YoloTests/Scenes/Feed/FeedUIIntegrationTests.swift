@@ -39,6 +39,7 @@ private extension FeedUIIntegrationTests {
     
     func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> FeedViewController {
         let sut = FeedUIComposer.compose()
+        trackForMemoryLeaks(sut, file: file, line: line)
         return sut
     }
     
