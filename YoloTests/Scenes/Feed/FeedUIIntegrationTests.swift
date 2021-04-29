@@ -93,11 +93,17 @@ private extension FeedUIIntegrationTests {
         executeRunLoopToCleanUpReferences()
     }
     
-    func assertThat(_ sut: FeedViewController, hasViewConfiguredFor image: FeedItem, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    func assertThat(_ sut: FeedViewController, hasViewConfiguredFor item: FeedItem, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.feedCardView(at: index)
         guard let cell = view as? FeedCardView else {
             return XCTFail("Expected \(FeedCardView.self) instance but got \(String(describing: view)) instead", file: file, line: line)
         }
+        
+        XCTAssertEqual(cell.nameText, item.user.name, file: file, line: line)
+        XCTAssertEqual(cell.aboutText, item.user.about, file: file, line: line)
+        XCTAssertEqual(cell.likesText, "\(item.interactions.likes)", file: file, line: line)
+        XCTAssertEqual(cell.commentsText, "\(item.interactions.comments)", file: file, line: line)
+        XCTAssertEqual(cell.sharesText, "\(item.interactions.shares)", file: file, line: line)
     }
     
     var title: String {
@@ -126,9 +132,7 @@ private extension FeedUIIntegrationTests {
             }
         }
     }
-    
 
-    
     func makeFeed(itemCount: Int = 5) -> Feed {
         let items = (0..<itemCount).map(makeFeedItem(_:))
         return Feed(items: items)
@@ -176,6 +180,28 @@ private extension FeedViewController {
     func simulateUserInitiatedReload() {
         refreshControl?.beginRefreshing()
         scrollViewDidEndDragging(tableView, willDecelerate: false)
+    }
+}
+
+private extension FeedCardView {
+    var nameText: String? {
+        nameLabel.text
+    }
+    
+    var aboutText: String? {
+        aboutLabel.text
+    }
+    
+    var likesText: String? {
+        likesCountLabel.text
+    }
+    
+    var commentsText: String? {
+        commentsCountLabel.text
+    }
+    
+    var sharesText: String? {
+        sharesCountLabel.text
     }
 }
 
