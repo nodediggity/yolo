@@ -49,6 +49,14 @@ private extension FeedSnapshotTests {
                     user: FeedItem.User(id: UUID().uuidString, name: "Some Name", about: "short about text", imageURL: makeURL()),
                     interactions: FeedItem.Interactions(likes: 247, comments: 57, shares: 33)
                 )
+            ),
+            FeedCardStub(
+                FeedItem(
+                    id: UUID().uuidString,
+                    imageURL: makeURL(),
+                    user: FeedItem.User(id: UUID().uuidString, name: "Another Name", about: "longer about text that should truncate as it is too long to fit", imageURL: makeURL()),
+                    interactions: FeedItem.Interactions(likes: 17, comments: 36, shares: 8)
+                )
             )
         ]
     }
