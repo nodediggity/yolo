@@ -129,6 +129,21 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.simulateFeedCardVisible(at: 1)
         XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0) + feed.images(forItemAt: 1))
     }
+    
+    func test_feed_card_view_cancels_load_image_url_requests_when_no_longer_visible() {
+        let feed = makeFeed(itemCount: 2)
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+        XCTAssertTrue(loader.cancelledImageLoaderURLs.isEmpty)
+        
+        sut.simulateFeedCardNotVisible(at: 0)
+        XCTAssertEqual(loader.cancelledImageLoaderURLs, feed.images(forItemAt: 0))
+        
+        sut.simulateFeedCardNotVisible(at: 1)
+        XCTAssertEqual(loader.cancelledImageLoaderURLs, feed.images(forItemAt: 0) + feed.images(forItemAt: 1))
+    }
 }
 
 private extension FeedUIIntegrationTests {
@@ -202,12 +217,16 @@ private extension FeedUIIntegrationTests {
             loadImageRequests.map(\.url)
         }
         
+        private(set) var cancelledImageLoaderURLs: [URL] = []
+        
         private var loadImageRequests: [(url: URL, publisher: PassthroughSubject<Data, Error>)] = []
         
         func loadImagePublisher(_ imageURL: URL) -> AnyPublisher<Data, Error> {
             let publisher = PassthroughSubject<Data, Error>()
             loadImageRequests.append((imageURL, publisher))
-            return publisher.eraseToAnyPublisher()
+            return publisher
+                .handleEvents(receiveCancel: { [weak self] in self?.cancelledImageLoaderURLs.append(imageURL) })
+                .eraseToAnyPublisher()
         }
     }
     
@@ -258,6 +277,17 @@ private extension FeedViewController {
     @discardableResult
     func simulateFeedCardVisible(at row: Int) -> FeedCardView? {
         return feedCardView(at: row) as? FeedCardView
+    }
+    
+    @discardableResult
+    func simulateFeedCardNotVisible(at row: Int) -> FeedCardView? {
+        let view = simulateFeedCardVisible(at: row)
+        
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: FEED_SECTION)
+        delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
+        
+        return view
     }
     
     func simulateUserInitiatedReload() {
