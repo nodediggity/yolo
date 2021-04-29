@@ -66,6 +66,21 @@ class FeedUIIntegrationTests: XCTestCase {
         
         assertThat(sut, isRendering: refreshedPage0.items)
     }
+    
+    func test_load_feed_completion_renders_empty_feed_after_non_empty_feed() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        let feed = makeFeed(itemCount: 5)
+        loader.loadFeedCompletes(with: .success(feed.items))
+        
+        assertThat(sut, isRendering: feed.items)
+        
+        sut.simulateUserInitiatedReload()
+        loader.loadFeedCompletes(with: .success([]), at: 1)
+
+        assertThat(sut, isRendering: [])
+    }
 }
 
 private extension FeedUIIntegrationTests {
