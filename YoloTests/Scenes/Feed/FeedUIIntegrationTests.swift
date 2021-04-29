@@ -81,6 +81,23 @@ class FeedUIIntegrationTests: XCTestCase {
 
         assertThat(sut, isRendering: [])
     }
+    
+    func test_load_feed_completion_does_not_alter_currently_rendered_feed_state_on_error() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        let feed = makeFeed(itemCount: 5)
+        loader.loadFeedCompletes(with: .success(feed.items))
+        
+        assertThat(sut, isRendering: feed.items)
+
+        sut.simulateUserInitiatedReload()
+        
+        let error = makeError()
+        loader.loadFeedCompletes(with: .failure(error), at: 1)
+        
+        assertThat(sut, isRendering: feed.items)
+    }
 }
 
 private extension FeedUIIntegrationTests {
@@ -143,7 +160,7 @@ private extension FeedUIIntegrationTests {
         func loadFeedCompletes(with result: Result<[FeedItem], Error>, at index: Int = 0) {
             switch result {
             case let .success(feed): loadFeedRequests[index].send(feed)
-            default: break
+            case let .failure(error): loadFeedRequests[index].send(completion: .failure(error))
             }
         }
     }
