@@ -48,7 +48,9 @@ private extension FeedSnapshotTests {
                     imageURL: makeURL(),
                     user: FeedItem.User(id: UUID().uuidString, name: "Some Name", about: "short about text", imageURL: makeURL()),
                     interactions: FeedItem.Interactions(likes: 247, comments: 57, shares: 33)
-                )
+                ),
+                userImage: UIImage.make(withColor: .red),
+                cardImage: UIImage.make(withColor: .blue)
             ),
             FeedCardStub(
                 FeedItem(
@@ -56,7 +58,9 @@ private extension FeedSnapshotTests {
                     imageURL: makeURL(),
                     user: FeedItem.User(id: UUID().uuidString, name: "Another Name", about: "longer about text that should truncate as it is too long to fit", imageURL: makeURL()),
                     interactions: FeedItem.Interactions(likes: 17, comments: 36, shares: 8)
-                )
+                ),
+                userImage: UIImage.make(withColor: .green),
+                cardImage: UIImage.make(withColor: .yellow)
             )
         ]
     }
@@ -77,9 +81,25 @@ private extension FeedViewController {
 
 private final class FeedCardStub {
     let viewModel: FeedCardViewModel
-    weak var controller: FeedCardCellController?
     
-    init(_ item: FeedItem) {
+    weak var controller: FeedCardCellController? {
+        didSet {
+            if let image = userImage {
+                controller?.displayImage(for: .user(image))
+            }
+            
+            if let image = cardImage {
+                controller?.displayImage(for: .body(image))
+            }
+        }
+    }
+    
+    private var userImage: UIImage?
+    private var cardImage: UIImage?
+    
+    init(_ item: FeedItem, userImage: UIImage? = nil, cardImage: UIImage? = nil) {
         self.viewModel = FeedCardPresenter.map(item)
+        self.userImage = userImage
+        self.cardImage = cardImage
     }
 }

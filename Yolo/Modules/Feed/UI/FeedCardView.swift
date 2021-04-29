@@ -11,6 +11,11 @@ public final class FeedCardView: UITableViewCell {
     
     private(set) public var userImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        [imageView.widthAnchor, imageView.heightAnchor].forEach { $0.constraint(equalToConstant: 64).isActive = true }
+        imageView.layer.cornerRadius = 32
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = .init(white: 0, alpha: 0.1)
         return imageView
     }()
     
@@ -45,11 +50,13 @@ public final class FeedCardView: UITableViewCell {
         view.backgroundColor = .init(white: 0, alpha: 0.1)
         view.heightAnchor.constraint(equalToConstant: 184).isActive = true
         view.layer.cornerRadius = 12
+        view.clipsToBounds = true
         return view
     }()
     
     private(set) public var cardImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
@@ -100,7 +107,7 @@ private extension FeedCardView {
         optionButtonContainer.translatesAutoresizingMaskIntoConstraints = false
         
         let headerHStack = UIStackView(
-            arrangedSubviews: [headerVStack, optionButtonContainer]
+            arrangedSubviews: [userImageView, headerVStack, optionButtonContainer]
         )
         headerHStack.alignment = .center
         headerHStack.axis = .horizontal
@@ -131,6 +138,7 @@ private extension FeedCardView {
         container.axis = .vertical
         container.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(container)
+        imageViewContainer.addSubview(cardImageView)
         
         let bottomAnchorConstraint = contentView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: 16)
         bottomAnchorConstraint.priority = .defaultLow
@@ -140,7 +148,11 @@ private extension FeedCardView {
             optionButtonContainer.widthAnchor.constraint(equalToConstant: 6),
             container.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             container.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
-            contentView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 24)
+            contentView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: 24),
+            cardImageView.topAnchor.constraint(equalTo: imageViewContainer.topAnchor),
+            cardImageView.leadingAnchor.constraint(equalTo: imageViewContainer.leadingAnchor),
+            imageViewContainer.bottomAnchor.constraint(equalTo: cardImageView.bottomAnchor),
+            imageViewContainer.trailingAnchor.constraint(equalTo: cardImageView.trailingAnchor)
         ])
     }
     
