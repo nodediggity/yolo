@@ -28,8 +28,13 @@ public final class FeedPresenter {
         "Discover"
     }
     
-    public weak var view: FeedView?
-    public weak var loadingView: FeedLoadingView?
+    private var view: FeedView?
+    private weak var loadingView: FeedLoadingView?
+    
+    init(view: FeedView?, loadingView: FeedLoadingView? = nil) {
+        self.view = view
+        self.loadingView = loadingView
+    }
     
     public func didStartLoadingFeed() {
         loadingView?.display(FeedLoadingViewModel(isLoading: true))

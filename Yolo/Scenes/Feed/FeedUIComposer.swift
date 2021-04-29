@@ -18,12 +18,10 @@ public enum FeedUIComposer {
         viewController.title = FeedPresenter.title
         
         let adapter = FeedPresentationAdapter(loader: loader)
-        
-        let presenter = FeedPresenter()
-        presenter.view = viewController
-        presenter.loadingView = viewController
-        
-        adapter.presenter = presenter
+        adapter.presenter = FeedPresenter(
+            view: FeedViewAdapter(controller: viewController),
+            loadingView: viewController
+        )
         
         viewController.onLoad = adapter.execute
         
@@ -31,3 +29,16 @@ public enum FeedUIComposer {
     }
 }
 
+private final class FeedViewAdapter {
+    private weak var controller: FeedViewController?
+    
+    init(controller: FeedViewController) {
+        self.controller = controller
+    }
+}
+
+extension FeedViewAdapter: FeedView {
+    func display(_ viewModel: FeedViewModel) {
+        controller?.display(viewModel.feed.map(FeedCardCellController.init))
+    }
+}
