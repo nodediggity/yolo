@@ -21,6 +21,10 @@
 		6A45D79E2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D79D2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift */; };
 		6A45D7A3263A0548003EF1C8 /* FeedResponseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7A2263A0548003EF1C8 /* FeedResponseMapper.swift */; };
 		6A45D7AA263A62E9003EF1C8 /* FeedUIIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7A9263A62E9003EF1C8 /* FeedUIIntegrationTests.swift */; };
+		6A45D7B1263A6E04003EF1C8 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7B0263A6E04003EF1C8 /* FeedViewController.swift */; };
+		6A45D7B8263A6E42003EF1C8 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7B7263A6E42003EF1C8 /* FeedPresenter.swift */; };
+		6A45D7C0263A6E65003EF1C8 /* FeedUIComposer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7BF263A6E65003EF1C8 /* FeedUIComposer.swift */; };
+		6A45D7C4263A6E7F003EF1C8 /* FeedPresentationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A45D7C3263A6E7F003EF1C8 /* FeedPresentationAdapter.swift */; };
 		6A79BE7D2639D918000062A7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79BE7C2639D918000062A7 /* AppDelegate.swift */; };
 		6A79BE7F2639D918000062A7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A79BE7E2639D918000062A7 /* SceneDelegate.swift */; };
 		6A79BE862639D919000062A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A79BE852639D919000062A7 /* Assets.xcassets */; };
@@ -54,6 +58,10 @@
 		6A45D79D2639FE8B003EF1C8 /* HTTPURLResponse+StatusCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HTTPURLResponse+StatusCode.swift"; sourceTree = "<group>"; };
 		6A45D7A2263A0548003EF1C8 /* FeedResponseMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedResponseMapper.swift; sourceTree = "<group>"; };
 		6A45D7A9263A62E9003EF1C8 /* FeedUIIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIIntegrationTests.swift; sourceTree = "<group>"; };
+		6A45D7B0263A6E04003EF1C8 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
+		6A45D7B7263A6E42003EF1C8 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
+		6A45D7BF263A6E65003EF1C8 /* FeedUIComposer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUIComposer.swift; sourceTree = "<group>"; };
+		6A45D7C3263A6E7F003EF1C8 /* FeedPresentationAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresentationAdapter.swift; sourceTree = "<group>"; };
 		6A79BE792639D918000062A7 /* Yolo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Yolo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A79BE7C2639D918000062A7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6A79BE7E2639D918000062A7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -199,6 +207,8 @@
 		6A45D78A2639FB7F003EF1C8 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
+				6A45D7B6263A6E35003EF1C8 /* Presentation */,
+				6A45D7AF263A6DFE003EF1C8 /* UI */,
 				6A45D7A1263A0540003EF1C8 /* API */,
 				6A45D78B2639FB8A003EF1C8 /* Feature */,
 			);
@@ -246,6 +256,39 @@
 			path = Feed;
 			sourceTree = "<group>";
 		};
+		6A45D7AF263A6DFE003EF1C8 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				6A45D7B0263A6E04003EF1C8 /* FeedViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		6A45D7B6263A6E35003EF1C8 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				6A45D7B7263A6E42003EF1C8 /* FeedPresenter.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		6A45D7BD263A6E5D003EF1C8 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				6A45D7BE263A6E60003EF1C8 /* Feed */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		6A45D7BE263A6E60003EF1C8 /* Feed */ = {
+			isa = PBXGroup;
+			children = (
+				6A45D7BF263A6E65003EF1C8 /* FeedUIComposer.swift */,
+				6A45D7C3263A6E7F003EF1C8 /* FeedPresentationAdapter.swift */,
+			);
+			path = Feed;
+			sourceTree = "<group>";
+		};
 		6A79BE702639D918000062A7 = {
 			isa = PBXGroup;
 			children = (
@@ -271,6 +314,7 @@
 				6A79BE852639D919000062A7 /* Assets.xcassets */,
 				6A30B9A92639E82800A65598 /* Application */,
 				6A30B9B12639E95A00A65598 /* Modules */,
+				6A45D7BD263A6E5D003EF1C8 /* Scenes */,
 				6A30B9AC2639E84400A65598 /* Views */,
 			);
 			path = Yolo;
@@ -396,9 +440,13 @@
 				6A45D78D2639FB94003EF1C8 /* Feed.swift in Sources */,
 				6A45D7A3263A0548003EF1C8 /* FeedResponseMapper.swift in Sources */,
 				6A45D7932639FBC2003EF1C8 /* FeedItem.swift in Sources */,
+				6A45D7B8263A6E42003EF1C8 /* FeedPresenter.swift in Sources */,
 				6A79BE7F2639D918000062A7 /* SceneDelegate.swift in Sources */,
 				6A30B9B52639E98500A65598 /* HTTPClient.swift in Sources */,
+				6A45D7B1263A6E04003EF1C8 /* FeedViewController.swift in Sources */,
+				6A45D7C4263A6E7F003EF1C8 /* FeedPresentationAdapter.swift in Sources */,
 				6A30B9BA2639E9CD00A65598 /* URLSessionHTTPClient.swift in Sources */,
+				6A45D7C0263A6E65003EF1C8 /* FeedUIComposer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
