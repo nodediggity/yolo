@@ -94,15 +94,3 @@ extension FeedViewAdapter: ResourceView {
         })
     }
 }
-
-public final class ResourceViewAdapter<ResourceViewModel>: ResourceView {
-    private var handler: () -> (ResourceViewModel) -> Void
-
-    public init(handler: @escaping (ResourceViewModel) -> Void) {
-        self.handler = { handler }
-    }
-
-    public func display(_ viewModel: ResourceViewModel) {
-        handler()(viewModel)
-    }
-}

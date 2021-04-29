@@ -55,6 +55,7 @@
 		6AE02CB5263B1F270089B39F /* WeakRefVirtualProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */; };
 		6AE02CCB263B326E0089B39F /* UITableView+Dequeueing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */; };
 		6AE02CD5263B3FBE0089B39F /* UIImage+TryMake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */; };
+		6AE02CD9263B41810089B39F /* ResourceViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02CD8263B41810089B39F /* ResourceViewAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +121,7 @@
 		6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakRefVirtualProxy.swift; sourceTree = "<group>"; };
 		6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Dequeueing.swift"; sourceTree = "<group>"; };
 		6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+TryMake.swift"; sourceTree = "<group>"; };
+		6AE02CD8263B41810089B39F /* ResourceViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceViewAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -359,11 +361,12 @@
 			children = (
 				6A45D813263AE262003EF1C8 /* Combine+Helpers.swift */,
 				6A45D7CE263A78CB003EF1C8 /* Publisher+MainQueue.swift */,
-				6AE02CAA263B19DC0089B39F /* ResourcePresenter.swift */,
 				6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */,
-				6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */,
-				6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */,
+				6AE02CAA263B19DC0089B39F /* ResourcePresenter.swift */,
+				6AE02CD8263B41810089B39F /* ResourceViewAdapter.swift */,
 				6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */,
+				6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */,
+				6AE02CB4263B1F270089B39F /* WeakRefVirtualProxy.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -655,6 +658,7 @@
 				6AE02C92263B10090089B39F /* Comment.swift in Sources */,
 				6AE02C97263B10BE0089B39F /* CommentsResponseMapper.swift in Sources */,
 				6A79BE7F2639D918000062A7 /* SceneDelegate.swift in Sources */,
+				6AE02CD9263B41810089B39F /* ResourceViewAdapter.swift in Sources */,
 				6A45D82F263AE911003EF1C8 /* ImageResponseMapper.swift in Sources */,
 				6A45D7CA263A7318003EF1C8 /* FeedCardView.swift in Sources */,
 				6A30B9B52639E98500A65598 /* HTTPClient.swift in Sources */,
