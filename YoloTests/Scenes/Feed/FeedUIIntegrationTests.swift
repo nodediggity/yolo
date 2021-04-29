@@ -98,6 +98,20 @@ class FeedUIIntegrationTests: XCTestCase {
         
         assertThat(sut, isRendering: feed.items)
     }
+    
+    func test_load_feed_dispatches_from_background_to_main_thread() {
+        let exp = expectation(description: "await background queue")
+        let feed = makeFeed(itemCount: 5)
+        
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        
+        DispatchQueue.global().async {
+            loader.loadFeedCompletes(with: .success(feed.items))
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
 }
 
 private extension FeedUIIntegrationTests {

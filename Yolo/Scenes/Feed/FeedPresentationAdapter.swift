@@ -26,6 +26,7 @@ class FeedPresentationAdapter {
         isPending = true
         presenter?.didStartLoadingFeed()
         cancellable = loader()
+            .dispatchOnMainQueue()
             .handleEvents(receiveCancel: { [weak self] in
                 self?.isPending = false
             })
