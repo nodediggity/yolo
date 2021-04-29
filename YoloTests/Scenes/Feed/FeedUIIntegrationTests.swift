@@ -31,9 +31,47 @@ private extension FeedViewController {
     }
 }
 
-enum FeedPresenter {
+extension FeedViewController: FeedLoadingView {
+    func display(_ viewModel: FeedLoadingViewModel) {
+        if viewModel.isLoading {
+            refreshControl?.beginRefreshing()
+        } else {
+            refreshControl?.endRefreshing()
+        }
+    }
+}
+
+struct FeedLoadingViewModel {
+    let isLoading: Bool
+}
+
+protocol FeedLoadingView: class {
+    func display(_ viewModel: FeedLoadingViewModel)
+}
+
+struct FeedViewModel {
+    let feed: [FeedItem]
+}
+
+protocol FeedView: class {
+    func display(_ viewModel: FeedViewModel)
+}
+
+class FeedPresenter {
     static var title: String {
         "Discover"
+    }
+    
+    weak var view: FeedView?
+    weak var loadingView: FeedLoadingView?
+    
+    func didStartLoadingFeed() {
+        loadingView?.display(FeedLoadingViewModel(isLoading: true))
+    }
+    
+    func didFinishLoadingFeed(with feed: [FeedItem]) {
+        view?.display(FeedViewModel(feed: feed))
+        loadingView?.display(FeedLoadingViewModel(isLoading: false))
     }
 }
 
@@ -43,10 +81,15 @@ enum FeedUIComposer {
     
     static func compose(loader: @escaping FeedLoader) -> FeedViewController {
         
-        let adapter = FeedPresentationAdapter(loader: loader)
-        
         let viewController = FeedViewController()
         viewController.title = FeedPresenter.title
+        
+        let adapter = FeedPresentationAdapter(loader: loader)
+        
+        let presenter = FeedPresenter()
+        presenter.loadingView = viewController
+        
+        adapter.presenter = presenter
         
         viewController.onLoad = adapter.execute
         
@@ -55,6 +98,9 @@ enum FeedUIComposer {
 }
 
 class FeedPresentationAdapter {
+    
+    var presenter: FeedPresenter?
+
     private let loader: () -> AnyPublisher<[FeedItem], Error>
     private var cancellable: Cancellable?
     
@@ -67,18 +113,22 @@ class FeedPresentationAdapter {
     func execute() {
         guard !isPending else { return }
         isPending = true
+        presenter?.didStartLoadingFeed()
         cancellable = loader()
             .handleEvents(receiveCancel: { [weak self] in
                 self?.isPending = false
             })
             .sink(
                 receiveCompletion: { _ in },
-                receiveValue: { [weak self] _ in
+                receiveValue: { [weak self] feed in
+                    self?.presenter?.didFinishLoadingFeed(with: feed)
                     self?.isPending = false
                 }
             )
     }
 }
+
+
 
 class FeedUIIntegrationTests: XCTestCase {
 
@@ -101,6 +151,22 @@ class FeedUIIntegrationTests: XCTestCase {
         
         sut.simulateUserInitiatedReload()
         XCTAssertEqual(loader.loadFeedCallCount, 2)
+    }
+    
+    func test_loading_indicator_is_visible_while_loading_feed() {
+        let (sut, loader) = makeSUT()
+
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
+        
+        loader.loadFeedCompletes(with: .success([]))
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
+        
+        sut.simulateUserInitiatedReload()
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
+        
+        loader.loadFeedCompletes(with: .success([]), at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
     }
 }
 
@@ -144,6 +210,12 @@ private extension FeedUIIntegrationTests {
 }
 
 private extension FeedViewController {
+    
+    var isShowingLoadingIndicator: Bool {
+        guard let refreshControl = refreshControl else { return false }
+        return refreshControl.isRefreshing
+    }
+    
     func simulateUserInitiatedReload() {
         refreshControl?.beginRefreshing()
         scrollViewDidEndDragging(tableView, willDecelerate: false)
