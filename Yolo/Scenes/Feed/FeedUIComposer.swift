@@ -49,8 +49,13 @@ extension FeedViewAdapter: FeedView {
             let model = FeedCardPresenter.map(item)
             let view = FeedCardCellController(model: model)
             
-            view.onLoadUserImage = { [loadImage] in
+            view.onLoadImage = { [loadImage] in
+                
                 loadImage(item.user.imageURL) { _ in
+                    
+                }
+                
+                loadImage(item.imageURL) { _ in
                     
                 }
             }

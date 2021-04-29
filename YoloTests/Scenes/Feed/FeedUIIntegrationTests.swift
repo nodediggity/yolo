@@ -115,7 +115,7 @@ class FeedUIIntegrationTests: XCTestCase {
     }
     
     // Images
-    func test_feed_card_view_loads_image_url_for_user_when_visible() {
+    func test_feed_card_view_loads_image_url_for_when_visible() {
         let feed = makeFeed(itemCount: 2)
         let (sut, loader) = makeSUT()
         
@@ -124,10 +124,10 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertTrue(loader.imageLoaderURLs.isEmpty)
         
         sut.simulateFeedCardVisible(at: 0)
-        XCTAssertEqual(loader.imageLoaderURLs, [feed.userImageURL(at: 0)])
+        XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0))
         
         sut.simulateFeedCardVisible(at: 1)
-        XCTAssertEqual(loader.imageLoaderURLs, [feed.userImageURL(at: 0), feed.userImageURL(at: 1)])
+        XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0) + feed.images(forItemAt: 1))
     }
 }
 
@@ -304,5 +304,18 @@ private extension Feed {
     func userImageURL(at index: Int) -> URL? {
         guard items.indices.contains(index) else { return nil }
         return items[index].user.imageURL
+    }
+    
+    func cardImageURL(at index: Int) -> URL? {
+        guard items.indices.contains(index) else { return nil }
+        return items[index].imageURL
+    }
+    
+    func images(forItemAt index: Int) -> [URL?] {
+        guard items.indices.contains(index) else { return [] }
+        return [
+            items[index].user.imageURL,
+            items[index].imageURL
+        ]
     }
 }
