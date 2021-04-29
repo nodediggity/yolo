@@ -252,6 +252,21 @@ class FeedUIIntegrationTests: XCTestCase {
         }
         wait(for: [exp], timeout: 1.0)
     }
+    
+    func test_feed_card_view_does_not_render_loaded_image_when_not_visible_anymore() {
+        let feed = makeFeed(itemCount: 5)
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        
+        loader.loadFeedCompletes(with: .success(feed.items))
+        
+        let view = sut.simulateFeedCardNotVisible(at: 0)
+        loader.loadImageCompletes(with: .success(UIImage.makeImageData(withColor: .blue)))
+        loader.loadImageCompletes(with: .success(UIImage.makeImageData(withColor: .red)))
+
+        XCTAssertNil(view?.renderedImageForUser)
+        XCTAssertNil(view?.renderedImageForCard)
+    }
 }
 
 private extension FeedUIIntegrationTests {
