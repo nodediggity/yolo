@@ -17,6 +17,13 @@ class FeedSnapshotTests: XCTestCase {
         assert(snapshot: sut.snapshot(for: .iPhone12(style: .light)), named: "EMPTY_FEED_light")
     }
     
+    func test_feed_with_content() {
+        let sut = makeSUT()
+        sut.display(makeFeedWithContent())
+        
+        assert(snapshot: sut.snapshot(for: .iPhone12(style: .light)), named: "FEED_WITH_CONTENT_light")
+    }
+    
 }
 
 private extension FeedSnapshotTests {
@@ -33,4 +40,38 @@ private extension FeedSnapshotTests {
         []
     }
     
+    func makeFeedWithContent() -> [FeedCardStub] {
+        return [
+            FeedCardStub(
+                FeedItem(
+                    id: UUID().uuidString,
+                    imageURL: makeURL(),
+                    user: FeedItem.User(id: UUID().uuidString, name: "Some Name", about: "short about text", imageURL: makeURL()),
+                    interactions: FeedItem.Interactions(likes: 247, comments: 57, shares: 33)
+                )
+            )
+        ]
+    }
+    
+}
+
+private extension FeedViewController {
+    func display(_ stubs: [FeedCardStub]) {
+        let cells: [FeedCardCellController] = stubs.map { stub in
+            let controller = FeedCardCellController(model: stub.viewModel)
+            stub.controller = controller
+            return controller
+        }
+        
+        display(cells)
+    }
+}
+
+private final class FeedCardStub {
+    let viewModel: FeedCardViewModel
+    weak var controller: FeedCardCellController?
+    
+    init(_ item: FeedItem) {
+        self.viewModel = FeedCardPresenter.map(item)
+    }
 }
