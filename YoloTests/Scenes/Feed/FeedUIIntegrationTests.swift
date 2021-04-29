@@ -216,6 +216,25 @@ class FeedUIIntegrationTests: XCTestCase {
         sut.simulateFeedCardNearVisible(at: 1)
         XCTAssertEqual(loader.imageLoaderURLs, feed.images(forItemAt: 0) + feed.images(forItemAt: 1))
     }
+    
+    func test_load_feed_car_view_image_loader_dispatches_from_background_to_main_thread() {
+        let exp = expectation(description: "await background queue")
+        let feed = makeFeed(itemCount: 5)
+        
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+        sut.simulateFeedCardVisible(at: 0)
+        
+        let imageData = UIImage.makeImageData(withColor: .red)
+        
+        DispatchQueue.global().async {
+            loader.loadImageCompletes(with: .success(imageData), at: 0)
+            loader.loadImageCompletes(with: .success(imageData), at: 1)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
 }
 
 private extension FeedUIIntegrationTests {
