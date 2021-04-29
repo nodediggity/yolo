@@ -10,7 +10,7 @@ import Combine
 
 class FeedPresentationAdapter {
     
-    var presenter: FeedPresenter?
+    var presenter: ResourcePresenter<[FeedItem], FeedViewAdapter>?
     
     private let loader: () -> AnyPublisher<[FeedItem], Error>
     private var cancellable: Cancellable?
@@ -24,7 +24,7 @@ class FeedPresentationAdapter {
     func execute() {
         guard !isPending else { return }
         isPending = true
-        presenter?.didStartLoadingFeed()
+        presenter?.didStartLoading()
         cancellable = loader()
             .dispatchOnMainQueue()
             .handleEvents(receiveCancel: { [weak self] in
@@ -33,7 +33,7 @@ class FeedPresentationAdapter {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] feed in
-                    self?.presenter?.didFinishLoadingFeed(with: feed)
+                    self?.presenter?.didFinishLoading(with: feed)
                     self?.isPending = false
                 }
             )
