@@ -69,4 +69,10 @@ extension FeedViewController {
         refreshControl?.beginRefreshing()
         scrollViewDidEndDragging(tableView, willDecelerate: false)
     }
+    
+    func simulateFeedCardSelection(at row: Int) {
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: FEED_SECTION)
+        delegate?.tableView?(tableView, didSelectRowAt: index)
+    }
 }

@@ -114,6 +114,21 @@ class FeedUIIntegrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_feed_card_selection_notifies_handler() {
+        let feed = makeFeed()
+        var request: [FeedItem] = []
+        
+        let (sut, loader) = makeSUT(onSelection: { request.append($0) })
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+
+        sut.simulateFeedCardSelection(at: 0)
+        XCTAssertEqual(request, [feed.items[0]])
+        
+        sut.simulateFeedCardSelection(at: 1)
+        XCTAssertEqual(request, [feed.items[0], feed.items[1]])
+    }
+    
     // Images
     func test_feed_card_view_loads_image_url_for_when_visible() {
         let feed = makeFeed(itemCount: 2)
@@ -239,9 +254,9 @@ class FeedUIIntegrationTests: XCTestCase {
 
 private extension FeedUIIntegrationTests {
     
-    func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
+    func makeSUT(onSelection: @escaping (FeedItem) -> Void = { _ in }, file: StaticString = #filePath, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.compose(loader: loader.loadFeedPublisher, imageLoader: loader.loadImagePublisher)
+        let sut = FeedUIComposer.compose(loader: loader.loadFeedPublisher, imageLoader: loader.loadImagePublisher, selection: onSelection)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
