@@ -307,6 +307,7 @@ private extension FeedUIIntegrationTests {
         XCTAssertEqual(cell.likesText, viewModel.likes, file: file, line: line)
         XCTAssertEqual(cell.commentsText, viewModel.comments, file: file, line: line)
         XCTAssertEqual(cell.sharesText, viewModel.shares, file: file, line: line)
+        XCTAssertEqual(cell.isShowingAsLiked, viewModel.isLiked, file: file, line: line)
     }
     
     var title: String {
@@ -372,6 +373,7 @@ private extension FeedUIIntegrationTests {
         let USER_NAME = "any name \(index)"
         let USER_ABOUT = "some text \(index)"
         let USER_IMAGE_URL = "https://some-user-image-\(index).com"
+        let IS_LIKED = index == 0
         let LIKES = Int.random(in: 0..<5)
         let COMMENTS = Int.random(in: 0..<10)
         let SHARES = Int.random(in: 0..<15)
@@ -380,7 +382,7 @@ private extension FeedUIIntegrationTests {
             id: ITEM_ID,
             imageURL: makeURL(IMAGE_URL),
             user: FeedItem.User(id: USER_ID, name: USER_NAME, about: USER_ABOUT, imageURL: makeURL(USER_IMAGE_URL)),
-            interactions: FeedItem.Interactions(isLiked: false, likes: LIKES, comments: COMMENTS, shares: SHARES)
+            interactions: FeedItem.Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
         )
     }
 }

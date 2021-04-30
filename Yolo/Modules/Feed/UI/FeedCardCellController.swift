@@ -54,6 +54,10 @@ extension FeedCardCellController: UITableViewDataSource {
         cell?.commentsCountLabel.text = model.comments
         cell?.sharesCountLabel.text = model.shares
         
+        if model.isLiked {
+            cell?.likeButton.tintColor = .red
+        }
+                
         load()
         return cell!
     }
