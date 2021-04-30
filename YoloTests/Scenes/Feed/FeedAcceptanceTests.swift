@@ -140,6 +140,7 @@ private extension FeedAcceptanceTests {
         let ITEM_ID = UUID().uuidString
         let IMAGE_URL = "https://some-card-image.com/card-image-0"
         let USER_ID = UUID().uuidString
+        let IS_LIKED = true
         let LIKES = 5
         let COMMENTS = 10
         let SHARES = 12
@@ -151,21 +152,13 @@ private extension FeedAcceptanceTests {
                 "id": USER_ID
             ],
             "interactions": [
+                "isLiked": IS_LIKED,
                 "likes": LIKES,
                 "comments": COMMENTS,
                 "shares": SHARES
             ]
         ] as [String : Any]
     }
-    
-//    func makeCommen(for comments: [[String: Any]]) -> Data {
-//        let data = try! JSONSerialization.data(withJSONObject: [
-//            "content": [
-//                "comments": comments
-//            ]
-//        ])
-//        return data
-//    }
     
     func makeComment(_ index: Int) -> [String: Any] {
         let COMMENT_ID = UUID().uuidString

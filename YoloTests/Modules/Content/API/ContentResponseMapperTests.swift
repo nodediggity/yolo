@@ -61,6 +61,7 @@ private extension ContentResponseMapperTests {
         let ITEM_ID = UUID().uuidString
         let IMAGE_URL = "https://some-image.com"
         let USER_ID = UUID().uuidString
+        let IS_LIKED = true
         let LIKES = 5
         let COMMENTS = 10
         let SHARES = 12
@@ -69,7 +70,7 @@ private extension ContentResponseMapperTests {
             id: ITEM_ID,
             imageURL: makeURL(IMAGE_URL),
             user: Content.User(id: USER_ID),
-            interactions: Content.Interactions(likes: LIKES, comments: COMMENTS, shares: SHARES)
+            interactions: Content.Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
         )
         
         let json = [
@@ -79,6 +80,7 @@ private extension ContentResponseMapperTests {
                 "id": USER_ID
             ],
             "interactions": [
+                "isLiked": IS_LIKED,
                 "likes": LIKES,
                 "comments": COMMENTS,
                 "shares": SHARES
