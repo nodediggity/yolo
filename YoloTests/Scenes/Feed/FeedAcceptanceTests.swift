@@ -29,6 +29,16 @@ class FeedAcceptanceTests: XCTestCase {
         let sut = launch(httpClient: .offline)
         XCTAssertEqual(sut.numberOfRenderedFeedItems, 0)
     }
+    
+    func test_on_select_content_action_routes_to_content_scene() {
+        let sut = launch(httpClient: .online(response))
+        XCTAssertEqual(sut.navigationController?.viewControllers.count, 1)
+        
+        sut.simulateFeedCardSelection(at: 0)
+        RunLoop.current.run(until: Date())
+        
+        XCTAssertEqual(sut.navigationController?.viewControllers.count, 2)
+    }
 }
 
 private extension FeedAcceptanceTests {
@@ -37,7 +47,8 @@ private extension FeedAcceptanceTests {
         let window = UIWindow(frame: .zero)
         sut.configure(window: window)
         
-        return sut.window?.rootViewController as! ListViewController
+        let nav = sut.window?.rootViewController as! UINavigationController
+        return nav.topViewController as! ListViewController
     }
     
     func response(for request: URLRequest) -> (Data, HTTPURLResponse) {

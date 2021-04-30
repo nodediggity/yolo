@@ -12,6 +12,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     
+    private lazy var navController: UINavigationController = {
+        let navController = UINavigationController(rootViewController: makeFeedScene())
+        return navController
+    }()
+    
     private lazy var httpClient: HTTPClient = {
         URLSessionHTTPClient(session: URLSession(configuration: .ephemeral))
     }()
@@ -30,11 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func configure(window: UIWindow) {
-        window.rootViewController = FeedUIComposer.compose(
-            loader: makeRemoteFeedLoader,
-            imageLoader: makeRemoteImageLoader,
-            selection: { _ in }
-        )
+        window.rootViewController = navController
         
         window.makeKeyAndVisible()
         self.window = window
@@ -42,6 +43,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 private extension SceneDelegate {
+    
+    func makeFeedScene() -> UIViewController {
+        FeedUIComposer.compose(
+           loader: makeRemoteFeedLoader,
+           imageLoader: makeRemoteImageLoader,
+            selection: { [self] in showContentScene(id: $0.id) }
+       )
+    }
+    
+    func showContentScene(id: String) {
+        let viewController = ContentUIComposer.compose(loader: { Empty().eraseToAnyPublisher() }, imageLoader: { _ in Empty().eraseToAnyPublisher() })
+        navController.pushViewController(viewController, animated: true)
+    }
     
     func makeRemoteFeedLoader() -> AnyPublisher<[FeedItem], Error> {
         let request = URLRequest(url: baseURL.appendingPathComponent("feed"))
