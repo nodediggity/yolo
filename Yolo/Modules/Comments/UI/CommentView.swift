@@ -12,8 +12,8 @@ public final class CommentView: UITableViewCell {
     private(set) public var userImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        [imageView.widthAnchor, imageView.heightAnchor].forEach { $0.constraint(equalToConstant: 50).isActive = true }
-        imageView.layer.cornerRadius = 25
+        [imageView.widthAnchor, imageView.heightAnchor].forEach { $0.constraint(equalToConstant: 48).isActive = true }
+        imageView.layer.cornerRadius = 24
         imageView.clipsToBounds = true
         imageView.backgroundColor = .init(white: 0, alpha: 0.1)
         imageView.contentMode = .scaleAspectFill
@@ -31,7 +31,7 @@ public final class CommentView: UITableViewCell {
     private(set) public var bodyTextLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textColor = #colorLiteral(red: 0.4941176471, green: 0.5568627451, blue: 0.6431372549, alpha: 1)
-        label.font = .preferredFont(forTextStyle: .headline, weight: .regular)
+        label.font = .preferredFont(forTextStyle: .body, weight: .light)
         label.adjustsFontForContentSizeCategory = true
         label.numberOfLines = 0
         return label

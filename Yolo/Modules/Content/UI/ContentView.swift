@@ -123,7 +123,7 @@ private extension ContentView {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = #colorLiteral(red: 0.4941176471, green: 0.5568627451, blue: 0.6431372549, alpha: 1)
-        label.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
         label.adjustsFontForContentSizeCategory = true
         label.widthAnchor.constraint(equalToConstant: 50).isActive = true
         return label
