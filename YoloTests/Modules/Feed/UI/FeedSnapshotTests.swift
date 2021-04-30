@@ -10,13 +10,6 @@ import Yolo
 
 class FeedSnapshotTests: XCTestCase {
     
-    func test_empty_feed() {
-        let sut = makeSUT()
-        sut.display(makeEmptyFeed())
-        
-        assert(snapshot: sut.snapshot(for: .iPhone12(style: .light)), named: "EMPTY_FEED_light")
-    }
-    
     func test_feed_with_content() {
         let sut = makeSUT()
         sut.display(makeFeedWithContent())
@@ -37,10 +30,6 @@ private extension FeedSnapshotTests {
         controller.tableView.showsVerticalScrollIndicator = false
         controller.tableView.showsHorizontalScrollIndicator = false
         return controller
-    }
-    
-    func makeEmptyFeed() -> [CellController] {
-        []
     }
     
     func makeFeedWithContent() -> [FeedCardStub] {
