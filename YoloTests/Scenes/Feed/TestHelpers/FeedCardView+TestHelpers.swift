@@ -37,5 +37,9 @@ extension FeedCardView {
     var sharesText: String? {
         sharesCountLabel.text
     }
+    
+    var isShowingAsLiked: Bool {
+        likeButton.tintColor == .red
+    }
 }
 
