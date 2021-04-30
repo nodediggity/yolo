@@ -93,7 +93,9 @@ private extension ContentUIIntergrationTests {
         sut.view.enforceLayoutCycle()
         
         if let model = model {
-            let (_, comments) = model
+            let (content, comments) = model
+            
+            assertThat(sut, hasViewConfiguredFor: content, at: 0, file: file, line: line)
             
             guard sut.numberOfRenderedComments == comments.count else {
                 return XCTFail("Expected \(comments.count) but got \(sut.numberOfRenderedComments) instead", file: file, line: line)
@@ -109,6 +111,17 @@ private extension ContentUIIntergrationTests {
         }
         
         executeRunLoopToCleanUpReferences()
+    }
+    
+    func assertThat(_ sut: ListViewController, hasViewConfiguredFor content: Content, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+        let view = sut.contentView()
+        guard let cell = view as? ContentView else {
+            return XCTFail("Expected \(ContentView.self) instance but got \(String(describing: view)) instead", file: file, line: line)
+        }
+        
+        XCTAssertEqual(cell.likesText, "\(content.interactions.likes)", file: file, line: line)
+        XCTAssertEqual(cell.commentsText, "\(content.interactions.comments)", file: file, line: line)
+        XCTAssertEqual(cell.sharesText, "\(content.interactions.shares)", file: file, line: line)
     }
     
     func assertThat(_ sut: ListViewController, hasViewConfiguredFor item: Comment, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
@@ -154,5 +167,25 @@ extension CommentView {
     
     var bodyText: String? {
         bodyTextLabel.text
+    }
+}
+
+
+extension ContentView {
+
+    var renderedImage: Data? {
+        contentImageView.image?.pngData()
+    }
+    
+    var likesText: String? {
+        likesCountLabel.text
+    }
+    
+    var commentsText: String? {
+        commentsCountLabel.text
+    }
+    
+    var sharesText: String? {
+        sharesCountLabel.text
     }
 }

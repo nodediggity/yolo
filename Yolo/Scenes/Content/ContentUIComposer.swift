@@ -26,6 +26,7 @@ public enum ContentUIComposer {
         viewController.onLoad = adapter.execute
         
         viewController.configure = { tableView in
+            tableView.register(ContentView.self)
             tableView.register(CommentView.self)
         }
         
@@ -45,12 +46,18 @@ extension ContentViewAdapter: ResourceView {
     typealias ResourceViewModel = (content: Content, comments: [Comment])
     
     func display(_ viewModel: ResourceViewModel) {
+        let (content, comments) = viewModel
         
-        let comments: [CellController] = viewModel.comments.map { item in
+        let contentSection: [CellController] = [ContentViewController()].map { view in
+            view.display(content)
+            return .init(id: content, view)
+        }
+        
+        let commentSection: [CellController] = comments.map { item in
             let view = CommentCellController(model: CommentPresenter.map(item))
             return .init(id: item, view)
         }
         
-        controller?.display([], comments)
+        controller?.display(contentSection, commentSection)
     }
 }
