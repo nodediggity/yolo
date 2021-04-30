@@ -32,12 +32,12 @@ class FeedAcceptanceTests: XCTestCase {
 }
 
 private extension FeedAcceptanceTests {
-    func launch(httpClient: HTTPClientStub = .offline) -> FeedViewController {
+    func launch(httpClient: HTTPClientStub = .offline) -> ListViewController {
         let sut = SceneDelegate(httpClient: httpClient)
         let window = UIWindow(frame: .zero)
         sut.configure(window: window)
         
-        return sut.window?.rootViewController as! FeedViewController
+        return sut.window?.rootViewController as! ListViewController
     }
     
     func response(for request: URLRequest) -> (Data, HTTPURLResponse) {
