@@ -38,6 +38,9 @@ class FeedAcceptanceTests: XCTestCase {
         
         let content = sut.navigationController?.topViewController as! ListViewController
         XCTAssertEqual(content.numberOfRenderedComments, 2)
+        
+        let view = content.contentView() as? ContentView
+        XCTAssertEqual(view?.renderedImage, makeCardImageData())
     }
 }
 
