@@ -76,6 +76,7 @@ private extension FeedResponseMapperTests {
         let USER_NAME = "any name \(index)"
         let USER_ABOUT = "some text \(index)"
         let USER_IMAGE_URL = "https://some-user-image-\(index).com"
+        let IS_LIKED = true
         let LIKES = 5
         let COMMENTS = 10
         let SHARES = 12
@@ -84,7 +85,7 @@ private extension FeedResponseMapperTests {
             id: ITEM_ID,
             imageURL: makeURL(IMAGE_URL),
             user: FeedItem.User(id: USER_ID, name: USER_NAME, about: USER_ABOUT, imageURL: makeURL(USER_IMAGE_URL)),
-            interactions: FeedItem.Interactions(likes: LIKES, comments: COMMENTS, shares: SHARES)
+            interactions: FeedItem.Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
         )
         
         let json = [
@@ -97,6 +98,7 @@ private extension FeedResponseMapperTests {
                 "imageURL": USER_IMAGE_URL
             ],
             "interactions": [
+                "isLiked": IS_LIKED,
                 "likes": LIKES,
                 "comments": COMMENTS,
                 "shares": SHARES

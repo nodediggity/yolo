@@ -45,6 +45,7 @@ private extension FeedResponseMapper {
             }
             
             struct Interactions: Decodable {
+                let isLiked: Bool
                 let likes: Int
                 let comments: Int
                 let shares: Int
@@ -64,6 +65,7 @@ private extension FeedResponseMapper {
                             imageURL: item.user.imageURL
                         ),
                         interactions: .init(
+                            isLiked: item.interactions.isLiked,
                             likes: item.interactions.likes,
                             comments: item.interactions.comments,
                             shares: item.interactions.shares
