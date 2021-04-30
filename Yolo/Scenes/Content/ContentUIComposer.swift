@@ -5,7 +5,7 @@
 //  Created by Gordon Smith on 30/04/2021.
 //
 
-import Foundation
+import UIKit
 import Combine
 
 public enum ContentUIComposer {
@@ -54,9 +54,11 @@ extension ContentViewAdapter: ResourceView {
             
             view.display(content)
             
-            let adapter = ResourcePresentationAdapter<Data, ContentViewController>(service: { [imageLoader] in
+            let adapter = ResourcePresentationAdapter<Data, WeakRefVirtualProxy<ContentViewController>>(service: { [imageLoader] in
                 imageLoader(content.imageURL)
             })
+            
+            adapter.presenter = ResourcePresenter(view: WeakRefVirtualProxy(view), mapper: UIImage.tryMake(data:))
             
             view.onLoadImage = adapter.execute
             
