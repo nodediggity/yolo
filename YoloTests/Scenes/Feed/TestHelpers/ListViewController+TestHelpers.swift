@@ -10,8 +10,6 @@ import Yolo
 
 extension ListViewController {
     
-    private var FEED_SECTION: Int { 0 }
-    
     override public func loadViewIfNeeded() {
         super.loadViewIfNeeded()
         tableView.frame = CGRect(x: 0, y: 0, width: 1, height: 1)
@@ -22,15 +20,64 @@ extension ListViewController {
         return refreshControl.isRefreshing
     }
     
+    func numberOfRenderedItems(in section: Int) -> Int {
+        guard tableView.numberOfSections > section else { return 0 }
+        return tableView.numberOfRows(inSection: section)
+    }
+    
+    func cell(row: Int, section: Int) -> UITableViewCell? {
+        let ds = tableView.dataSource
+        let index = IndexPath(row: row, section: section)
+        return ds?.tableView(tableView, cellForRowAt: index)
+    }
+            
+    func simulateListItemNotVisible(row: Int, section: Int) -> UITableViewCell? {
+        let view = cell(row: row, section: section)
+        
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: section)
+        delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
+        
+        return view
+    }
+    
+    func simulateListItemNearVisible(row: Int, section: Int) {
+        let ds = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: section)
+        ds?.tableView(tableView, prefetchRowsAt: [index])
+    }
+    
+    func simulateListItemNoLongerNearVisible(row: Int, section: Int) {
+        simulateListItemNearVisible(row: row, section: section)
+        
+        let ds = tableView.prefetchDataSource
+        let index = IndexPath(row: row, section: section)
+        ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
+    }
+        
+    func simulateUserInitiatedReload() {
+        refreshControl?.beginRefreshing()
+        scrollViewDidEndDragging(tableView, willDecelerate: false)
+    }
+    
+    func simulateListItemSelection(row: Int, section: Int) {
+        let delegate = tableView.delegate
+        let index = IndexPath(row: row, section: section)
+        delegate?.tableView?(tableView, didSelectRowAt: index)
+    }
+}
+
+// FEED
+extension ListViewController {
+
+    private var FEED_SECTION: Int { 0 }
+
     var numberOfRenderedFeedItems: Int {
-        guard tableView.numberOfSections > FEED_SECTION else { return 0 }
-        return tableView.numberOfRows(inSection: FEED_SECTION)
+        numberOfRenderedItems(in: FEED_SECTION)
     }
     
     func feedCardView(at row: Int) -> UITableViewCell? {
-        let ds = tableView.dataSource
-        let index = IndexPath(row: row, section: FEED_SECTION)
-        return ds?.tableView(tableView, cellForRowAt: index)
+        cell(row: row, section: FEED_SECTION) as? FeedCardView
     }
     
     @discardableResult
@@ -40,37 +87,18 @@ extension ListViewController {
     
     @discardableResult
     func simulateFeedCardNotVisible(at row: Int) -> FeedCardView? {
-        let view = simulateFeedCardVisible(at: row)
-        
-        let delegate = tableView.delegate
-        let index = IndexPath(row: row, section: FEED_SECTION)
-        delegate?.tableView?(tableView, didEndDisplaying: view!, forRowAt: index)
-        
-        return view
+        return simulateListItemNotVisible(row: row, section: FEED_SECTION) as? FeedCardView
     }
     
     func simulateFeedCardNearVisible(at row: Int) {
-        let ds = tableView.prefetchDataSource
-        let index = IndexPath(row: row, section: FEED_SECTION)
-        ds?.tableView(tableView, prefetchRowsAt: [index])
+        simulateListItemNearVisible(row: row, section: FEED_SECTION)
     }
     
     func simulateFeedCardNoLongerNearVisible(at row: Int) {
-        simulateFeedCardNearVisible(at: row)
-        
-        let ds = tableView.prefetchDataSource
-        let index = IndexPath(row: row, section: FEED_SECTION)
-        ds?.tableView?(tableView, cancelPrefetchingForRowsAt: [index])
-    }
-        
-    func simulateUserInitiatedReload() {
-        refreshControl?.beginRefreshing()
-        scrollViewDidEndDragging(tableView, willDecelerate: false)
+        simulateListItemNoLongerNearVisible(row: row, section: FEED_SECTION)
     }
     
     func simulateFeedCardSelection(at row: Int) {
-        let delegate = tableView.delegate
-        let index = IndexPath(row: row, section: FEED_SECTION)
-        delegate?.tableView?(tableView, didSelectRowAt: index)
+        simulateListItemSelection(row: row, section: FEED_SECTION)
     }
 }
