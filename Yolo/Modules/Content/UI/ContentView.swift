@@ -9,6 +9,8 @@ import UIKit
 
 public final class ContentView: UITableViewCell {
     
+    public var onToggleLikeAction: (() -> Void)?
+    
     private(set) public var imageViewContainer: UIView = {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -63,6 +65,8 @@ public final class ContentView: UITableViewCell {
 
 private extension ContentView {
     func configureUI() {
+        
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
 
         let footerHStack = UIStackView(arrangedSubviews: [
             likeButton.makeContainer(),
@@ -123,5 +127,9 @@ private extension ContentView {
         label.adjustsFontForContentSizeCategory = true
         label.widthAnchor.constraint(equalToConstant: 50).isActive = true
         return label
+    }
+    
+    @objc func likeButtonTapped() {
+        onToggleLikeAction?()
     }
 }

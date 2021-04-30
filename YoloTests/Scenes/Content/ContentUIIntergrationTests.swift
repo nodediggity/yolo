@@ -11,7 +11,7 @@ import Yolo
 
 class ContentUIIntergrationTests: XCTestCase {
     
-    // Content
+    // MARK:- Content
     func test_load_actions_request_content_from_loader() {
         let (sut, loader) = makeSUT()
         XCTAssertEqual(loader.loadContentCallCount, 0)
@@ -123,18 +123,84 @@ class ContentUIIntergrationTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    // MARK:- Interactions
+    func test_like_feed_item_action_dispatches_request() {
+        let model = makeContent()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(loader.interactionRequests.isEmpty)
+        
+        loader.loadContentCompletes(with: .success(model))
+        
+        let view = sut.contentView() as? ContentView
+        view?.simulateToggleLikeAction()
+        
+        XCTAssertEqual(loader.interactionRequests.map(\.id), [model.content.id])
+        XCTAssertEqual(loader.interactionRequests.map(\.op), [.unlike])
+    }
+
+    func test_like_feed_item_does_not_dispatch_multiple_requests_if_existing_request_is_pending() {
+        let model = makeContent()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(loader.interactionRequests.isEmpty)
+
+        loader.loadContentCompletes(with: .success(model))
+
+        let view = sut.contentView() as? ContentView
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(loader.interactionRequests.count, 1)
+
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(loader.interactionRequests.count, 1)
+    }
+
+    func test_toggle_like_action_performs_optimistic_state_update() {
+        let model = makeContent()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.loadContentCompletes(with: .success(model))
+
+        let view = sut.contentView() as? ContentView
+        XCTAssertEqual(view?.likesText, "10")
+        XCTAssertEqual(view?.isShowingAsLiked, true)
+
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(view?.likesText, "9")
+        XCTAssertEqual(view?.isShowingAsLiked, false)
+    }
+
+    func test_toggle_like_failure_reverts_optimistic_state_update() {
+        let model = makeContent()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.loadContentCompletes(with: .success(model))
+
+        let view = sut.contentView() as? ContentView
+        XCTAssertEqual(view?.likesText, "10")
+        XCTAssertEqual(view?.isShowingAsLiked, true)
+
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(view?.likesText, "9")
+        XCTAssertEqual(view?.isShowingAsLiked, false)
+
+        loader.toggleInteractionCompletes(with: .failure(makeError()))
+
+        XCTAssertEqual(view?.likesText, "10")
+        XCTAssertEqual(view?.isShowingAsLiked, true)
+    }
 }
 
 private extension ContentUIIntergrationTests {
     func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = ContentUIComposer.compose(loader: loader.loadContentPublisher, imageLoader: loader.loadImagePublisher)
+        let sut = ContentUIComposer.compose(loader: loader.loadContentPublisher, imageLoader: loader.loadImagePublisher, interactionService: loader.toggleInteractionPublisher)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
     }
     
-    func makeContent(commentCount: Int = 5, interactions: Content.Interactions = .init(isLiked: true, likes: 10, comments: 20, shares: 15)) -> (content: Content, comments: [Comment]) {
+    func makeContent(commentCount: Int = 5, interactions: Interactions = .init(isLiked: true, likes: 10, comments: 20, shares: 15)) -> (content: Content, comments: [Comment]) {
         (
             content: Content(
                 id: "any",
@@ -247,6 +313,25 @@ private extension ContentUIIntergrationTests {
             }
         }
         
+        // Interactions
+        var interactionRequests: [(id: String, op: Interaction)] {
+            return interactionsRequests.map { ($0.id, $0.interaction) }
+        }
+        
+        private var interactionsRequests: [(id: String, interaction: Interaction, publisher: PassthroughSubject<Interactions, Error>)] = []
+        
+        func toggleInteractionPublisher(id: String, interaction: Interaction) -> AnyPublisher<Interactions, Error> {
+            let publisher = PassthroughSubject<Interactions, Error>()
+            interactionsRequests.append((id, interaction, publisher))
+            return publisher.eraseToAnyPublisher()
+        }
+        
+        func toggleInteractionCompletes(with result: Result<Interactions, Error>, at index: Int = 0) {
+            switch result {
+            case let .success(value): interactionsRequests[index].publisher.send(value)
+            case let .failure(error): interactionsRequests[index].publisher.send(completion: .failure(error))
+            }
+        }
     }
 }
 
@@ -286,6 +371,10 @@ extension ContentView {
     
     var isShowingAsLiked: Bool {
         likeButton.tintColor == .red
+    }
+    
+    func simulateToggleLikeAction() {
+        likeButton.simulateTap()
     }
 }
 

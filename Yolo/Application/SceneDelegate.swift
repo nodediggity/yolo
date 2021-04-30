@@ -56,7 +56,8 @@ private extension SceneDelegate {
         let loader = makeRemoteContentWithCommentsLoader(id: id)
         let viewController = ContentUIComposer.compose(
             loader: { loader },
-            imageLoader: makeRemoteImageLoader
+            imageLoader: makeRemoteImageLoader,
+            interactionService: makeRemoteInteractionService
         )
         navController.pushViewController(viewController, animated: true)
     }
