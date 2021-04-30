@@ -18,7 +18,7 @@ public enum FeedUIComposer {
         
         let viewController = FeedViewController()
         viewController.title = FeedPresenter.title
-        
+                
         let adapter = ResourcePresentationAdapter<[FeedItem], FeedViewAdapter>(service: loader)
         adapter.presenter = ResourcePresenter(
             view: FeedViewAdapter(
@@ -31,6 +31,10 @@ public enum FeedUIComposer {
         )
         
         viewController.onLoad = adapter.execute
+        
+        viewController.configure = { tableView in
+            tableView.register(FeedCardView.self)
+        }
         
         return viewController
     }
