@@ -33,7 +33,8 @@ public final class FeedCardView: UITableViewCell {
     private(set) public var aboutLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textColor = .secondaryLabel
-        label.font = .preferredFont(forTextStyle: .body, weight: .light)
+        label.font = .preferredFont(forTextStyle: .footnote, weight: .regular)
+        label.numberOfLines = 2
         label.adjustsFontForContentSizeCategory = true
         return label
     }()
@@ -108,6 +109,7 @@ private extension FeedCardView {
             arrangedSubviews: [nameLabel, aboutLabel]
         )
         headerVStack.axis = .vertical
+        headerVStack.alignment = .leading
         
         let optionButtonContainer = optionsButton.makeContainer()
         optionButtonContainer.translatesAutoresizingMaskIntoConstraints = false
