@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A137528263BEB4D003F0E5D /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A137527263BEB4D003F0E5D /* Content.swift */; };
 		6A262139263BD6F600956E14 /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A262138263BD6F600956E14 /* ListViewController.swift */; };
 		6A26214D263BDC7C00956E14 /* CommentPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A26214C263BDC7C00956E14 /* CommentPresenter.swift */; };
 		6A262153263BDDB600956E14 /* CommentPresenterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A262152263BDDB600956E14 /* CommentPresenterTests.swift */; };
@@ -78,6 +79,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6A137527263BEB4D003F0E5D /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		6A262138263BD6F600956E14 /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		6A26214C263BDC7C00956E14 /* CommentPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentPresenter.swift; sourceTree = "<group>"; };
 		6A262152263BDDB600956E14 /* CommentPresenterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentPresenterTests.swift; sourceTree = "<group>"; };
@@ -160,6 +162,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A137525263BEAFD003F0E5D /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				6A137526263BEB1A003F0E5D /* Feature */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
+		6A137526263BEB1A003F0E5D /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				6A137527263BEB4D003F0E5D /* Content.swift */,
+			);
+			path = Feature;
+			sourceTree = "<group>";
+		};
 		6A26214B263BDC6300956E14 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,10 +241,10 @@
 		6A26216C263BDFE100956E14 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */,
-				6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */,
 				6AE02CE8263B43610089B39F /* CellController.swift */,
 				6A262138263BD6F600956E14 /* ListViewController.swift */,
+				6AE02CD4263B3FBE0089B39F /* UIImage+TryMake.swift */,
+				6AE02CCA263B326E0089B39F /* UITableView+Dequeueing.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -303,8 +321,9 @@
 		6A30B9B12639E95A00A65598 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				6A26216B263BDFD700956E14 /* Common */,
 				6AE02C8F263B0FDE0089B39F /* Comments */,
+				6A26216B263BDFD700956E14 /* Common */,
+				6A137525263BEAFD003F0E5D /* Content */,
 				6A45D78A2639FB7F003EF1C8 /* Feed */,
 				6A45D82C263AE8F2003EF1C8 /* Media */,
 				6A30B9B22639E96100A65598 /* Networking */,
@@ -779,6 +798,7 @@
 				6A262139263BD6F600956E14 /* ListViewController.swift in Sources */,
 				6A45D80E263AB724003EF1C8 /* UIImage+Size.swift in Sources */,
 				6AE02CAB263B19DC0089B39F /* ResourcePresenter.swift in Sources */,
+				6A137528263BEB4D003F0E5D /* Content.swift in Sources */,
 				6A45D814263AE262003EF1C8 /* Combine+Helpers.swift in Sources */,
 				6AE02CCB263B326E0089B39F /* UITableView+Dequeueing.swift in Sources */,
 				6AE02CAF263B1E310089B39F /* ResourcePresentationAdapter.swift in Sources */,
