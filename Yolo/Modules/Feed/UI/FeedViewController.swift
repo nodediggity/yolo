@@ -9,8 +9,11 @@ import UIKit
 
 public final class FeedViewController: UITableViewController {
     
+    /// Provide additional configuration for the `UITableView` such as registering cells or setting preferences
+    public var configure: ((UITableView) -> Void)?
+    
     public var onLoad: (() -> Void)?
-        
+    
     private lazy var dataSource: UITableViewDiffableDataSource<Int, CellController> = {
         UITableViewDiffableDataSource<Int, CellController>(tableView: tableView) { tableView, index, controller in
             controller.dataSource.tableView(tableView, cellForRowAt: index)
@@ -19,12 +22,7 @@ public final class FeedViewController: UITableViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = UIRefreshControl(frame: .zero)
-        tableView.dataSource = dataSource
-        tableView.prefetchDataSource = self
-        tableView.separatorStyle = .none
-        tableView.register(FeedCardView.self)
-        
+        configureUI()
         load()
     }
     
@@ -81,6 +79,14 @@ private extension FeedViewController {
     
     func controller(for indexPath: IndexPath) -> CellController? {
         dataSource.itemIdentifier(for: indexPath)
+    }
+    
+    func configureUI() {
+        refreshControl = UIRefreshControl(frame: .zero)
+        tableView.dataSource = dataSource
+        tableView.prefetchDataSource = self
+        tableView.separatorStyle = .none
+        configure?(tableView)
     }
 }
 

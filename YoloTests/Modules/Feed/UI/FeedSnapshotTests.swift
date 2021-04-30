@@ -29,6 +29,9 @@ class FeedSnapshotTests: XCTestCase {
 private extension FeedSnapshotTests {
     func makeSUT() -> FeedViewController {
         let controller = FeedViewController()
+        controller.configure = { tableView in
+            tableView.register(FeedCardView.self)
+        }
         controller.loadViewIfNeeded()
         controller.tableView.separatorStyle = .none
         controller.tableView.showsVerticalScrollIndicator = false
