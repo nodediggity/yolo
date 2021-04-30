@@ -113,6 +113,7 @@ private extension FeedAcceptanceTests {
         let USER_NAME = "any name \(index)"
         let USER_ABOUT = "some text \(index)"
         let USER_IMAGE_URL = "https://some-user-image.com/user-image-\(index)"
+        let IS_LIKED = true
         let LIKES = 5
         let COMMENTS = 10
         let SHARES = 12
@@ -127,6 +128,7 @@ private extension FeedAcceptanceTests {
                 "imageURL": USER_IMAGE_URL
             ],
             "interactions": [
+                "isLiked": IS_LIKED,
                 "likes": LIKES,
                 "comments": COMMENTS,
                 "shares": SHARES

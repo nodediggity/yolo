@@ -380,7 +380,7 @@ private extension FeedUIIntegrationTests {
             id: ITEM_ID,
             imageURL: makeURL(IMAGE_URL),
             user: FeedItem.User(id: USER_ID, name: USER_NAME, about: USER_ABOUT, imageURL: makeURL(USER_IMAGE_URL)),
-            interactions: FeedItem.Interactions(likes: LIKES, comments: COMMENTS, shares: SHARES)
+            interactions: FeedItem.Interactions(isLiked: false, likes: LIKES, comments: COMMENTS, shares: SHARES)
         )
     }
 }
