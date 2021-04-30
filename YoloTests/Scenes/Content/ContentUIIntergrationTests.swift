@@ -74,6 +74,22 @@ class ContentUIIntergrationTests: XCTestCase {
         XCTAssertEqual(loader.imageLoaderURLs, [model.content.imageURL])
     }
     
+    func test_content_renders_image_loaded_for_url() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        let model = makeContent()
+        loader.loadContentCompletes(with: .success(model))
+        
+        let view = sut.contentView() as? ContentView
+        XCTAssertEqual(view?.renderedImage, .none)
+        
+        let imageData = UIImage.makeImageData(withColor: .red)
+        loader.loadImageCompletes(with: .success(imageData), at: 0)
+        
+        XCTAssertEqual(view?.renderedImage, imageData)
+    }
+    
 }
 
 private extension ContentUIIntergrationTests {
