@@ -14,8 +14,8 @@ public final class FeedCardView: UITableViewCell {
     private(set) public var userImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        [imageView.widthAnchor, imageView.heightAnchor].forEach { $0.constraint(equalToConstant: 64).isActive = true }
-        imageView.layer.cornerRadius = 32
+        [imageView.widthAnchor, imageView.heightAnchor].forEach { $0.constraint(equalToConstant: 48).isActive = true }
+        imageView.layer.cornerRadius = 24
         imageView.clipsToBounds = true
         imageView.backgroundColor = .init(white: 0, alpha: 0.1)
         imageView.contentMode = .scaleAspectFill
@@ -25,7 +25,7 @@ public final class FeedCardView: UITableViewCell {
     private(set) public var nameLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textColor = .label
-        label.font = .preferredFont(forTextStyle: .title2, weight: .bold)
+        label.font = .preferredFont(forTextStyle: .title3, weight: .bold)
         label.adjustsFontForContentSizeCategory = true
         return label
     }()
@@ -33,7 +33,7 @@ public final class FeedCardView: UITableViewCell {
     private(set) public var aboutLabel: UILabel = {
         let label = UILabel(frame: .zero)
         label.textColor = .secondaryLabel
-        label.font = .preferredFont(forTextStyle: .body, weight: .bold)
+        label.font = .preferredFont(forTextStyle: .body, weight: .light)
         label.adjustsFontForContentSizeCategory = true
         return label
     }()
@@ -51,7 +51,7 @@ public final class FeedCardView: UITableViewCell {
         let view = UIView(frame: .zero)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .init(white: 0, alpha: 0.1)
-        view.heightAnchor.constraint(equalToConstant: 184).isActive = true
+        view.heightAnchor.constraint(equalToConstant: 224).isActive = true
         view.layer.cornerRadius = 12
         view.clipsToBounds = true
         return view
@@ -177,7 +177,7 @@ private extension FeedCardView {
         let label = UILabel(frame: .zero)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = #colorLiteral(red: 0.4941176471, green: 0.5568627451, blue: 0.6431372549, alpha: 1)
-        label.font = .preferredFont(forTextStyle: .subheadline, weight: .bold)
+        label.font = .preferredFont(forTextStyle: .subheadline, weight: .semibold)
         label.adjustsFontForContentSizeCategory = true
         label.widthAnchor.constraint(equalToConstant: 50).isActive = true
         return label

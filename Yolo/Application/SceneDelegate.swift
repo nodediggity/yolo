@@ -31,6 +31,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         if let scene = (scene as? UIWindowScene) {
             configure(window: .init(windowScene: scene))
+            configureNavigationAttributes()
         }
     }
     
@@ -42,6 +43,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 private extension SceneDelegate {
+    
+    func configureNavigationAttributes() {
+        UINavigationBar.appearance().largeTitleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.label
+        ]
+
+        UINavigationBar.appearance().titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.label
+        ]
+
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().tintColor = UIColor.label
+    }
     
     func makeFeedScene() -> UIViewController {
         FeedUIComposer.compose(
