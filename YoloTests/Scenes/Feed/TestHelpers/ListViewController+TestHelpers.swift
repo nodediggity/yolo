@@ -20,6 +20,10 @@ extension ListViewController {
         return refreshControl.isRefreshing
     }
     
+    var numberOfSections: Int {
+        numberOfSections(in: tableView)
+    }
+    
     func numberOfRenderedItems(in section: Int) -> Int {
         guard tableView.numberOfSections > section else { return 0 }
         return tableView.numberOfRows(inSection: section)
@@ -101,4 +105,40 @@ extension ListViewController {
     func simulateFeedCardSelection(at row: Int) {
         simulateListItemSelection(row: row, section: FEED_SECTION)
     }
+}
+
+// Content
+extension ListViewController {
+
+    private var COMMENT_SECTION: Int { 1 }
+
+    var numberOfRenderedComments: Int {
+        numberOfRenderedItems(in: COMMENT_SECTION)
+    }
+    
+    func commentView(at row: Int) -> UITableViewCell? {
+        cell(row: row, section: COMMENT_SECTION) as? CommentView
+    }
+    
+//    @discardableResult
+//    func simulateFeedCardVisible(at row: Int) -> FeedCardView? {
+//        return feedCardView(at: row) as? FeedCardView
+//    }
+//
+//    @discardableResult
+//    func simulateFeedCardNotVisible(at row: Int) -> FeedCardView? {
+//        return simulateListItemNotVisible(row: row, section: FEED_SECTION) as? FeedCardView
+//    }
+//
+//    func simulateFeedCardNearVisible(at row: Int) {
+//        simulateListItemNearVisible(row: row, section: FEED_SECTION)
+//    }
+//
+//    func simulateFeedCardNoLongerNearVisible(at row: Int) {
+//        simulateListItemNoLongerNearVisible(row: row, section: FEED_SECTION)
+//    }
+//
+//    func simulateFeedCardSelection(at row: Int) {
+//        simulateListItemSelection(row: row, section: FEED_SECTION)
+//    }
 }
