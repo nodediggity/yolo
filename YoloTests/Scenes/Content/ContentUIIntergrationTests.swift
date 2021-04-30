@@ -20,6 +20,11 @@ enum ContentUIComposer {
         
         let viewController = ListViewController()
         
+        adapter.presenter = ResourcePresenter(
+            view: ContentViewAdapter(controller: viewController),
+            loadingView: WeakRefVirtualProxy(viewController)
+        )
+        
         viewController.onLoad = adapter.execute
         
         return viewController
@@ -61,6 +66,21 @@ class ContentUIIntergrationTests: XCTestCase {
         XCTAssertEqual(loader.loadContentCallCount, 2)
     }
     
+    func test_loading_indicator_is_visible_while_loading_content() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
+        
+        loader.loadContentCompletes(with: .success(makeContent()))
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
+        
+        sut.simulateUserInitiatedReload()
+        XCTAssertTrue(sut.isShowingLoadingIndicator)
+        
+        loader.loadContentCompletes(with: .success(makeContent()), at: 1)
+        XCTAssertFalse(sut.isShowingLoadingIndicator)
+    }
     
 }
 
