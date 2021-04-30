@@ -70,7 +70,7 @@ private extension ContentResponseMapperTests {
             id: ITEM_ID,
             imageURL: makeURL(IMAGE_URL),
             user: Content.User(id: USER_ID),
-            interactions: Content.Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
+            interactions: Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
         )
         
         let json = [
