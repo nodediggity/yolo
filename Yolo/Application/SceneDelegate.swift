@@ -36,7 +36,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func configure(window: UIWindow) {
         window.rootViewController = navController
-        
         window.makeKeyAndVisible()
         self.window = window
     }
@@ -53,7 +52,11 @@ private extension SceneDelegate {
     }
     
     func showContentScene(id: String) {
-        let viewController = ContentUIComposer.compose(loader: { Empty().eraseToAnyPublisher() }, imageLoader: { _ in Empty().eraseToAnyPublisher() })
+        let loader = makeRemoteContentWithCommentsLoader(id: id)
+        let viewController = ContentUIComposer.compose(
+            loader: { loader },
+            imageLoader: { _ in Empty().eraseToAnyPublisher() }
+        )
         navController.pushViewController(viewController, animated: true)
     }
     
@@ -72,5 +75,39 @@ private extension SceneDelegate {
             .dispatchPublisher(for: request)
             .tryMap(ImageResponseMapper.map)
             .eraseToAnyPublisher()
+    }
+    
+    func makeRemoteContentWithCommentsLoader(id: String) -> AnyPublisher<(content: Content, comments: [Comment]), Error> {
+        Publishers.Zip(makeRemoteContentLoader(id: id), makeRemoteCommentsLoader(id: id))
+            .map(mapContent)
+            .eraseToAnyPublisher()
+    }
+    
+    func makeRemoteContentLoader(id: String) -> AnyPublisher<Content, Error> {
+        let request = URLRequest(
+            url: baseURL
+                .appendingPathComponent("content")
+                .appendingPathComponent(id)
+        )
+        return httpClient
+            .dispatchPublisher(for: request)
+            .tryMap(ContentResponseMapper.map)
+            .eraseToAnyPublisher()
+    }
+    
+    func makeRemoteCommentsLoader(id: String) -> AnyPublisher<[Comment], Error> {
+        let request = URLRequest(
+            url: baseURL
+                .appendingPathComponent("comments")
+                .appendingPathComponent(id)
+        )
+        return httpClient
+            .dispatchPublisher(for: request)
+            .tryMap(CommentsResponseMapper.map)
+            .eraseToAnyPublisher()
+    }
+    
+    func mapContent(_ values: (Content, [Comment])) -> (content: Content, comments: [Comment]) {
+        (content: values.0, comments: values.1)
     }
 }

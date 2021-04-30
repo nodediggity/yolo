@@ -32,12 +32,12 @@ class FeedAcceptanceTests: XCTestCase {
     
     func test_on_select_content_action_routes_to_content_scene() {
         let sut = launch(httpClient: .online(response))
-        XCTAssertEqual(sut.navigationController?.viewControllers.count, 1)
         
         sut.simulateFeedCardSelection(at: 0)
         RunLoop.current.run(until: Date())
         
-        XCTAssertEqual(sut.navigationController?.viewControllers.count, 2)
+        let content = sut.navigationController?.topViewController as! ListViewController
+        XCTAssertEqual(content.numberOfRenderedComments, 2)
     }
 }
 
@@ -56,17 +56,6 @@ private extension FeedAcceptanceTests {
         return (makeData(for: request.url!), response)
     }
     
-    func makeData(for url: URL) -> Data {
-        switch url.absoluteString {
-        case "https://some-user-image-0.com", "https://some-user-image-1.com":
-            return makeUserImageData()
-        case "https://some-image-0.com", "https://some-image-1.com":
-            return makeCardImageData()
-        default:
-            return makeFeedData(itemCount: 5)
-        }
-    }
-    
     func makeCardImageData() -> Data {
         UIImage.makeImageData(withColor: .red)
     }
@@ -79,6 +68,34 @@ private extension FeedAcceptanceTests {
         try! JSONSerialization.data(withJSONObject: makeFeed(itemCount: itemCount))
     }
     
+    func makeContentData() -> Data {
+        try! JSONSerialization.data(withJSONObject: ["content": makeContent()])
+    }
+    
+    func makeCommentsData() -> Data {
+        try! JSONSerialization.data(withJSONObject: [
+            "content": [
+                "comments": [makeComment(0), makeComment(1)]
+            ]
+        ])
+    }
+    
+    func makeData(for url: URL) -> Data {
+        switch url.path {
+        case "/user-image-0", "/user-image-1":
+            return makeUserImageData()
+        case "/card-image-0", "/card-image-1":
+            return makeCardImageData()
+        case "/feed":
+            return makeFeedData(itemCount: 5)
+        case "/content/item-0":
+            return makeContentData()
+        case "/comments/item-0":
+            return makeCommentsData()
+        default: return makeData()
+        }
+    }
+    
     func makeFeed(itemCount: Int = 5) -> [String: Any] {
         let items = (0..<itemCount).map(makeFeedItem(_:))
         return [
@@ -87,12 +104,12 @@ private extension FeedAcceptanceTests {
     }
     
     func makeFeedItem(_ index: Int) -> [String: Any] {
-        let ITEM_ID = UUID().uuidString
-        let IMAGE_URL = "https://some-image-\(index).com"
+        let ITEM_ID = "item-\(index)"
+        let IMAGE_URL = "https://some-card-image.com/card-image-\(index)"
         let USER_ID = UUID().uuidString
         let USER_NAME = "any name \(index)"
         let USER_ABOUT = "some text \(index)"
-        let USER_IMAGE_URL = "https://some-user-image-\(index).com"
+        let USER_IMAGE_URL = "https://some-user-image.com/user-image-\(index)"
         let LIKES = 5
         let COMMENTS = 10
         let SHARES = 12
@@ -110,6 +127,55 @@ private extension FeedAcceptanceTests {
                 "likes": LIKES,
                 "comments": COMMENTS,
                 "shares": SHARES
+            ]
+        ] as [String : Any]
+    }
+
+    func makeContent() -> [String: Any] {
+        let ITEM_ID = UUID().uuidString
+        let IMAGE_URL = "https://some-card-image.com/card-image-0"
+        let USER_ID = UUID().uuidString
+        let LIKES = 5
+        let COMMENTS = 10
+        let SHARES = 12
+    
+        return [
+            "id": ITEM_ID,
+            "imageURL": IMAGE_URL,
+            "user": [
+                "id": USER_ID
+            ],
+            "interactions": [
+                "likes": LIKES,
+                "comments": COMMENTS,
+                "shares": SHARES
+            ]
+        ] as [String : Any]
+    }
+    
+//    func makeCommen(for comments: [[String: Any]]) -> Data {
+//        let data = try! JSONSerialization.data(withJSONObject: [
+//            "content": [
+//                "comments": comments
+//            ]
+//        ])
+//        return data
+//    }
+    
+    func makeComment(_ index: Int) -> [String: Any] {
+        let COMMENT_ID = UUID().uuidString
+        let COMMENT_TEXT = "comment #\(index)"
+        let USER_ID = UUID().uuidString
+        let USER_NAME = "any name \(index)"
+        let USER_IMAGE_URL = "https://some-user-image.com/user-image-\(index)"
+
+        return [
+            "id": COMMENT_ID,
+            "text": COMMENT_TEXT,
+            "user": [
+                "id": USER_ID,
+                "name": USER_NAME,
+                "imageURL": USER_IMAGE_URL
             ]
         ] as [String : Any]
     }
