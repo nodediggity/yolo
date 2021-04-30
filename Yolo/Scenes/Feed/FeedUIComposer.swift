@@ -14,9 +14,9 @@ public enum FeedUIComposer {
     public typealias ImageLoader = (_ imageURL: URL) -> AnyPublisher<Data, Error>
     public typealias SelectionHandler = (FeedItem) -> Void
     
-    public static func compose(loader: @escaping FeedLoader, imageLoader: @escaping ImageLoader, selection: @escaping SelectionHandler) -> FeedViewController {
+    public static func compose(loader: @escaping FeedLoader, imageLoader: @escaping ImageLoader, selection: @escaping SelectionHandler) -> ListViewController {
         
-        let viewController = FeedViewController()
+        let viewController = ListViewController()
         viewController.title = FeedPresenter.title
                 
         let adapter = ResourcePresentationAdapter<[FeedItem], FeedViewAdapter>(service: loader)
@@ -42,11 +42,11 @@ public enum FeedUIComposer {
 
 private final class FeedViewAdapter {
     
-    private weak var controller: FeedViewController?
+    private weak var controller: ListViewController?
     private let imageLoader: FeedUIComposer.ImageLoader
     private let selection: FeedUIComposer.SelectionHandler
     
-    init(controller: FeedViewController, imageLoader: @escaping FeedUIComposer.ImageLoader, selection: @escaping FeedUIComposer.SelectionHandler) {
+    init(controller: ListViewController, imageLoader: @escaping FeedUIComposer.ImageLoader, selection: @escaping FeedUIComposer.SelectionHandler) {
         self.controller = controller
         self.imageLoader = imageLoader
         self.selection = selection

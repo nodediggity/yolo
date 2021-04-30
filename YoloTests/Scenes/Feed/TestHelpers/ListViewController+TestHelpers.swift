@@ -1,5 +1,5 @@
 //
-//  FeedViewController+TestHelpers.swift
+//  ListViewController+TestHelpers.swift
 //  YoloTests
 //
 //  Created by Gordon Smith on 29/04/2021.
@@ -8,7 +8,7 @@
 import UIKit
 import Yolo
 
-extension FeedViewController {
+extension ListViewController {
     
     private var FEED_SECTION: Int { 0 }
     

@@ -271,7 +271,7 @@ class FeedUIIntegrationTests: XCTestCase {
 
 private extension FeedUIIntegrationTests {
     
-    func makeSUT(onSelection: @escaping (FeedItem) -> Void = { _ in }, file: StaticString = #filePath, line: UInt = #line) -> (sut: FeedViewController, loader: LoaderSpy) {
+    func makeSUT(onSelection: @escaping (FeedItem) -> Void = { _ in }, file: StaticString = #filePath, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
         let sut = FeedUIComposer.compose(loader: loader.loadFeedPublisher, imageLoader: loader.loadImagePublisher, selection: onSelection)
         trackForMemoryLeaks(loader, file: file, line: line)
@@ -279,7 +279,7 @@ private extension FeedUIIntegrationTests {
         return (sut, loader)
     }
     
-    func assertThat(_ sut: FeedViewController, isRendering feed: [FeedItem], file: StaticString = #filePath, line: UInt = #line) {
+    func assertThat(_ sut: ListViewController, isRendering feed: [FeedItem], file: StaticString = #filePath, line: UInt = #line) {
         sut.view.enforceLayoutCycle()
         
         guard sut.numberOfRenderedFeedItems == feed.count else {
@@ -294,7 +294,7 @@ private extension FeedUIIntegrationTests {
         executeRunLoopToCleanUpReferences()
     }
     
-    func assertThat(_ sut: FeedViewController, hasViewConfiguredFor item: FeedItem, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
+    func assertThat(_ sut: ListViewController, hasViewConfiguredFor item: FeedItem, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
         let view = sut.feedCardView(at: index)
         guard let cell = view as? FeedCardView else {
             return XCTFail("Expected \(FeedCardView.self) instance but got \(String(describing: view)) instead", file: file, line: line)
