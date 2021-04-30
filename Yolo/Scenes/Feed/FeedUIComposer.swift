@@ -142,13 +142,3 @@ private extension FeedItem {
         clone(with: interactions.asUnliked())
     }
 }
-
-private extension Interactions {
-    func asUnliked() -> Self {
-        Interactions(isLiked: false, likes: likes - 1, comments: comments, shares: shares)
-    }
-
-    func asLiked() -> Self {
-        Interactions(isLiked: true, likes: likes + 1, comments: comments, shares: shares)
-    }
-}
