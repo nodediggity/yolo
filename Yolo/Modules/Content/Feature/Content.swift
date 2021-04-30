@@ -32,10 +32,12 @@ extension Content {
     }
     
     public struct Interactions: Hashable {
+        public let isLiked: Bool
         public let likes: Int
         public let comments: Int
         public let shares: Int
-        public init(likes: Int, comments: Int, shares: Int) {
+        public init(isLiked: Bool, likes: Int, comments: Int, shares: Int) {
+            self.isLiked = isLiked
             self.likes = likes
             self.comments = comments
             self.shares = shares

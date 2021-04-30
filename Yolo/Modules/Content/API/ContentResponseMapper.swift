@@ -42,6 +42,7 @@ private extension ContentResponseMapper {
             }
             
             struct Interactions: Decodable {
+                let isLiked: Bool
                 let likes: Int
                 let comments: Int
                 let shares: Int
@@ -54,6 +55,7 @@ private extension ContentResponseMapper {
                 imageURL: content.imageURL,
                 user: Content.User(id: content.user.id),
                 interactions: Content.Interactions(
+                    isLiked: content.interactions.isLiked,
                     likes: content.interactions.likes,
                     comments: content.interactions.comments,
                     shares: content.interactions.shares

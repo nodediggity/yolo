@@ -52,6 +52,11 @@ private extension ContentViewController {
         cell?.likesCountLabel.text = "\(model.interactions.likes)"
         cell?.commentsCountLabel.text = "\(model.interactions.comments)"
         cell?.sharesCountLabel.text = "\(model.interactions.shares)"
+        
+        if model.interactions.isLiked {
+            cell?.likeButton.tintColor = .red
+        }
+        
     }
     
     func load() {

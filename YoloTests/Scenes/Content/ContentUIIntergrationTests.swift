@@ -57,12 +57,12 @@ class ContentUIIntergrationTests: XCTestCase {
         
         sut.simulateUserInitiatedReload()
         
-        let updatedContent = makeContent(interactions: .init(likes: 100, comments: 200, shares: 300))
+        let updatedContent = makeContent(interactions: .init(isLiked: false, likes: 100, comments: 200, shares: 300))
         loader.loadContentCompletes(with: .success(updatedContent), at: 1)
         assertThat(sut, isRendering: updatedContent)
         
         sut.simulateUserInitiatedReload()
-        let contentNoComments = makeContent(commentCount: 0, interactions: .init(likes: 100, comments: 200, shares: 300))
+        let contentNoComments = makeContent(commentCount: 0, interactions: .init(isLiked: true, likes: 100, comments: 200, shares: 300))
         loader.loadContentCompletes(with: .success(contentNoComments), at: 2)
         assertThat(sut, isRendering: contentNoComments)
     }
@@ -134,7 +134,7 @@ private extension ContentUIIntergrationTests {
         return (sut, loader)
     }
     
-    func makeContent(commentCount: Int = 5, interactions: Content.Interactions = .init(likes: 10, comments: 20, shares: 15)) -> (content: Content, comments: [Comment]) {
+    func makeContent(commentCount: Int = 5, interactions: Content.Interactions = .init(isLiked: true, likes: 10, comments: 20, shares: 15)) -> (content: Content, comments: [Comment]) {
         (
             content: Content(
                 id: "any",
@@ -187,6 +187,7 @@ private extension ContentUIIntergrationTests {
         XCTAssertEqual(cell.likesText, "\(content.interactions.likes)", file: file, line: line)
         XCTAssertEqual(cell.commentsText, "\(content.interactions.comments)", file: file, line: line)
         XCTAssertEqual(cell.sharesText, "\(content.interactions.shares)", file: file, line: line)
+        XCTAssertEqual(cell.isShowingAsLiked, content.interactions.isLiked, file: file, line: line)
     }
     
     func assertThat(_ sut: ListViewController, hasViewConfiguredFor item: Comment, at index: Int, file: StaticString = #filePath, line: UInt = #line) {
@@ -281,6 +282,10 @@ extension ContentView {
     
     var sharesText: String? {
         sharesCountLabel.text
+    }
+    
+    var isShowingAsLiked: Bool {
+        likeButton.tintColor == .red
     }
 }
 
