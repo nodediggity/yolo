@@ -37,6 +37,10 @@ extension ContentViewController: UITableViewDataSource {
 
 private extension ContentViewController {
     func configureUI() {
+        guard let model = model else { return }
         cell?.selectionStyle = .none
+        cell?.likesCountLabel.text = "\(model.interactions.likes)"
+        cell?.commentsCountLabel.text = "\(model.interactions.comments)"
+        cell?.sharesCountLabel.text = "\(model.interactions.shares)"
     }
 }
