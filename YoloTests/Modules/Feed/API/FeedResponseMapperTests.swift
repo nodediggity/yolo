@@ -85,7 +85,7 @@ private extension FeedResponseMapperTests {
             id: ITEM_ID,
             imageURL: makeURL(IMAGE_URL),
             user: FeedItem.User(id: USER_ID, name: USER_NAME, about: USER_ABOUT, imageURL: makeURL(USER_IMAGE_URL)),
-            interactions: FeedItem.Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
+            interactions: Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
         )
         
         let json = [
