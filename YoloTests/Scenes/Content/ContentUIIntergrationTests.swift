@@ -90,6 +90,24 @@ class ContentUIIntergrationTests: XCTestCase {
         XCTAssertEqual(view?.renderedImage, imageData)
     }
     
+    func test_content_view_image_loader_dispatches_from_background_to_main_thread() {
+        let exp = expectation(description: "await background queue")
+        let model = makeContent()
+        
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.loadContentCompletes(with: .success(model))
+        sut.simulateContentViewVisible()
+        
+        let imageData = UIImage.makeImageData(withColor: .red)
+        
+        DispatchQueue.global().async {
+            loader.loadImageCompletes(with: .success(imageData), at: 0)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 1.0)
+    }
+    
 }
 
 private extension ContentUIIntergrationTests {
