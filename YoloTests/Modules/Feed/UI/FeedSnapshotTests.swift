@@ -39,7 +39,7 @@ private extension FeedSnapshotTests {
                     id: UUID().uuidString,
                     imageURL: makeURL(),
                     user: FeedItem.User(id: UUID().uuidString, name: "Some Name", about: "short about text", imageURL: makeURL()),
-                    interactions: FeedItem.Interactions(isLiked: true, likes: 247, comments: 57, shares: 33)
+                    interactions: Interactions(isLiked: true, likes: 247, comments: 57, shares: 33)
                 ),
                 userImage: UIImage.make(withColor: .red),
                 cardImage: UIImage.make(withColor: .blue)
@@ -49,7 +49,7 @@ private extension FeedSnapshotTests {
                     id: UUID().uuidString,
                     imageURL: makeURL(),
                     user: FeedItem.User(id: UUID().uuidString, name: "Another Name", about: "longer about text that should truncate as it is too long to fit", imageURL: makeURL()),
-                    interactions: FeedItem.Interactions(isLiked: false, likes: 17, comments: 36, shares: 8)
+                    interactions: Interactions(isLiked: false, likes: 17, comments: 36, shares: 8)
                 ),
                 userImage: UIImage.make(withColor: .green),
                 cardImage: UIImage.make(withColor: .yellow)

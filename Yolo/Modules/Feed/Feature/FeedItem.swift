@@ -26,20 +26,7 @@ public struct FeedItem: Hashable {
             self.imageURL = imageURL
         }
     }
-    
-    public struct Interactions: Hashable {
-        public let isLiked: Bool
-        public let likes: Int
-        public let comments: Int
-        public let shares: Int
-        public init(isLiked: Bool, likes: Int, comments: Int, shares: Int) {
-            self.isLiked = isLiked
-            self.likes = likes
-            self.comments = comments
-            self.shares = shares
-        }
-    }
-    
+        
     public init(id: String, imageURL: URL, user: User, interactions: Interactions) {
         self.id = id
         self.imageURL = imageURL
