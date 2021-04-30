@@ -254,8 +254,8 @@
 		6A13753D263BEF4D003F0E5D /* Content */ = {
 			isa = PBXGroup;
 			children = (
-				6A8F2615263C5A72008E86F6 /* TestHelpers */,
 				6A13753E263BEF67003F0E5D /* ContentUIIntergrationTests.swift */,
+				6A8F2615263C5A72008E86F6 /* TestHelpers */,
 			);
 			path = Content;
 			sourceTree = "<group>";
@@ -489,6 +489,7 @@
 		6A30B9DC2639EB4300A65598 /* TestHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				6A45D81E263AE72E003EF1C8 /* ListViewController+TestHelpers.swift */,
 				6A30B9DD2639EB5800A65598 /* XCTestCase+Data.swift */,
 				6A30B9E32639EB6B00A65598 /* XCTestCase+Error.swift */,
 				6A30B9E92639EB8500A65598 /* XCTestCase+URL.swift */,
@@ -641,7 +642,6 @@
 		6A45D81D263AE725003EF1C8 /* TestHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				6A45D81E263AE72E003EF1C8 /* ListViewController+TestHelpers.swift */,
 				6A45D826263AE77A003EF1C8 /* FeedCardView+TestHelpers.swift */,
 			);
 			path = TestHelpers;
