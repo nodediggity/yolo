@@ -11,15 +11,16 @@ import Combine
 public enum ContentUIComposer {
     
     public typealias Loader = () -> AnyPublisher<(content: Content, comments: [Comment]), Error>
-    
-    public static func compose(loader: @escaping Loader) -> ListViewController {
+    public typealias ImageLoader = (_ imageURL: URL) -> AnyPublisher<Data, Error>
+
+    public static func compose(loader: @escaping Loader, imageLoader: @escaping ImageLoader) -> ListViewController {
         
         let adapter = ResourcePresentationAdapter<(content: Content, comments: [Comment]), ContentViewAdapter>(service: loader)
         
         let viewController = ListViewController()
         
         adapter.presenter = ResourcePresenter(
-            view: ContentViewAdapter(controller: viewController),
+            view: ContentViewAdapter(controller: viewController, imageLoader: imageLoader),
             loadingView: WeakRefVirtualProxy(viewController)
         )
         
@@ -36,9 +37,10 @@ public enum ContentUIComposer {
 
 private final class ContentViewAdapter {
     private weak var controller: ListViewController?
-    
-    init(controller: ListViewController) {
+    private let imageLoader: ContentUIComposer.ImageLoader
+    init(controller: ListViewController, imageLoader: @escaping ContentUIComposer.ImageLoader) {
         self.controller = controller
+        self.imageLoader = imageLoader
     }
 }
 
@@ -49,7 +51,15 @@ extension ContentViewAdapter: ResourceView {
         let (content, comments) = viewModel
         
         let contentSection: [CellController] = [ContentViewController()].map { view in
+            
             view.display(content)
+            
+            let adapter = ResourcePresentationAdapter<Data, ContentViewController>(service: { [imageLoader] in
+                imageLoader(content.imageURL)
+            })
+            
+            view.onLoadImage = adapter.execute
+            
             return .init(id: content, view)
         }
         

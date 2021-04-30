@@ -117,6 +117,10 @@ extension ListViewController {
         cell(row: 0, section: CONTENT_SECTION) as? ContentView
     }
     
+    func simulateContentViewVisible() {
+        _ = contentView()
+    }
+    
     var numberOfRenderedComments: Int {
         numberOfRenderedItems(in: COMMENT_SECTION)
     }

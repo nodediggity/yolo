@@ -62,12 +62,24 @@ class ContentUIIntergrationTests: XCTestCase {
         assertThat(sut, isRendering: updatedContent)
     }
     
+    func test_content_loads_image_for_url_when_visible() {
+        let (sut, loader) = makeSUT()
+        
+        sut.loadViewIfNeeded()
+        let model = makeContent()
+        loader.loadContentCompletes(with: .success(model))
+        XCTAssertTrue(loader.imageLoaderURLs.isEmpty)
+        
+        sut.simulateContentViewVisible()
+        XCTAssertEqual(loader.imageLoaderURLs, [model.content.imageURL])
+    }
+    
 }
 
 private extension ContentUIIntergrationTests {
     func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = ContentUIComposer.compose(loader: loader.loadContentPublisher)
+        let sut = ContentUIComposer.compose(loader: loader.loadContentPublisher, imageLoader: loader.loadImagePublisher)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
@@ -154,6 +166,30 @@ private extension ContentUIIntergrationTests {
             switch result {
             case let .success(values): contentRequests[index].send(values)
             default: break
+            }
+        }
+        
+        // Image Loader
+        var imageLoaderURLs: [URL] {
+            loadImageRequests.map(\.url)
+        }
+        
+        private(set) var cancelledImageLoaderURLs: [URL] = []
+        
+        private var loadImageRequests: [(url: URL, publisher: PassthroughSubject<Data, Error>)] = []
+        
+        func loadImagePublisher(_ imageURL: URL) -> AnyPublisher<Data, Error> {
+            let publisher = PassthroughSubject<Data, Error>()
+            loadImageRequests.append((imageURL, publisher))
+            return publisher
+                .handleEvents(receiveCancel: { [weak self] in self?.cancelledImageLoaderURLs.append(imageURL) })
+                .eraseToAnyPublisher()
+        }
+        
+        func loadImageCompletes(with result: Result<Data, Error>, at index: Int = 0) {
+            switch result {
+            case let .success(data): loadImageRequests[index].publisher.send(data)
+            case let .failure(error): loadImageRequests[index].publisher.send(completion: .failure(error))
             }
         }
         
