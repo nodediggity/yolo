@@ -54,7 +54,7 @@ private extension ContentResponseMapper {
                 id: content.id,
                 imageURL: content.imageURL,
                 user: Content.User(id: content.user.id),
-                interactions: Content.Interactions(
+                interactions: Interactions(
                     isLiked: content.interactions.isLiked,
                     likes: content.interactions.likes,
                     comments: content.interactions.comments,
