@@ -267,13 +267,80 @@ class FeedUIIntegrationTests: XCTestCase {
         XCTAssertNil(view?.renderedImageForUser)
         XCTAssertNil(view?.renderedImageForCard)
     }
+    
+    // MARK:- Interactions
+    func test_like_feed_item_action_dispatches_request() {
+        let feed = makeFeed()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(loader.interactionRequests.isEmpty)
+        
+        loader.loadFeedCompletes(with: .success(feed.items))
+        
+        let view = sut.feedCardView(at: 0) as? FeedCardView
+        view?.simulateToggleLikeAction()
+        
+        XCTAssertEqual(loader.interactionRequests.map(\.id), [feed.items.first?.id])
+        XCTAssertEqual(loader.interactionRequests.map(\.op), [.unlike])
+    }
+
+    func test_like_feed_item_does_not_dispatch_multiple_requests_if_existing_request_is_pending() {
+        let feed = makeFeed()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(loader.interactionRequests.isEmpty)
+        
+        loader.loadFeedCompletes(with: .success(feed.items))
+        
+        let view = sut.feedCardView(at: 0) as? FeedCardView
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(loader.interactionRequests.count, 1)
+        
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(loader.interactionRequests.count, 1)
+    }
+
+    func test_toggle_like_action_performs_optimistic_state_update() {
+        let feed = makeFeed()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+
+        let view = sut.feedCardView(at: 0) as? FeedCardView
+        XCTAssertEqual(view?.likesText, "10")
+        XCTAssertEqual(view?.isShowingAsLiked, true)
+
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(view?.likesText, "9")
+        XCTAssertEqual(view?.isShowingAsLiked, false)
+    }
+
+    func test_toggle_like_failure_reverts_optimistic_state_update() {
+        let feed = makeFeed()
+        let (sut, loader) = makeSUT()
+        sut.loadViewIfNeeded()
+        loader.loadFeedCompletes(with: .success(feed.items))
+
+        let view = sut.feedCardView(at: 0) as? FeedCardView
+        XCTAssertEqual(view?.likesText, "10")
+        XCTAssertEqual(view?.isShowingAsLiked, true)
+
+        view?.simulateToggleLikeAction()
+        XCTAssertEqual(view?.likesText, "9")
+        XCTAssertEqual(view?.isShowingAsLiked, false)
+        
+        loader.toggleInteractionCompletes(with: .failure(makeError()))
+        
+        XCTAssertEqual(view?.likesText, "10")
+        XCTAssertEqual(view?.isShowingAsLiked, true)
+    }
 }
 
 private extension FeedUIIntegrationTests {
     
     func makeSUT(onSelection: @escaping (FeedItem) -> Void = { _ in }, file: StaticString = #filePath, line: UInt = #line) -> (sut: ListViewController, loader: LoaderSpy) {
         let loader = LoaderSpy()
-        let sut = FeedUIComposer.compose(loader: loader.loadFeedPublisher, imageLoader: loader.loadImagePublisher, selection: onSelection)
+        let sut = FeedUIComposer.compose(loader: loader.loadFeedPublisher, imageLoader: loader.loadImagePublisher, interactionService: loader.toggleInteractionPublisher, selection: onSelection)
         trackForMemoryLeaks(loader, file: file, line: line)
         trackForMemoryLeaks(sut, file: file, line: line)
         return (sut, loader)
@@ -359,6 +426,27 @@ private extension FeedUIIntegrationTests {
             case let .failure(error): loadImageRequests[index].publisher.send(completion: .failure(error))
             }
         }
+        
+        // Interactions
+        var interactionRequests: [(id: String, op: Interaction)] {
+            return interactionsRequests.map { ($0.id, $0.interaction) }
+        }
+        
+        private var interactionsRequests: [(id: String, interaction: Interaction, publisher: PassthroughSubject<Interactions, Error>)] = []
+        
+        func toggleInteractionPublisher(id: String, interaction: Interaction) -> AnyPublisher<Interactions, Error> {
+            let publisher = PassthroughSubject<Interactions, Error>()
+            interactionsRequests.append((id, interaction, publisher))
+            return publisher.eraseToAnyPublisher()
+        }
+        
+        func toggleInteractionCompletes(with result: Result<Interactions, Error>, at index: Int = 0) {
+            switch result {
+            case let .success(value): interactionsRequests[index].publisher.send(value)
+            case let .failure(error): interactionsRequests[index].publisher.send(completion: .failure(error))
+            }
+        }
+        
     }
     
     func makeFeed(itemCount: Int = 5) -> Feed {
@@ -373,8 +461,8 @@ private extension FeedUIIntegrationTests {
         let USER_NAME = "any name \(index)"
         let USER_ABOUT = "some text \(index)"
         let USER_IMAGE_URL = "https://some-user-image-\(index).com"
-        let IS_LIKED = index == 0
-        let LIKES = Int.random(in: 0..<5)
+        let IS_LIKED = true
+        let LIKES = 10
         let COMMENTS = Int.random(in: 0..<10)
         let SHARES = Int.random(in: 0..<15)
         
@@ -382,7 +470,7 @@ private extension FeedUIIntegrationTests {
             id: ITEM_ID,
             imageURL: makeURL(IMAGE_URL),
             user: FeedItem.User(id: USER_ID, name: USER_NAME, about: USER_ABOUT, imageURL: makeURL(USER_IMAGE_URL)),
-            interactions: FeedItem.Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
+            interactions: Interactions(isLiked: IS_LIKED, likes: LIKES, comments: COMMENTS, shares: SHARES)
         )
     }
 }

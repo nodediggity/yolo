@@ -62,7 +62,8 @@ private extension FeedSnapshotTests {
 private extension ListViewController {
     func display(_ stubs: [FeedCardStub]) {
         let cells: [CellController] = stubs.map { stub in
-            let controller = FeedCardCellController(model: stub.viewModel)
+            let controller = FeedCardCellController()
+            controller.display(stub.viewModel)
             stub.controller = controller
             controller.onLoadImage = stub.displayImages
             return .init(controller)

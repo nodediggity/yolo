@@ -17,13 +17,15 @@ public final class FeedCardCellController: NSObject {
     public var onLoadImage: (() -> Void)?
     public var onLoadImageCancel: (() -> Void)?
     
+    public var onToggleLikeAction: (() -> Void)?
+    
     public var onSelection: (() -> Void)?
 
     private var cell: FeedCardView?
-    private let model: FeedCardViewModel
+    private var model: FeedCardViewModel?
     
-    public init(model: FeedCardViewModel) {
-        self.model = model
+    public override init() {
+        super.init()
     }
     
     public func displayImage(for view: Image) {
@@ -33,6 +35,11 @@ public final class FeedCardCellController: NSObject {
         case let .body(image):
             cell?.cardImageView.image = image
         }
+    }
+    
+    public func display(_ model: FeedCardViewModel) {
+        self.model = model
+        configureCell()
     }
 }
 
@@ -45,18 +52,13 @@ extension FeedCardCellController: UITableViewDataSource {
         cell = tableView.dequeueReusableCell()
         cell?.userImageView.image = nil
         cell?.cardImageView.image = nil
-        
         cell?.selectionStyle = .none
         
-        cell?.nameLabel.text = model.name
-        cell?.aboutLabel.text = model.about
-        cell?.likesCountLabel.text = model.likes
-        cell?.commentsCountLabel.text = model.comments
-        cell?.sharesCountLabel.text = model.shares
-        
-        if model.isLiked {
-            cell?.likeButton.tintColor = .red
+        cell?.onToggleLikeAction = { [weak self] in
+            self?.onToggleLikeAction?()
         }
+        
+        configureCell()
                 
         load()
         return cell!
@@ -95,5 +97,16 @@ private extension FeedCardCellController {
 
     func releaseCellForReuse() {
         cell = nil
+    }
+    
+    func configureCell() {
+        guard let model = model else { return }
+        cell?.nameLabel.text = model.name
+        cell?.aboutLabel.text = model.about
+        cell?.likesCountLabel.text = model.likes
+        cell?.commentsCountLabel.text = model.comments
+        cell?.sharesCountLabel.text = model.shares
+        
+        cell?.likeButton.tintColor = model.isLiked ? .red : #colorLiteral(red: 0.4941176471, green: 0.5568627451, blue: 0.6431372549, alpha: 1)
     }
 }

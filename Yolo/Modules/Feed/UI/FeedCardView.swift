@@ -9,6 +9,8 @@ import UIKit
 
 public final class FeedCardView: UITableViewCell {
     
+    public var onToggleLikeAction: (() -> Void)?
+    
     private(set) public var userImageView: UIImageView = {
         let imageView = UIImageView(frame: .zero)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -99,6 +101,8 @@ public final class FeedCardView: UITableViewCell {
 private extension FeedCardView {
     func configureUI() {
         
+        likeButton.addTarget(self, action: #selector(likeButtonTapped), for: .touchUpInside)
+        
         // Header
         let headerVStack = UIStackView(
             arrangedSubviews: [nameLabel, aboutLabel]
@@ -177,6 +181,10 @@ private extension FeedCardView {
         label.adjustsFontForContentSizeCategory = true
         label.widthAnchor.constraint(equalToConstant: 50).isActive = true
         return label
+    }
+    
+    @objc func likeButtonTapped() {
+        onToggleLikeAction?()
     }
 }
 
