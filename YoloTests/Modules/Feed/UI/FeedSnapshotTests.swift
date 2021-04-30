@@ -27,8 +27,8 @@ class FeedSnapshotTests: XCTestCase {
 }
 
 private extension FeedSnapshotTests {
-    func makeSUT() -> FeedViewController {
-        let controller = FeedViewController()
+    func makeSUT() -> ListViewController {
+        let controller = ListViewController()
         controller.configure = { tableView in
             tableView.register(FeedCardView.self)
         }
@@ -70,7 +70,7 @@ private extension FeedSnapshotTests {
     
 }
 
-private extension FeedViewController {
+private extension ListViewController {
     func display(_ stubs: [FeedCardStub]) {
         let cells: [CellController] = stubs.map { stub in
             let controller = FeedCardCellController(model: stub.viewModel)
