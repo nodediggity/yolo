@@ -60,6 +60,11 @@ class ContentUIIntergrationTests: XCTestCase {
         let updatedContent = makeContent(interactions: .init(likes: 100, comments: 200, shares: 300))
         loader.loadContentCompletes(with: .success(updatedContent), at: 1)
         assertThat(sut, isRendering: updatedContent)
+        
+        sut.simulateUserInitiatedReload()
+        let contentNoComments = makeContent(commentCount: 0, interactions: .init(likes: 100, comments: 200, shares: 300))
+        loader.loadContentCompletes(with: .success(contentNoComments), at: 2)
+        assertThat(sut, isRendering: contentNoComments)
     }
     
     func test_content_loads_image_for_url_when_visible() {
@@ -72,6 +77,9 @@ class ContentUIIntergrationTests: XCTestCase {
         
         sut.simulateContentViewVisible()
         XCTAssertEqual(loader.imageLoaderURLs, [model.content.imageURL])
+        
+        sut.simulateCommentVisible(at: 0)
+        XCTAssertEqual(loader.imageLoaderURLs, [model.content.imageURL, model.comments.imageURL(at: 0)])
     }
     
     func test_content_renders_image_loaded_for_url() {
@@ -88,6 +96,13 @@ class ContentUIIntergrationTests: XCTestCase {
         loader.loadImageCompletes(with: .success(imageData), at: 0)
         
         XCTAssertEqual(view?.renderedImage, imageData)
+        
+        let commentView = sut.simulateCommentVisible(at: 0)
+        
+        let commentImageData = UIImage.makeImageData(withColor: .blue)
+        loader.loadImageCompletes(with: .success(commentImageData), at: 1)
+        
+        XCTAssertEqual(commentView?.renderedImage, commentImageData)
     }
     
     func test_content_view_image_loader_dispatches_from_background_to_main_thread() {
@@ -143,13 +158,17 @@ private extension ContentUIIntergrationTests {
             
             assertThat(sut, hasViewConfiguredFor: content, at: 0, file: file, line: line)
             
-            guard sut.numberOfRenderedComments == comments.count else {
-                return XCTFail("Expected \(comments.count) but got \(sut.numberOfRenderedComments) instead", file: file, line: line)
-            }
-            
-            comments.indices.forEach { index in
-                let comment = comments[index]
-                assertThat(sut, hasViewConfiguredFor: comment, at: index, file: file, line: line)
+            if comments.isEmpty {
+                XCTAssertTrue(sut.isShowingNoCommentPlaceholder, file: file ,line: line)
+            } else {
+                guard sut.numberOfRenderedComments == comments.count else {
+                    return XCTFail("Expected \(comments.count) but got \(sut.numberOfRenderedComments) instead", file: file, line: line)
+                }
+                
+                comments.indices.forEach { index in
+                    let comment = comments[index]
+                    assertThat(sut, hasViewConfiguredFor: comment, at: index, file: file, line: line)
+                }
             }
             
         } else if sut.numberOfSections > 0, sut.numberOfRenderedItems(in: 0) > 0 {
@@ -231,6 +250,11 @@ private extension ContentUIIntergrationTests {
 }
 
 extension CommentView {
+    
+    var renderedImage: Data? {
+        userImageView.image?.pngData()
+    }
+    
     var nameText: String? {
         nameLabel.text
     }
@@ -257,5 +281,12 @@ extension ContentView {
     
     var sharesText: String? {
         sharesCountLabel.text
+    }
+}
+
+extension Array where Element == Comment {
+    func imageURL(at index: Index) -> URL? {
+        guard indices.contains(index) else { return nil }
+        return self[index].user.imageURL
     }
 }

@@ -31,8 +31,15 @@ extension CommentCellController: UITableViewDataSource {
         
         cell?.nameLabel.text = model.name
         cell?.bodyTextLabel.text = model.text
-        
+        load()
         return cell!
+    }
+}
+
+extension CommentCellController: ResourceView {
+    public typealias ResourceViewModel = UIImage
+    public func display(_ viewModel: ResourceViewModel) {
+        cell?.userImageView.image = viewModel
     }
 }
 

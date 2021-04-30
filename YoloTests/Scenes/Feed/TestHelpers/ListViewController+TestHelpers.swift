@@ -128,4 +128,13 @@ extension ListViewController {
     func commentView(at row: Int) -> UITableViewCell? {
         cell(row: row, section: COMMENT_SECTION) as? CommentView
     }
+    
+    @discardableResult
+    func simulateCommentVisible(at row: Int) -> CommentView? {
+        return commentView(at: row) as? CommentView
+    }
+    
+    var isShowingNoCommentPlaceholder: Bool {
+        return cell(row: 0, section: COMMENT_SECTION) is EmptySectionView
+    }
 }

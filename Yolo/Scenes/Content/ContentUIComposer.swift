@@ -65,8 +65,23 @@ extension ContentViewAdapter: ResourceView {
             return .init(id: content, view)
         }
         
+        if comments.isEmpty {
+            let placeholderSection = EmptySectionViewController(text: ContentPresenter.placeholderComments)
+            controller?.display(contentSection, [.init(placeholderSection)])
+            return
+        }
+        
         let commentSection: [CellController] = comments.map { item in
             let view = CommentCellController(model: CommentPresenter.map(item))
+            
+            let adapter = ResourcePresentationAdapter<Data, WeakRefVirtualProxy<CommentCellController>>(service: { [imageLoader] in imageLoader(item.user.imageURL)
+            })
+            
+            adapter.presenter = ResourcePresenter(view: WeakRefVirtualProxy(view), mapper: UIImage.tryMake(data:))
+
+            view.onLoadImage = adapter.execute
+
+    
             return .init(id: item, view)
         }
         
