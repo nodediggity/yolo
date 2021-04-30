@@ -12,18 +12,20 @@ public enum FeedUIComposer {
     
     public typealias FeedLoader = () -> AnyPublisher<[FeedItem], Error>
     public typealias ImageLoader = (_ imageURL: URL) -> AnyPublisher<Data, Error>
+    public typealias InteractionService = (_ id: String, _ interaction: Interaction) -> AnyPublisher<Interactions, Error>
     public typealias SelectionHandler = (FeedItem) -> Void
     
-    public static func compose(loader: @escaping FeedLoader, imageLoader: @escaping ImageLoader, selection: @escaping SelectionHandler) -> ListViewController {
+    public static func compose(loader: @escaping FeedLoader, imageLoader: @escaping ImageLoader, interactionService: @escaping InteractionService, selection: @escaping SelectionHandler) -> ListViewController {
         
         let viewController = ListViewController()
         viewController.title = FeedPresenter.title
-                
+        
         let adapter = ResourcePresentationAdapter<[FeedItem], FeedViewAdapter>(service: loader)
         adapter.presenter = ResourcePresenter(
             view: FeedViewAdapter(
                 controller: viewController,
                 imageLoader: imageLoader,
+                interactionService: interactionService,
                 selection: selection
             ),
             loadingView: WeakRefVirtualProxy(viewController),
@@ -44,11 +46,13 @@ private final class FeedViewAdapter {
     
     private weak var controller: ListViewController?
     private let imageLoader: FeedUIComposer.ImageLoader
+    private let interactionService: FeedUIComposer.InteractionService
     private let selection: FeedUIComposer.SelectionHandler
     
-    init(controller: ListViewController, imageLoader: @escaping FeedUIComposer.ImageLoader, selection: @escaping FeedUIComposer.SelectionHandler) {
+    init(controller: ListViewController, imageLoader: @escaping FeedUIComposer.ImageLoader, interactionService: @escaping FeedUIComposer.InteractionService, selection: @escaping FeedUIComposer.SelectionHandler) {
         self.controller = controller
         self.imageLoader = imageLoader
+        self.interactionService = interactionService
         self.selection = selection
     }
 }
@@ -57,8 +61,12 @@ extension FeedViewAdapter: ResourceView {
     typealias ResourceViewModel = FeedViewModel
     func display(_ viewModel: FeedViewModel) {
         controller?.display(viewModel.feed.map { item in
-            let model = FeedCardPresenter.map(item)
-            let view = FeedCardCellController(model: model)
+            
+            var model = item
+            
+            let view = FeedCardCellController()
+            
+            view.display(FeedCardPresenter.map(model))
             
             // MARK:- UserImageView
             let userImageViewAdapter = ResourcePresentationAdapter<Data, ResourceViewAdapter<UIImage>>(service: { [imageLoader] in
@@ -69,7 +77,7 @@ extension FeedViewAdapter: ResourceView {
                 view: ResourceViewAdapter { [weak view] in view?.displayImage(for: .user($0)) },
                 mapper: UIImage.tryMake(data:)
             )
-                        
+            
             // MARK:- BodyImageView
             let bodyImageViewAdapter = ResourcePresentationAdapter<Data, ResourceViewAdapter<UIImage>>(service: { [imageLoader] in
                 imageLoader(item.imageURL)
@@ -78,6 +86,16 @@ extension FeedViewAdapter: ResourceView {
             bodyImageViewAdapter.presenter = ResourcePresenter(
                 view: ResourceViewAdapter { [weak view] in view?.displayImage(for: .body($0)) },
                 mapper: UIImage.tryMake(data:)
+            )
+            
+            // MARK:- Interactions
+            let interactionsAdapter = ResourcePresentationAdapter<Interactions, ResourceViewAdapter<Interactions>>(service: { [interactionService] in
+                interactionService(model.id, model.interactions.isLiked ? .unlike : .like)
+            })
+
+            interactionsAdapter.presenter = ResourcePresenter(
+                view: ResourceViewAdapter { model = model.clone(with: $0) },
+                errorView: ResourceErrorViewAdapter { [weak view] _ in view?.display(FeedCardPresenter.map(item)) }
             )
             
             view.onLoadImage = {
@@ -93,8 +111,44 @@ extension FeedViewAdapter: ResourceView {
             view.onSelection = { [selection] in
                 selection(item)
             }
+
+            view.onToggleLikeAction = { [weak view] in
+                // dispatch request
+                interactionsAdapter.execute()
+                // perform optimistic UI update
+                model = model.toggleLikedState()
+                view?.display(FeedCardPresenter.map(model))
+            }
             
             return CellController(id: item, view)
         })
+    }
+}
+
+private extension FeedItem {
+    func clone(with interactions: Interactions) -> Self {
+        FeedItem(id: id, imageURL: imageURL, user: user, interactions: interactions)
+    }
+
+    func toggleLikedState() -> Self {
+        return interactions.isLiked ? cloneAsUnliked() : cloneAsLiked()
+    }
+
+    func cloneAsLiked() -> Self {
+        clone(with: interactions.asLiked())
+    }
+
+    func cloneAsUnliked() -> Self {
+        clone(with: interactions.asUnliked())
+    }
+}
+
+private extension Interactions {
+    func asUnliked() -> Self {
+        Interactions(isLiked: false, likes: likes - 1, comments: comments, shares: shares)
+    }
+
+    func asLiked() -> Self {
+        Interactions(isLiked: true, likes: likes + 1, comments: comments, shares: shares)
     }
 }

@@ -41,5 +41,24 @@ extension FeedCardView {
     var isShowingAsLiked: Bool {
         likeButton.tintColor == .red
     }
+    
+    func simulateToggleLikeAction() {
+        likeButton.simulateTap()
+    }
 }
 
+extension UIButton {
+    func simulateTap() {
+        simulate(controlEvent: .touchUpInside)
+    }
+}
+
+extension UIControl {
+    func simulate(controlEvent: UIControl.Event) {
+        allTargets.forEach { target in
+            actions(forTarget: target, forControlEvent: controlEvent)?.forEach {
+                (target as NSObject).perform(Selector($0))
+            }
+        }
+    }
+}

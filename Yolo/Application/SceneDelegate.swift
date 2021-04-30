@@ -46,7 +46,8 @@ private extension SceneDelegate {
     func makeFeedScene() -> UIViewController {
         FeedUIComposer.compose(
            loader: makeRemoteFeedLoader,
-           imageLoader: makeRemoteImageLoader,
+            imageLoader: makeRemoteImageLoader,
+            interactionService: makeRemoteInteractionService,
             selection: { [self] in showContentScene(id: $0.id) }
        )
     }
@@ -109,5 +110,19 @@ private extension SceneDelegate {
     
     func mapContent(_ values: (Content, [Comment])) -> (content: Content, comments: [Comment]) {
         (content: values.0, comments: values.1)
+    }
+    
+    func makeRemoteInteractionService(id: String, interaction: Interaction) -> AnyPublisher<Interactions, Error> {
+        var request = URLRequest(
+            url: baseURL
+                .appendingPathComponent("interactions")
+                .appendingPathComponent(id)
+        )
+        request.httpMethod = interaction == .like ? "PUT" : "DELETE"
+        
+        return httpClient
+            .dispatchPublisher(for: request)
+            .tryMap(InteractionResposneMapper.map)
+            .eraseToAnyPublisher()
     }
 }

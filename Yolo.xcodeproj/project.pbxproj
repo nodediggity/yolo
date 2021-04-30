@@ -68,6 +68,8 @@
 		6AC229DE263C2A4E0061718F /* InteractionResposneMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC229DD263C2A4E0061718F /* InteractionResposneMapper.swift */; };
 		6AC229E5263C2AE50061718F /* Interactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC229E4263C2AE50061718F /* Interactions.swift */; };
 		6AC229EC263C2B3D0061718F /* InteractionResposneMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC229EB263C2B3D0061718F /* InteractionResposneMapperTests.swift */; };
+		6AC229F2263C35060061718F /* Interaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC229F1263C35060061718F /* Interaction.swift */; };
+		6AC229F6263C36EE0061718F /* ResourceErrorViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AC229F5263C36EE0061718F /* ResourceErrorViewAdapter.swift */; };
 		6AE02C92263B10090089B39F /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02C91263B10090089B39F /* Comment.swift */; };
 		6AE02C97263B10BE0089B39F /* CommentsResponseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02C96263B10BE0089B39F /* CommentsResponseMapper.swift */; };
 		6AE02C9F263B121E0089B39F /* CommentsResponseMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE02C9E263B121E0089B39F /* CommentsResponseMapperTests.swift */; };
@@ -156,6 +158,8 @@
 		6AC229DD263C2A4E0061718F /* InteractionResposneMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionResposneMapper.swift; sourceTree = "<group>"; };
 		6AC229E4263C2AE50061718F /* Interactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interactions.swift; sourceTree = "<group>"; };
 		6AC229EB263C2B3D0061718F /* InteractionResposneMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionResposneMapperTests.swift; sourceTree = "<group>"; };
+		6AC229F1263C35060061718F /* Interaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interaction.swift; sourceTree = "<group>"; };
+		6AC229F5263C36EE0061718F /* ResourceErrorViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceErrorViewAdapter.swift; sourceTree = "<group>"; };
 		6AE02C91263B10090089B39F /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		6AE02C96263B10BE0089B39F /* CommentsResponseMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsResponseMapper.swift; sourceTree = "<group>"; };
 		6AE02C9E263B121E0089B39F /* CommentsResponseMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsResponseMapperTests.swift; sourceTree = "<group>"; };
@@ -327,6 +331,7 @@
 			children = (
 				6AE02CD8263B41810089B39F /* ResourceViewAdapter.swift */,
 				6AE02CAA263B19DC0089B39F /* ResourcePresenter.swift */,
+				6AC229F5263C36EE0061718F /* ResourceErrorViewAdapter.swift */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -714,6 +719,7 @@
 			isa = PBXGroup;
 			children = (
 				6AC229E4263C2AE50061718F /* Interactions.swift */,
+				6AC229F1263C35060061718F /* Interaction.swift */,
 			);
 			path = Feature;
 			sourceTree = "<group>";
@@ -919,6 +925,7 @@
 				6AE02CCB263B326E0089B39F /* UITableView+Dequeueing.swift in Sources */,
 				6AE02CAF263B1E310089B39F /* ResourcePresentationAdapter.swift in Sources */,
 				6AE02CD5263B3FBE0089B39F /* UIImage+TryMake.swift in Sources */,
+				6AC229F6263C36EE0061718F /* ResourceErrorViewAdapter.swift in Sources */,
 				6A26215E263BDF0F00956E14 /* CommentView.swift in Sources */,
 				6A79BE7D2639D918000062A7 /* AppDelegate.swift in Sources */,
 				6AE02CE9263B43610089B39F /* CellController.swift in Sources */,
@@ -942,6 +949,7 @@
 				6A45D7CA263A7318003EF1C8 /* FeedCardView.swift in Sources */,
 				6A99F09C263C18C900169D84 /* ContentPresenter.swift in Sources */,
 				6A30B9B52639E98500A65598 /* HTTPClient.swift in Sources */,
+				6AC229F2263C35060061718F /* Interaction.swift in Sources */,
 				6A45D7EB263A839A003EF1C8 /* FeedCardPresenter.swift in Sources */,
 				6A30B9BA2639E9CD00A65598 /* URLSessionHTTPClient.swift in Sources */,
 				6A45D7C0263A6E65003EF1C8 /* FeedUIComposer.swift in Sources */,
