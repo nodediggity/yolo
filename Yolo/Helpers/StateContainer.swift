@@ -12,6 +12,8 @@ public protocol Event { }
 
 public typealias StateMapper<T> = (_ state: T?, _ event: Event) -> T
 
+typealias Store = StateContainer<AppState>
+
 public final class StateContainer<T> {
     private(set) public var state: CurrentValueSubject<T, Never>
     private let mapper: StateMapper<T>
