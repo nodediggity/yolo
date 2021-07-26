@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6A08AA7026AF29CA00BA287C /* StateContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA6F26AF29CA00BA287C /* StateContainerTests.swift */; };
 		6A137528263BEB4D003F0E5D /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A137527263BEB4D003F0E5D /* Content.swift */; };
 		6A13752F263BEC40003F0E5D /* ContentResponseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A13752E263BEC40003F0E5D /* ContentResponseMapper.swift */; };
 		6A137537263BED60003F0E5D /* ContentResponseMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A137536263BED60003F0E5D /* ContentResponseMapperTests.swift */; };
@@ -101,6 +102,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		6A08AA6F26AF29CA00BA287C /* StateContainerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateContainerTests.swift; sourceTree = "<group>"; };
 		6A137527263BEB4D003F0E5D /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		6A13752E263BEC40003F0E5D /* ContentResponseMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentResponseMapper.swift; sourceTree = "<group>"; };
 		6A137536263BED60003F0E5D /* ContentResponseMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentResponseMapperTests.swift; sourceTree = "<group>"; };
@@ -206,6 +208,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6A08AA6E26AF29B800BA287C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				6A08AA6F26AF29CA00BA287C /* StateContainerTests.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		6A137525263BEAFD003F0E5D /* Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -447,6 +457,7 @@
 			isa = PBXGroup;
 			children = (
 				6A30B9C42639EA1700A65598 /* Info.plist */,
+				6A08AA6E26AF29B800BA287C /* Helpers */,
 				6A30B9CE2639EA4C00A65598 /* Modules */,
 				6A45D7A7263A62B8003EF1C8 /* Scenes */,
 				6A30B9DC2639EB4300A65598 /* TestHelpers */,
@@ -921,6 +932,7 @@
 				6A30B9E42639EB6B00A65598 /* XCTestCase+Error.swift in Sources */,
 				6A30B9D32639EA6700A65598 /* URLProtocolStub.swift in Sources */,
 				6A30B9DE2639EB5800A65598 /* XCTestCase+Data.swift in Sources */,
+				6A08AA7026AF29CA00BA287C /* StateContainerTests.swift in Sources */,
 				6A8F260E263C59F8008E86F6 /* ContentView+TestHelpers.swift in Sources */,
 				6A45D837263AE998003EF1C8 /* ImageResponseMapperTests.swift in Sources */,
 				6A45D7F0263A85B3003EF1C8 /* FeedSnapshotTests.swift in Sources */,
