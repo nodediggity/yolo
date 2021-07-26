@@ -57,6 +57,20 @@ class StateContainerTests: XCTestCase {
         XCTAssertEqual(output, [state])
     }
     
+    func test_on_event_dispatch_delivers_current_state_to_mapper() {
+        
+        struct AnyEvent: Event { }
+        
+        let state = "initial state"
+        var output: [String?] = []
+        let sut = StateContainer<String>(state: state, mapper: { state, _ in output.append(state); return "any" })
+
+        sut.dispatch(AnyEvent())
+
+        XCTAssertEqual(output.count, 1)
+        XCTAssertEqual(output, [state])
+    }
+    
     func test_on_event_dispatch_notifies_mapper_of_received_event() {
         
         struct AnyEvent: Event { }
