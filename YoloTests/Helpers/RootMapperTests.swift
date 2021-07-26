@@ -8,22 +8,16 @@
 import XCTest
 import Yolo
 
-let rootMapper: StateMapper<String> = { state, event in
-    var state = state ?? "any state"
-    
-    return state
-}
-
 class RootMapperTests: XCTestCase {
     func test_on_init_with_no_state_delivers_default_state() {
         struct AnyEvent: Event { }
         let output = rootMapper(nil, AnyEvent())
-        XCTAssertNotNil(output)
+        XCTAssertEqual(output, AppState())
     }
     
     func test_on_init_with_state_delivers_given_state() {
         struct AnyEvent: Event { }
-        let state = "initial state"
+        let state = AppState()
         let output = rootMapper(state, AnyEvent())
         XCTAssertEqual(output, state)
     }

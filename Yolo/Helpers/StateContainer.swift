@@ -34,3 +34,13 @@ public final class StateContainer<T> {
 private extension StateContainer {
     struct StateInit: Event { }
 }
+
+public struct AppState: Equatable {
+    public init() { }
+}
+
+public let rootMapper: StateMapper<AppState> = { state, event in
+    var state = state ?? AppState()
+    
+    return state
+}
