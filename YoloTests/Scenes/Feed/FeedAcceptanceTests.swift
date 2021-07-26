@@ -55,7 +55,8 @@ class FeedAcceptanceTests: XCTestCase {
         }))
         
         sut.loadViewIfNeeded()
-        XCTAssertFalse(output.isEmpty)
+        XCTAssertEqual(output.count, 1)
+        XCTAssertEqual(output.first?.payload.count, sut.numberOfRenderedFeedItems)
     }
 }
 

@@ -87,8 +87,8 @@ private extension SceneDelegate {
             .dispatchPublisher(for: request)
             .tryMap(FeedResponseMapper.map)
             .map { $0.items }
-            .handleEvents(receiveOutput: { [store] _ in
-                store.dispatch(FeedLoadedEvent())
+            .handleEvents(receiveOutput: { [store] items in
+                store.dispatch(FeedLoadedEvent(payload: items))
             })
             .eraseToAnyPublisher()
     }

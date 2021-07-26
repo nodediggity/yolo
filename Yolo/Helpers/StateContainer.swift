@@ -48,5 +48,5 @@ public let rootMapper: StateMapper<AppState> = { state, event in
 }
 
 struct FeedLoadedEvent: Event {
-    
+    let payload: [FeedItem]
 }
