@@ -56,7 +56,9 @@ class FeedAcceptanceTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         XCTAssertEqual(output.count, 1)
-        XCTAssertEqual(output.first?.payload.count, sut.numberOfRenderedFeedItems)
+        
+        let payload = output.payload()
+        XCTAssertEqual(payload.count, sut.numberOfRenderedFeedItems)
     }
 }
 
@@ -192,5 +194,11 @@ private extension FeedAcceptanceTests {
                 "imageURL": USER_IMAGE_URL
             ]
         ] as [String : Any]
+    }
+}
+
+extension Array where Element == FeedLoadedEvent {
+    func payload(at index: Int = 0) -> [FeedItem] {
+        return self[index].payload
     }
 }
