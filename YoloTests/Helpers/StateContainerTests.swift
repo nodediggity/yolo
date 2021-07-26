@@ -14,13 +14,20 @@ typealias StateMapper<T> = (_ state: T?, _ event: Event) -> T
 
 class StateContainer<T> {
     private(set) var state: CurrentValueSubject<T, Never>
-
+    private let mapper: StateMapper<T>
+    
     init(state: T?, mapper: @escaping StateMapper<T>) {
         if let state = state {
             self.state = .init(state)
         } else {
             self.state = .init(mapper(nil, StateInit()))
         }
+        self.mapper = mapper
+    }
+    
+    func dispatch(_ event: Event) {
+        let next = mapper(state.value, event)
+        state.send(next)
     }
 }
 
@@ -48,5 +55,17 @@ class StateContainerTests: XCTestCase {
             .sink(receiveValue: { output.append($0) })
         
         XCTAssertEqual(output, [state])
+    }
+    
+    func test_on_event_dispatch_notifies_mapper_of_received_event() {
+        
+        struct AnyEvent: Event { }
+        
+        var output: [Event] = []
+        let sut = StateContainer<String>(state: "any", mapper: { _, event in output.append(event); return "any" })
+
+        sut.dispatch(AnyEvent())
+        XCTAssertEqual(output.count, 1)
+        XCTAssertNotNil(output.first as? AnyEvent)
     }
 }
