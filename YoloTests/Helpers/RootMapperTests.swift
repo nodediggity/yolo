@@ -20,4 +20,11 @@ class RootMapperTests: XCTestCase {
         let output = rootMapper(nil, AnyEvent())
         XCTAssertNotNil(output)
     }
+    
+    func test_on_init_with_state_delivers_given_state() {
+        struct AnyEvent: Event { }
+        let state = "initial state"
+        let output = rootMapper(state, AnyEvent())
+        XCTAssertEqual(output, state)
+    }
 }
