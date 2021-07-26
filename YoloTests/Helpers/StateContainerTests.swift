@@ -7,33 +7,7 @@
 
 import XCTest
 import Combine
-
-protocol Event { }
-
-typealias StateMapper<T> = (_ state: T?, _ event: Event) -> T
-
-class StateContainer<T> {
-    private(set) var state: CurrentValueSubject<T, Never>
-    private let mapper: StateMapper<T>
-    
-    init(state: T?, mapper: @escaping StateMapper<T>) {
-        if let state = state {
-            self.state = .init(state)
-        } else {
-            self.state = .init(mapper(nil, StateInit()))
-        }
-        self.mapper = mapper
-    }
-    
-    func dispatch(_ event: Event) {
-        let next = mapper(state.value, event)
-        state.send(next)
-    }
-}
-
-private extension StateContainer {
-    struct StateInit: Event { }
-}
+import Yolo
 
 class StateContainerTests: XCTestCase {
 
