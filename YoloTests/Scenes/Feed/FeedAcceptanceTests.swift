@@ -42,11 +42,26 @@ class FeedAcceptanceTests: XCTestCase {
         let view = content.contentView() as? ContentView
         XCTAssertEqual(view?.renderedImage, makeCardImageData())
     }
+    
+    func test_on_feed_load_success_dispatches_event_to_store() {
+        var output: [FeedLoadedEvent] = []
+        let sut = launch(httpClient: .online(response), store: Store(state: .init(), mapper: { state, event in
+            if let event = event as? FeedLoadedEvent {
+                output.append(event)
+            } else {
+                XCTFail("Expected `FeedLoadedEvent` but got \(type(of: event)) instead")
+            }
+           return state!
+        }))
+        
+        sut.loadViewIfNeeded()
+        XCTAssertFalse(output.isEmpty)
+    }
 }
 
 private extension FeedAcceptanceTests {
-    func launch(httpClient: HTTPClientStub = .offline) -> ListViewController {
-        let sut = SceneDelegate(httpClient: httpClient)
+    func launch(httpClient: HTTPClientStub = .offline, store: Store = Store(state: nil, mapper: { _, _ in AppState() })) -> ListViewController {
+        let sut = SceneDelegate(httpClient: httpClient, store: store)
         let window = UIWindow(frame: .zero)
         sut.configure(window: window)
         

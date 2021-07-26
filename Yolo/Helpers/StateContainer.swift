@@ -46,3 +46,7 @@ public let rootMapper: StateMapper<AppState> = { state, event in
     
     return state
 }
+
+struct FeedLoadedEvent: Event {
+    
+}

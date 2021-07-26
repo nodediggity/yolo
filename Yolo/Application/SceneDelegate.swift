@@ -23,9 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private lazy var baseURL = URL(string: "https://powerful-wave-91495.herokuapp.com/")!
     
-    convenience init(httpClient: HTTPClient) {
+    private lazy var store: Store = {
+        Store(state: nil, mapper: rootMapper)
+    }()
+    
+    convenience init(httpClient: HTTPClient, store: Store) {
         self.init()
         self.httpClient = httpClient
+        self.store = store
     }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -82,6 +87,9 @@ private extension SceneDelegate {
             .dispatchPublisher(for: request)
             .tryMap(FeedResponseMapper.map)
             .map { $0.items }
+            .handleEvents(receiveOutput: { [store] _ in
+                store.dispatch(FeedLoadedEvent())
+            })
             .eraseToAnyPublisher()
     }
     
