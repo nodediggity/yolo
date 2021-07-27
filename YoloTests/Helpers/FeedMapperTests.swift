@@ -7,24 +7,6 @@
 
 import XCTest
 import Yolo
-import OrderedCollections
-
-struct FeedState: Equatable {
-    var items: OrderedDictionary<String, FeedItem> = [:]
-}
-
-let feedMapper: StateMapper<FeedState> = { state, event in
-    var state = state ?? FeedState()
-    
-    if let event = event as? FeedLoadedEvent {
-        event.payload.forEach { item in
-            state.items[item.id] = item
-        }
-        return state
-    }
-
-    return state
-}
 
 class FeedMapperTests: XCTestCase {
 

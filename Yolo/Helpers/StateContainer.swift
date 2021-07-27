@@ -53,13 +53,35 @@ public let rootMapper: StateMapper<AppState> = { state, event in
         event.payload.forEach { item in
             state.feed[item.id] = item
         }
-        
         return state
     }
     
     return state
 }
 
-struct FeedLoadedEvent: Event {
-    let payload: [FeedItem]
+public struct FeedLoadedEvent: Event {
+    public let payload: [FeedItem]
+    public init(payload: [FeedItem]) {
+        self.payload = payload
+    }
+}
+
+public struct FeedState: Equatable {
+    public var items: OrderedDictionary<String, FeedItem>
+    public init(items: OrderedDictionary<String, FeedItem> = [:]) {
+        self.items = items
+    }
+}
+
+public let feedMapper: StateMapper<FeedState> = { state, event in
+    var state = state ?? FeedState()
+    
+    if let event = event as? FeedLoadedEvent {
+        event.payload.forEach { item in
+            state.items[item.id] = item
+        }
+        return state
+    }
+
+    return state
 }
