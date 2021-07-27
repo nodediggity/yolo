@@ -39,24 +39,16 @@ private extension StateContainer {
 }
 
 public struct AppState: Equatable {
-    public var feed: OrderedDictionary<String, FeedItem>
-    public init(feed: OrderedDictionary<String, FeedItem> = [:]) {
+    let feed: FeedState
+    public init(feed: FeedState = .init()) {
         self.feed = feed
     }
 }
 
 public let rootMapper: StateMapper<AppState> = { state, event in
-    var state = state ?? AppState()
-    
-    if let event = event as? FeedLoadedEvent {
-        
-        event.payload.forEach { item in
-            state.feed[item.id] = item
-        }
-        return state
-    }
-    
-    return state
+    AppState(
+        feed: feedMapper(state?.feed, event)
+    )
 }
 
 public struct FeedLoadedEvent: Event {

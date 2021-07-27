@@ -93,7 +93,7 @@ private extension SceneDelegate {
             .flatMap { [store] _ in
                 store.state
                     .map { state in
-                        state.feed.reduce([FeedItem](), { acc, e in
+                        state.feed.items.reduce([FeedItem](), { acc, e -> [FeedItem] in
                             var acc = acc
                             acc.append(e.value)
                             return acc
