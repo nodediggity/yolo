@@ -7,11 +7,15 @@
 
 import XCTest
 import Yolo
+import OrderedCollections
 
-struct FeedState: Equatable { }
+struct FeedState: Equatable {
+    var items: OrderedDictionary<String, FeedItem> = [:]
+}
 
 let feedMapper: StateMapper<FeedState> = { state, event in
-    FeedState()
+    var state = state ?? FeedState()
+    return state
 }
 
 class FeedMapperTests: XCTestCase {
@@ -21,5 +25,29 @@ class FeedMapperTests: XCTestCase {
         let output = feedMapper(nil, AnyEvent())
         XCTAssertEqual(output, FeedState())
     }
+    
+    func test_on_init_with_state_delivers_given_state() {
+        struct AnyEvent: Event { }
+        let item = makeItem()
+        let state = FeedState(items: [item.id: item])
+        let output = feedMapper(state, AnyEvent())
+        XCTAssertEqual(output, state)
+    }
 
+}
+
+private extension FeedMapperTests {
+    func makeItem() -> FeedItem {
+        FeedItem(
+            id: "any",
+            imageURL: makeURL(),
+            user: .init(id: "any", name: "any", about: "any", imageURL: makeURL()),
+            interactions: .init(
+                isLiked: false,
+                likes: 0,
+                comments: 0,
+                shares: 0
+            )
+        )
+    }
 }
