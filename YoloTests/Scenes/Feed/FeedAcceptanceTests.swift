@@ -56,14 +56,11 @@ class FeedAcceptanceTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         XCTAssertEqual(output.count, 1)
-        
-        let payload = output.payload()
-        XCTAssertEqual(payload.count, sut.numberOfRenderedFeedItems)
     }
 }
 
 private extension FeedAcceptanceTests {
-    func launch(httpClient: HTTPClientStub = .offline, store: Store = Store(state: nil, mapper: { _, _ in AppState() })) -> ListViewController {
+    func launch(httpClient: HTTPClientStub = .offline, store: Store = Store(state: nil, mapper: rootMapper)) -> ListViewController {
         let sut = SceneDelegate(httpClient: httpClient, store: store)
         let window = UIWindow(frame: .zero)
         sut.configure(window: window)

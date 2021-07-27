@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import OrderedCollections
 
 public protocol Event { }
 
@@ -38,11 +39,23 @@ private extension StateContainer {
 }
 
 public struct AppState: Equatable {
-    public init() { }
+    public var feed: OrderedDictionary<String, FeedItem>
+    public init(feed: OrderedDictionary<String, FeedItem> = [:]) {
+        self.feed = feed
+    }
 }
 
 public let rootMapper: StateMapper<AppState> = { state, event in
     var state = state ?? AppState()
+    
+    if let event = event as? FeedLoadedEvent {
+        
+        event.payload.forEach { item in
+            state.feed[item.id] = item
+        }
+        
+        return state
+    }
     
     return state
 }

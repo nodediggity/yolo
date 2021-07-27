@@ -90,6 +90,18 @@ private extension SceneDelegate {
             .handleEvents(receiveOutput: { [store] items in
                 store.dispatch(FeedLoadedEvent(payload: items))
             })
+            .flatMap { [store] _ in
+                store.state
+                    .map { state in
+                        state.feed.reduce([FeedItem](), { acc, e in
+                            var acc = acc
+                            acc.append(e.value)
+                            return acc
+                        })
+                    }
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            }
             .eraseToAnyPublisher()
     }
     
