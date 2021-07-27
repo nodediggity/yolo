@@ -12,6 +12,9 @@
 		6A08AA7426AF3F9700BA287C /* RootMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA7326AF3F9700BA287C /* RootMapperTests.swift */; };
 		6A08AA7726AFD04100BA287C /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 6A08AA7626AFD04100BA287C /* OrderedCollections */; };
 		6A08AA7926AFD28D00BA287C /* FeedMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA7826AFD28D00BA287C /* FeedMapperTests.swift */; };
+		6A08AA7B26AFDD4B00BA287C /* Memoize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA7A26AFDD4B00BA287C /* Memoize.swift */; };
+		6A08AA7D26AFDE7800BA287C /* Selector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA7C26AFDE7800BA287C /* Selector.swift */; };
+		6A08AA7F26AFE0D400BA287C /* FeedSelectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA7E26AFE0D400BA287C /* FeedSelectorTests.swift */; };
 		6A137528263BEB4D003F0E5D /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A137527263BEB4D003F0E5D /* Content.swift */; };
 		6A13752F263BEC40003F0E5D /* ContentResponseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A13752E263BEC40003F0E5D /* ContentResponseMapper.swift */; };
 		6A137537263BED60003F0E5D /* ContentResponseMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A137536263BED60003F0E5D /* ContentResponseMapperTests.swift */; };
@@ -110,6 +113,9 @@
 		6A08AA7126AF3B9600BA287C /* StateContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateContainer.swift; sourceTree = "<group>"; };
 		6A08AA7326AF3F9700BA287C /* RootMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootMapperTests.swift; sourceTree = "<group>"; };
 		6A08AA7826AFD28D00BA287C /* FeedMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMapperTests.swift; sourceTree = "<group>"; };
+		6A08AA7A26AFDD4B00BA287C /* Memoize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memoize.swift; sourceTree = "<group>"; };
+		6A08AA7C26AFDE7800BA287C /* Selector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selector.swift; sourceTree = "<group>"; };
+		6A08AA7E26AFE0D400BA287C /* FeedSelectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSelectorTests.swift; sourceTree = "<group>"; };
 		6A137527263BEB4D003F0E5D /* Content.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content.swift; sourceTree = "<group>"; };
 		6A13752E263BEC40003F0E5D /* ContentResponseMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentResponseMapper.swift; sourceTree = "<group>"; };
 		6A137536263BED60003F0E5D /* ContentResponseMapperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentResponseMapperTests.swift; sourceTree = "<group>"; };
@@ -222,6 +228,7 @@
 				6A08AA6F26AF29CA00BA287C /* StateContainerTests.swift */,
 				6A08AA7326AF3F9700BA287C /* RootMapperTests.swift */,
 				6A08AA7826AFD28D00BA287C /* FeedMapperTests.swift */,
+				6A08AA7E26AFE0D400BA287C /* FeedSelectorTests.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -638,6 +645,8 @@
 				6A45D7CE263A78CB003EF1C8 /* Publisher+MainQueue.swift */,
 				6AE02CAE263B1E310089B39F /* ResourcePresentationAdapter.swift */,
 				6A08AA7126AF3B9600BA287C /* StateContainer.swift */,
+				6A08AA7A26AFDD4B00BA287C /* Memoize.swift */,
+				6A08AA7C26AFDE7800BA287C /* Selector.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -943,6 +952,7 @@
 			files = (
 				6A8F261F263C5B07008E86F6 /* FeedUIIntegrationTests+LoaderSpy.swift in Sources */,
 				6A8F2619263C5AD3008E86F6 /* FeedUIIntegrationTests+Assertions.swift in Sources */,
+				6A08AA7F26AFE0D400BA287C /* FeedSelectorTests.swift in Sources */,
 				6A45D827263AE77A003EF1C8 /* FeedCardView+TestHelpers.swift in Sources */,
 				6A8F2606263C5999008E86F6 /* ContentUIIntergrationTests+Assertions.swift in Sources */,
 				6A8F2623263C5B5B008E86F6 /* UIView+LayoutCycle.swift in Sources */,
@@ -990,6 +1000,7 @@
 				6A13752F263BEC40003F0E5D /* ContentResponseMapper.swift in Sources */,
 				6A137556263BFEF7003F0E5D /* ContentViewController.swift in Sources */,
 				6AE02CAB263B19DC0089B39F /* ResourcePresenter.swift in Sources */,
+				6A08AA7B26AFDD4B00BA287C /* Memoize.swift in Sources */,
 				6A137528263BEB4D003F0E5D /* Content.swift in Sources */,
 				6A45D814263AE262003EF1C8 /* Combine+Helpers.swift in Sources */,
 				6AE02CCB263B326E0089B39F /* UITableView+Dequeueing.swift in Sources */,
@@ -1014,6 +1025,7 @@
 				6AC229E5263C2AE50061718F /* Interactions.swift in Sources */,
 				6A26214D263BDC7C00956E14 /* CommentPresenter.swift in Sources */,
 				6AE02CD9263B41810089B39F /* ResourceViewAdapter.swift in Sources */,
+				6A08AA7D26AFDE7800BA287C /* Selector.swift in Sources */,
 				6AE78CA8263C42F500E350FB /* Interactions+Toggle.swift in Sources */,
 				6AC229DE263C2A4E0061718F /* InteractionResposneMapper.swift in Sources */,
 				6A45D82F263AE911003EF1C8 /* ImageResponseMapper.swift in Sources */,

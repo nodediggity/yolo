@@ -38,7 +38,7 @@ private extension StateContainer {
     struct StateInit: Event { }
 }
 
-public struct AppState: Equatable {
+public struct AppState: Hashable {
     let feed: FeedState
     public init(feed: FeedState = .init()) {
         self.feed = feed
@@ -58,7 +58,7 @@ public struct FeedLoadedEvent: Event {
     }
 }
 
-public struct FeedState: Equatable {
+public struct FeedState: Hashable {
     public var items: OrderedDictionary<String, FeedItem>
     public init(items: OrderedDictionary<String, FeedItem> = [:]) {
         self.items = items
@@ -74,6 +74,16 @@ public let feedMapper: StateMapper<FeedState> = { state, event in
         }
         return state
     }
-
+    
     return state
 }
+
+public let stateSelector = { (state: AppState) in state }
+public let feedSelector = createSelector(selector1: stateSelector, { state -> [FeedItem] in
+    let feed = state.feed
+    return feed.items.reduce([FeedItem]()) { acc, e in
+        var acc = acc
+        acc.append(e.value)
+        return acc
+    }
+})

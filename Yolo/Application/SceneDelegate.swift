@@ -92,13 +92,7 @@ private extension SceneDelegate {
             })
             .flatMap { [store] _ in
                 store.state
-                    .map { state in
-                        state.feed.items.reduce([FeedItem](), { acc, e -> [FeedItem] in
-                            var acc = acc
-                            acc.append(e.value)
-                            return acc
-                        })
-                    }
+                    .map(feedSelector)
                     .setFailureType(to: Error.self)
                     .eraseToAnyPublisher()
             }
