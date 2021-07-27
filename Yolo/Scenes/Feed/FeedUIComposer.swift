@@ -125,7 +125,7 @@ extension FeedViewAdapter: ResourceView {
     }
 }
 
-private extension FeedItem {
+extension FeedItem {
     func clone(with interactions: Interactions) -> Self {
         FeedItem(id: id, imageURL: imageURL, user: user, interactions: interactions)
     }

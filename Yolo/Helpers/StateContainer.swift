@@ -75,6 +75,11 @@ public let feedMapper: StateMapper<FeedState> = { state, event in
         return state
     }
     
+    if let event = event as? LikeInteractionEvent, let item = state.items[event.payload.id] {
+        state.items[event.payload.id] = event.payload.isLiked ? item.cloneAsLiked() : item.cloneAsUnliked()
+        return state
+    }
+    
     return state
 }
 

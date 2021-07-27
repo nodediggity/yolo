@@ -45,6 +45,16 @@ class FeedMapperTests: XCTestCase {
         XCTAssertEqual(output2.items, [item.id: item])
     }
 
+    func test_on_like_interaction_event_maps_payload_to_state() {
+        let item = makeItem()
+        XCTAssertFalse(item.interactions.isLiked)
+        
+        let likeEvent = LikeInteractionEvent(payload: (item.id, true))
+        let output = feedMapper(FeedState(items: [item.id: item]), likeEvent)
+        
+        let state = output.items[item.id]
+        XCTAssertEqual(state?.interactions.isLiked, true)
+    }
 }
 
 private extension FeedMapperTests {
