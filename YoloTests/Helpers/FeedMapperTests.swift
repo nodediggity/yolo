@@ -50,10 +50,16 @@ class FeedMapperTests: XCTestCase {
         XCTAssertFalse(item.interactions.isLiked)
         
         let likeEvent = LikeInteractionEvent(payload: (item.id, true))
-        let output = feedMapper(FeedState(items: [item.id: item]), likeEvent)
+        let output0 = feedMapper(FeedState(items: [item.id: item]), likeEvent)
         
-        let state = output.items[item.id]
-        XCTAssertEqual(state?.interactions.isLiked, true)
+        let state0 = output0.items[item.id]
+        XCTAssertEqual(state0?.interactions.isLiked, true)
+        
+        let removelikeEvent = LikeInteractionEvent(payload: (item.id, false))
+        let output1 = feedMapper(output0, removelikeEvent)
+        
+        let state1 = output1.items[item.id]
+        XCTAssertEqual(state1?.interactions.isLiked, false)
     }
 }
 
