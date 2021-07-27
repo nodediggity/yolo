@@ -49,6 +49,19 @@ class FeedMapperTests: XCTestCase {
         
         XCTAssertEqual(output.items, [item.id: item])
     }
+    
+    func test_does_not_update_state_on_unhandled_event() {
+        struct IgnoredEvent: Event { }
+
+        let item = makeItem()
+        let event = FeedLoadedEvent(payload: [item])
+
+        let output1 = feedMapper(nil, event)
+        XCTAssertEqual(output1.items, [item.id: item])
+        
+        let output2 = feedMapper(output1, IgnoredEvent())
+        XCTAssertEqual(output2.items, [item.id: item])
+    }
 
 }
 
