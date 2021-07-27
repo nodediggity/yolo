@@ -61,12 +61,10 @@ extension FeedViewAdapter: ResourceView {
     typealias ResourceViewModel = FeedViewModel
     func display(_ viewModel: FeedViewModel) {
         controller?.display(viewModel.feed.map { item in
-            
-            var model = item
-            
+                        
             let view = FeedCardCellController()
             
-            view.display(FeedCardPresenter.map(model))
+            view.display(FeedCardPresenter.map(item))
             
             // MARK:- UserImageView
             let userImageViewAdapter = ResourcePresentationAdapter<Data, ResourceViewAdapter<UIImage>>(service: { [imageLoader] in
@@ -90,13 +88,8 @@ extension FeedViewAdapter: ResourceView {
             
             // MARK:- Interactions
             let interactionsAdapter = ResourcePresentationAdapter<Interactions, ResourceViewAdapter<Interactions>>(service: { [interactionService] in
-                interactionService(model.id, model.interactions.isLiked ? .unlike : .like)
+                interactionService(item.id, item.interactions.isLiked ? .unlike : .like)
             })
-
-            interactionsAdapter.presenter = ResourcePresenter(
-                view: ResourceViewAdapter { model = model.clone(with: $0) },
-                errorView: ResourceErrorViewAdapter { [weak view] _ in view?.display(FeedCardPresenter.map(item)) }
-            )
             
             view.onLoadImage = {
                 userImageViewAdapter.execute()
@@ -112,13 +105,7 @@ extension FeedViewAdapter: ResourceView {
                 selection(item)
             }
 
-            view.onToggleLikeAction = { [weak view] in
-                // dispatch request
-                interactionsAdapter.execute()
-                // perform optimistic UI update
-                model = model.toggleLikedState()
-                view?.display(FeedCardPresenter.map(model))
-            }
+            view.onToggleLikeAction = interactionsAdapter.execute
             
             return CellController(id: item, view)
         })
