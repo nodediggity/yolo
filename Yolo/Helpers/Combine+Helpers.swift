@@ -23,3 +23,9 @@ extension HTTPClient {
         .eraseToAnyPublisher()
     }
 }
+
+extension Publisher {
+    func select(from store: Store, using selector: @escaping (AppState) -> Output) -> AnyPublisher<Output, Failure> {
+        flatMap { _ in store.state.map(selector).setFailureType(to: Failure.self) }.eraseToAnyPublisher()
+    }
+}

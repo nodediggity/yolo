@@ -86,17 +86,11 @@ private extension SceneDelegate {
         return httpClient
             .dispatchPublisher(for: request)
             .tryMap(FeedResponseMapper.map)
-            .map { $0.items }
+            .map(\.items)
             .handleEvents(receiveOutput: { [store] items in
                 store.dispatch(FeedLoadedEvent(payload: items))
             })
-            .flatMap { [store] _ in
-                store.state
-                    .map(feedSelector)
-                    .setFailureType(to: Error.self)
-                    .eraseToAnyPublisher()
-            }
-            .eraseToAnyPublisher()
+            .select(from: store, using: feedSelector)
     }
     
     func makeRemoteImageLoader(_ imageURL: URL) -> AnyPublisher<Data, Error> {
