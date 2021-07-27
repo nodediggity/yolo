@@ -136,6 +136,7 @@ private extension SceneDelegate {
     }
     
     func makeRemoteInteractionService(id: String, interaction: Interaction) -> AnyPublisher<Interactions, Error> {
+        store.dispatch(LikeInteractionEvent(payload: (id, interaction == .like)))
         var request = URLRequest(
             url: baseURL
                 .appendingPathComponent("interactions")

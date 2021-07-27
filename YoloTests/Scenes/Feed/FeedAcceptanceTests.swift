@@ -57,6 +57,35 @@ class FeedAcceptanceTests: XCTestCase {
         sut.loadViewIfNeeded()
         XCTAssertEqual(output.count, 1)
     }
+    
+    func test_on_toggle_like_dispatches_event_to_store() {
+        var output: [LikeInteractionEvent] = []
+        let item = FeedItem(
+            id: "any",
+            imageURL: makeURL(),
+            user: .init(id: "any", name: "any name", about: "any", imageURL: makeURL()),
+            interactions: .init(isLiked: false, likes: 0, comments: 0, shares: 0)
+        )
+        let state = AppState(feed: FeedState(items: [item.id: item]))
+        let sut = launch(httpClient: .online(response), store: Store(state: state, mapper: { state, event in
+            if let event = event as? LikeInteractionEvent {
+                output.append(event)
+            }
+           return state!
+        }))
+        
+        sut.loadViewIfNeeded()
+        XCTAssertTrue(output.isEmpty)
+        
+        let view = sut.feedCardView(at: 0) as? FeedCardView
+        view?.simulateToggleLikeAction()
+        
+        XCTAssertEqual(output.count, 1)
+        let event = output.payload(at: 0)
+        
+        XCTAssertEqual(event.id, item.id)
+        XCTAssertTrue(event.isLiked)
+    }
 }
 
 private extension FeedAcceptanceTests {
@@ -196,6 +225,12 @@ private extension FeedAcceptanceTests {
 
 extension Array where Element == FeedLoadedEvent {
     func payload(at index: Int = 0) -> [FeedItem] {
+        return self[index].payload
+    }
+}
+
+extension Array where Element == LikeInteractionEvent {
+    func payload(at index: Int = 0) -> (id: String, isLiked: Bool) {
         return self[index].payload
     }
 }

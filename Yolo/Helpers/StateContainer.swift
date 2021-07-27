@@ -87,3 +87,10 @@ public let feedSelector = createSelector(selector1: stateSelector, { state -> [F
         return acc
     }
 })
+
+public struct LikeInteractionEvent: Event {
+    public let payload: (id: String, isLiked: Bool)
+    public init(payload: (id: String, isLiked: Bool)) {
+        self.payload = payload
+    }
+}
