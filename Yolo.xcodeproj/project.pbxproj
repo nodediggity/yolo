@@ -3,13 +3,14 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		6A08AA7026AF29CA00BA287C /* StateContainerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA6F26AF29CA00BA287C /* StateContainerTests.swift */; };
 		6A08AA7226AF3B9600BA287C /* StateContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA7126AF3B9600BA287C /* StateContainer.swift */; };
 		6A08AA7426AF3F9700BA287C /* RootMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A08AA7326AF3F9700BA287C /* RootMapperTests.swift */; };
+		6A08AA7726AFD04100BA287C /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 6A08AA7626AFD04100BA287C /* OrderedCollections */; };
 		6A137528263BEB4D003F0E5D /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A137527263BEB4D003F0E5D /* Content.swift */; };
 		6A13752F263BEC40003F0E5D /* ContentResponseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A13752E263BEC40003F0E5D /* ContentResponseMapper.swift */; };
 		6A137537263BED60003F0E5D /* ContentResponseMapperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A137536263BED60003F0E5D /* ContentResponseMapperTests.swift */; };
@@ -206,6 +207,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A08AA7726AFD04100BA287C /* OrderedCollections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,6 +862,9 @@
 			dependencies = (
 			);
 			name = Yolo;
+			packageProductDependencies = (
+				6A08AA7626AFD04100BA287C /* OrderedCollections */,
+			);
 			productName = Yolo;
 			productReference = 6A79BE792639D918000062A7 /* Yolo.app */;
 			productType = "com.apple.product-type.application";
@@ -892,6 +897,9 @@
 				Base,
 			);
 			mainGroup = 6A79BE702639D918000062A7;
+			packageReferences = (
+				6A08AA7526AFD04100BA287C /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			productRefGroup = 6A79BE7A2639D918000062A7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1272,6 +1280,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6A08AA7526AFD04100BA287C /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6A08AA7626AFD04100BA287C /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6A08AA7526AFD04100BA287C /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6A79BE712639D918000062A7 /* Project object */;
 }
