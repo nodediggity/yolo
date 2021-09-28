@@ -23,9 +23,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     private lazy var baseURL = URL(string: "https://powerful-wave-91495.herokuapp.com/")!
     
-    convenience init(httpClient: HTTPClient) {
+    private lazy var store: Store = {
+        Store(state: nil, mapper: rootMapper)
+    }()
+    
+    convenience init(httpClient: HTTPClient, store: Store) {
         self.init()
         self.httpClient = httpClient
+        self.store = store
     }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -81,8 +86,11 @@ private extension SceneDelegate {
         return httpClient
             .dispatchPublisher(for: request)
             .tryMap(FeedResponseMapper.map)
-            .map { $0.items }
-            .eraseToAnyPublisher()
+            .map(\.items)
+            .handleEvents(receiveOutput: { [store] items in
+                store.dispatch(FeedLoadedEvent(payload: items))
+            })
+            .select(from: store, using: feedSelector)
     }
     
     func makeRemoteImageLoader(_ imageURL: URL) -> AnyPublisher<Data, Error> {
@@ -128,6 +136,7 @@ private extension SceneDelegate {
     }
     
     func makeRemoteInteractionService(id: String, interaction: Interaction) -> AnyPublisher<Interactions, Error> {
+        store.dispatch(LikeInteractionEvent(payload: (id, interaction == .like)))
         var request = URLRequest(
             url: baseURL
                 .appendingPathComponent("interactions")

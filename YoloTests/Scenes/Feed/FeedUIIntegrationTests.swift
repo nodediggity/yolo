@@ -299,41 +299,6 @@ class FeedUIIntegrationTests: XCTestCase {
         view?.simulateToggleLikeAction()
         XCTAssertEqual(loader.interactionRequests.count, 1)
     }
-
-    func test_toggle_like_action_performs_optimistic_state_update() {
-        let feed = makeFeed()
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        loader.loadFeedCompletes(with: .success(feed.items))
-
-        let view = sut.feedCardView(at: 0) as? FeedCardView
-        XCTAssertEqual(view?.likesText, "10")
-        XCTAssertEqual(view?.isShowingAsLiked, true)
-
-        view?.simulateToggleLikeAction()
-        XCTAssertEqual(view?.likesText, "9")
-        XCTAssertEqual(view?.isShowingAsLiked, false)
-    }
-
-    func test_toggle_like_failure_reverts_optimistic_state_update() {
-        let feed = makeFeed()
-        let (sut, loader) = makeSUT()
-        sut.loadViewIfNeeded()
-        loader.loadFeedCompletes(with: .success(feed.items))
-
-        let view = sut.feedCardView(at: 0) as? FeedCardView
-        XCTAssertEqual(view?.likesText, "10")
-        XCTAssertEqual(view?.isShowingAsLiked, true)
-
-        view?.simulateToggleLikeAction()
-        XCTAssertEqual(view?.likesText, "9")
-        XCTAssertEqual(view?.isShowingAsLiked, false)
-        
-        loader.toggleInteractionCompletes(with: .failure(makeError()))
-        
-        XCTAssertEqual(view?.likesText, "10")
-        XCTAssertEqual(view?.isShowingAsLiked, true)
-    }
 }
 
 private extension FeedUIIntegrationTests {

@@ -1,0 +1,80 @@
+//
+//  FeedMapperTests.swift
+//  YoloTests
+//
+//  Created by Gordon Smith on 27/07/2021.
+//
+
+import XCTest
+import Yolo
+
+class FeedMapperTests: XCTestCase {
+
+    func test_on_init_with_no_state_delivers_default_state() {
+        struct AnyEvent: Event { }
+        let output = feedMapper(nil, AnyEvent())
+        XCTAssertEqual(output, FeedState())
+    }
+    
+    func test_on_init_with_state_delivers_given_state() {
+        struct AnyEvent: Event { }
+        let item = makeItem()
+        let state = FeedState(items: [item.id: item])
+        let output = feedMapper(state, AnyEvent())
+        XCTAssertEqual(output, state)
+    }
+    
+    func test_on_feed_loaded_event_maps_payload_to_state() {
+        let item = makeItem()
+        let event = FeedLoadedEvent(payload: [item])
+        let output = feedMapper(nil, event)
+        
+        XCTAssertEqual(output.items, [item.id: item])
+    }
+    
+    func test_does_not_update_state_on_unhandled_event() {
+        struct IgnoredEvent: Event { }
+
+        let item = makeItem()
+        let event = FeedLoadedEvent(payload: [item])
+
+        let output1 = feedMapper(nil, event)
+        XCTAssertEqual(output1.items, [item.id: item])
+        
+        let output2 = feedMapper(output1, IgnoredEvent())
+        XCTAssertEqual(output2.items, [item.id: item])
+    }
+
+    func test_on_like_interaction_event_maps_payload_to_state() {
+        let item = makeItem()
+        XCTAssertFalse(item.interactions.isLiked)
+        
+        let likeEvent = LikeInteractionEvent(payload: (item.id, true))
+        let output0 = feedMapper(FeedState(items: [item.id: item]), likeEvent)
+        
+        let state0 = output0.items[item.id]
+        XCTAssertEqual(state0?.interactions.isLiked, true)
+        
+        let removelikeEvent = LikeInteractionEvent(payload: (item.id, false))
+        let output1 = feedMapper(output0, removelikeEvent)
+        
+        let state1 = output1.items[item.id]
+        XCTAssertEqual(state1?.interactions.isLiked, false)
+    }
+}
+
+private extension FeedMapperTests {
+    func makeItem() -> FeedItem {
+        FeedItem(
+            id: "any",
+            imageURL: makeURL(),
+            user: .init(id: "any", name: "any", about: "any", imageURL: makeURL()),
+            interactions: .init(
+                isLiked: false,
+                likes: 0,
+                comments: 0,
+                shares: 0
+            )
+        )
+    }
+}
